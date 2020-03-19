@@ -1,0 +1,87 @@
+Formula
+  =
+    "exists" _ x:Variable _ phi: Formula {
+    	return {type: "exists", var: x, arg: phi};
+    }
+
+    /
+    
+    "forall" _ x:Variable _ phi: Formula {
+    	return {type: "forall", var: x, arg: phi};
+    }
+ 
+    /
+ 
+  
+    phi: Formula2 "->" psi: Formula {
+    	return {type: "->", args: [phi, psi]};
+    }
+    
+    /
+    
+    phi:Formula2 tail:(_ ("or") _ Formula)* {
+      let args = [phi];
+      tail.forEach(function(element) {args.push(element[3][0]); });
+      if(args.length == 1)
+          return args[0]
+      else
+          return {type: "or", args: args};
+    }
+    
+    
+    
+Formula2
+   =
+   phi:Factor tail:(_ ("and") _ Formula)* {
+      let args = [phi];
+      tail.forEach(function(element) {args.push(element[3][0]); });
+      if(args.length == 1)
+          return args[0]
+      else
+          return {type: "and", args: args};
+    }
+    
+
+Factor
+  = "(" _ phi:Formula _ ")" { return phi; }
+     
+     /
+     
+    ("not") _ phi:Factor {
+    	return  {type: "not", arg: phi};
+    } 
+    /
+    AtomicFormula
+
+
+
+AtomicFormula = Predicate "("  args: ArgumentList ")" {
+	return {type: "atomic": args: args};
+}
+
+
+
+ArgumentList
+ = term:Term tail:( _ (",") _ Term)* {
+      let args = [term];
+      tail.forEach(function(element) {args.push(element[3][0]); });
+      return args;
+    }
+    
+    
+Predicate
+  = ("P" / "Q" / "R") {return text(); }
+
+
+
+Term 
+ = Variable
+ 
+ 
+Variable
+ = "x" / "y" / "z"
+ 
+ 
+ 
+_ "whitespace"
+  = [ \t\n\r]*
