@@ -11,6 +11,11 @@ function stringToProof(str: string): Proof {
 }
 
 function checkProof(proof: Proof) {
+    for(let i = 0; i < proof.length; i++)
+        for(let j = 0; i < j; j++)
+        for(let k = 0; k < j; k++)
+        if(resolution([proof[k], proof[j]], proof[i]))
+            console.log(i + "obtained from " + j + " and " + k);
     console.log(proof);
     return;
 }
