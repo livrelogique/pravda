@@ -21,3 +21,11 @@ export function stringToFormula(str: string): Formula {
         return null;
     }
 }
+
+
+export function getLitterals(f: Formula): Formula[] {
+    if ((<any> f).args == null)
+        return [f];
+    else
+        return (<any> f).args;
+}

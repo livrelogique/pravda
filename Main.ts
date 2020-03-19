@@ -1,4 +1,4 @@
-import {Formula, stringToFormula} from "src/Formula";
+import { Formula, stringToFormula, getLitterals } from "./src/Formula.js";
 
 type Proof = Formula[];
 
@@ -23,21 +23,57 @@ function update() {
 (<HTMLTextAreaElement>document.getElementById("proof")).onchange = update;
 (<HTMLTextAreaElement>document.getElementById("proof")).onclick = update;
 
+function same(obj1, obj2) {
+    return JSON.stringify(obj1) == JSON.stringify(obj2);
+}
+
+
+
+function contains(element: any, array: any[]): boolean {
+    for (let e of array) {
+        if (same(e, element))
+            return true;
+    }
+    return false;
+}
 
 function resolution(c: Formula[], res: Formula) {
     if (c.length != 2) return false;
 
-    let c0: Formula[];
-    if (c[0].type != "or") c0 = [c[0]]; else c0 = c[0].args;
+    let c0: Formula[] = getLitterals(c[0]);
+    let c1: Formula[] = getLitterals(c[1]);
+    let r: Formula[] = getLitterals(res);
 
-    let c1: Formula[];
-    if (c[1].type != "or") c1 = [c[1]]; else c1 = c[1].args;
+    for (let l of r)
+        if (!contains(l, c0) && !contains(l, c1)) return false;
 
-    let r: Formula[];
-    if (res.type != "or") r = [res]; else r = res.args;
+    function getLit(myClause, r) {
+        for (let a0 of myClause)
+            if (!contains(a0, r)) {
+                return a0;
+            }
+        return undefined;
+    }
 
-    for (let a0 of c0)
-        for (let a1 of c1)
-            if (a0.type == "not" && a1.type == "atomic" && a0.arg == a1)
-                return true;
+    let l0 = getLit(c0, r);
+    let l1 = getLit(c1, r);
+
+    if (l0 == undefined) return false;
+    if (l1 == undefined) return false;
+
+    for (let l of c0)
+        if (!same(l, l0) && !contains(l, r))
+            return false;
+
+    for (let l of c1)
+        if (!same(l, l1) && !contains(l, r))
+            return false;
+
+    if (l0.type != "not")
+        [l1, l0] = [l1, l0];
+
+    if (l0.type == "not" && l1.type == "atomic" && same(l0.arg, l1))
+        return true;
+
+    return false;
 }
