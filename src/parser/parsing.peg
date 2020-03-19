@@ -75,7 +75,7 @@ TermList
 Term 
  = VariableSymbol /
    f:FunctionSymbol "(" args: TermList ")" {
-   	return {type: "atomic", func:f, args: args};
+   	return {type: "term", func:f, args: args};
    }
  
  
