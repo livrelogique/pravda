@@ -1,12 +1,12 @@
 Formula
   =
-    "exists" _ x:Variable _ phi: Formula {
+    "exists" _ x:VariableSymbol _ phi: Formula {
     	return {type: "exists", var: x, arg: phi};
     }
 
     /
     
-    "forall" _ x:Variable _ phi: Formula {
+    "forall" _ x:VariableSymbol _ phi: Formula {
     	return {type: "forall", var: x, arg: phi};
     }
  
@@ -21,7 +21,7 @@ Formula
     
     phi:Formula2 tail:(_ ("or") _ Formula)* {
       let args = [phi];
-      tail.forEach(function(element) {args.push(element[3][0]); });
+      tail.forEach(function(element) {args.push(element[3]); });
       if(args.length == 1)
           return args[0]
       else
@@ -34,7 +34,7 @@ Formula2
    =
    phi:Factor tail:(_ ("and") _ Formula)* {
       let args = [phi];
-      tail.forEach(function(element) {args.push(element[3][0]); });
+      tail.forEach(function(element) {args.push(element[3]); });
       if(args.length == 1)
           return args[0]
       else
@@ -55,13 +55,13 @@ Factor
 
 
 
-AtomicFormula = Predicate "("  args: ArgumentList ")" {
-	return {type: "atomic": args: args};
+AtomicFormula = p:PredicateSymbol "("  args: TermList ")" {
+	return {type: "atomic", pred:p, args: args};
 }
 
 
 
-ArgumentList
+TermList
  = term:Term tail:( _ (",") _ Term)* {
       let args = [term];
       tail.forEach(function(element) {args.push(element[3][0]); });
@@ -69,19 +69,25 @@ ArgumentList
     }
     
     
-Predicate
-  = ("P" / "Q" / "R") {return text(); }
 
 
 
 Term 
- = Variable
+ = VariableSymbol /
+   f:FunctionSymbol "(" args: TermList ")" {
+   	return {type: "atomic", func:f, args: args};
+   }
  
  
-Variable
- = "x" / "y" / "z"
+VariableSymbol
+ = "x" / "y" / "z" { return text();}
  
+FunctionSymbol
+ = "f" / "g" / "h" { return text();}
  
+PredicateSymbol
+  = ("P" / "Q" / "R") {return text(); }
+
  
 _ "whitespace"
   = [ \t\n\r]*
