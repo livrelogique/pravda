@@ -34,8 +34,9 @@ textarea {
 
 
 
-prover {
-    display: inline;
+div {
+    display: inline-block;
+    white-space: nowrap;
     padding: 0px;
     
 }

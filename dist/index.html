@@ -56,10 +56,11 @@
 
   <h2>Hilbert system in propositional logic</h2>
   <textarea proofSystem="HilbertProofSystem" goal="p -> p">
-    p -> q -> p
-
-
-    
+    p -> (p -> p)
+    (p -> ((p -> p) -> p))
+    (p -> ((p -> p) -> p)) -> ((p -> (p -> p)) -> (p -> p))
+    //((p -> (p -> p)) -> (p -> p))
+    p -> p
   </textarea>
 
 

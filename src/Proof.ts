@@ -6,7 +6,14 @@ export class Proof {
     justification: string[] = [];
 
     public get length() { return this.formulas.length };
-    public isCorrect() { return !(this.justification.find((line) => line.indexOf("???") >= 0)); }
+    public isCorrect() {
+        return !(this.justification.find(
+            (line) => {
+
+                line.indexOf("???") >= 0;
+
+            }));
+    }
 }
 
 
