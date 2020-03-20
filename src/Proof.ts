@@ -1,5 +1,5 @@
 
-import { Formula, stringToFormula, getDirectSubFormulas } from "./src/Formula.js";
+import { Formula, stringToFormula} from "./Formula.js";
 
 export class Proof {
     formulas: Formula[] = new Array();

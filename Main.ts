@@ -1,5 +1,5 @@
-import {Proof, stringToProof} from "./src/Proof.js";
-import {ResolutionProofSystem} from "./src/ResolutionProofSystem.js";
+import { Proof, stringToProof } from "./src/Proof.js";
+import { ResolutionProofSystem } from "./src/ResolutionProofSystem.js";
 
 
 let proofSystem = new ResolutionProofSystem();
@@ -10,6 +10,7 @@ function update() {
     proofSystem.checkProof(proof);
     (<HTMLTextAreaElement>document.getElementById("justification")).value =
         proof.justification.join("\n");
+    console.log(proof);
 }
 
 (<HTMLTextAreaElement>document.getElementById("proof")).onchange = update;

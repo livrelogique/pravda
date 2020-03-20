@@ -1,5 +1,5 @@
-import { ProofSystem } from "ProofSystem.js";
-import { Formula, stringToFormula, getDirectSubFormulas } from "Formula.js";
+import { ProofSystem } from "./ProofSystem.js";
+import { Formula, getDirectSubFormulas } from "./Formula.js";
 
 function same(obj1, obj2) {
     return JSON.stringify(obj1) == JSON.stringify(obj2);
@@ -53,7 +53,7 @@ function resolution(ac0: Formula, ac1: Formula, ares: Formula) {
         [l1, l0] = [l0, l1];
 
     if (l0.type == "not" && l1.type == "atomic" && same(l0.arg, l1))
-        return "resolution rule on " + (j + 1) + " and " + (k + 1);
+        return "resolution rule";
 
     return false;
 }
