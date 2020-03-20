@@ -15,19 +15,20 @@
   This tool has been created thanks to COVID-19.
 
   <h2>Resolution in propositional logic</h2>
+
   <h3>Resolution rule: special case modus ponens</h3>
-  <prover proofSystem="ResolutionProofSystem" goal="q">not p or q   *
-    p                 *
+  <prover proofSystem="ResolutionProofSystem" goal="q">not p or q *
+    p *
     //q
   </prover>
-  <h2>A small proof</h2>
-  <prover proofSystem="ResolutionProofSystem" goal="bottom">not p or not q or r    *
-not r                  *
-not p or q             *
-p                      *
-//not p or not q
-//not p
-//bottom
+  <h3>A small proof</h3>
+  <prover proofSystem="ResolutionProofSystem" goal="bottom">not p or not q or r *
+    not r *
+    not p or q *
+    p *
+    //not p or not q
+    //not p
+    //bottom
   </prover>
 
 </body>
