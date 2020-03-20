@@ -1,16 +1,22 @@
+textarea {
+    resize: none;
+    border: none;
+    background-color: lightyellow;
+}
+
 .proof {
     background: url(../images/linenumbers.png);
     background-attachment: local;
     background-repeat: no-repeat;
+    background-color: lightyellow;
     padding-left: 35px;
     padding-top: 10px;
     padding-bottom: 0px;
-    border-color: #ccc;
     margin-right: 0px;
     padding-right: 0px;
-    border-right: none;
+    border-right: 1px solid orange;
     font-size: 1.07em;
-    border: none;
+    
 }
 
 
@@ -26,16 +32,13 @@
 }
 
 
-textarea {
-    resize: none;
-    background-color: lightyellow;
-}
+
 
 
 prover {
     display: inline;
     padding: 0px;
-    box-shadow: 0 7px 7px 0 rgba(0, 0, 0, 0.8);
+    
 }
 
 
@@ -46,7 +49,7 @@ prover {
 
 
 .solutionButton {
-    background-color: greenyellow;
+    background-color: orange;
     border: 2px brown solid;
     margin: 8px;
     padding: 4px;
