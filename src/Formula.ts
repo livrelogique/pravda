@@ -26,9 +26,9 @@ export function stringToFormula(str: string): Formula {
 @input a formula that is supposed to be a clause
 @output the array of litterals
 */
-export function getLitterals(f: Formula): Formula[] {
+export function getDirectSubFormulas(f: Formula): Formula[] {
     if ((<any> f).type != "or")
         return [f];
     else
-        return (<any> f).args.map((f) => getLitterals(f)).flat();
+        return (<any> f).args.map((f) => getDirectSubFormulas(f)).flat();
 }

@@ -55,7 +55,8 @@ Factor
 
 
 
-AtomicFormula = p:PredicateSymbol "("  args: TermList ")" {
+AtomicFormula = PropositionSymbol /
+	p:PredicateSymbol "("  args: TermList ")" {
 	return {type: "atomic", pred:p, args: args};
 }
 
@@ -73,7 +74,7 @@ TermList
 
 
 Term 
- = VariableSymbol /
+ = VariableSymbol / ConstantSymbol /
    f:FunctionSymbol "(" args: TermList ")" {
    	return {type: "term", func:f, args: args};
    }
@@ -82,11 +83,18 @@ Term
 VariableSymbol
  = "x" / "y" / "z" { return text();}
  
+ConstantSymbol
+ = "0" / "1" / "a" / "b" / "c" / "d" / "e" { return text();}
+
 FunctionSymbol
  = "f" / "g" / "h" { return text();}
  
+
+PropositionSymbol
+  = ("p" / "q" / "r" / "s" / "t" / "u" / "v") {return text(); }
+
 PredicateSymbol
-  = ("P" / "Q" / "R") {return text(); }
+  = ("P" / "Q" / "R" / "S" / "T" / "U" / "V") {return text(); }
 
  
 _ "whitespace"

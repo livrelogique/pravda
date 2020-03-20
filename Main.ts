@@ -1,4 +1,4 @@
-import { Formula, stringToFormula, getLitterals } from "./src/Formula.js";
+import { Formula, stringToFormula, getDirectSubFormulas } from "./src/Formula.js";
 
 class Proof {
     formulas: Formula[] = new Array();
@@ -66,9 +66,9 @@ function contains(element: any, array: any[]): boolean {
 }
 
 function resolution(cc0: Formula, cc1: Formula, res: Formula) {
-    let c0: Formula[] = getLitterals(cc0);
-    let c1: Formula[] = getLitterals(cc1);
-    let r: Formula[] = getLitterals(res);
+    let c0: Formula[] = getDirectSubFormulas(cc0);
+    let c1: Formula[] = getDirectSubFormulas(cc1);
+    let r: Formula[] = getDirectSubFormulas(res);
 
     for (let l of r)
         if (!contains(l, c0) && !contains(l, c1)) return false;
