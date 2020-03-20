@@ -1,7 +1,9 @@
 Formula
-  = ("bottom") {return "bottom"}
+  = ("bottom" / "false") {return {type: "false"};}
     /
-    ("top") {return "top"}
+    ("top" / "true") {return {type: "true"};}
+    /
+    ("phi" / "psi" / "chi" / "eta") {return text();}
     /
     "exists" _ x:VariableSymbol _ phi: Formula {
     	return {type: "exists", var: x, arg: phi};
@@ -16,7 +18,7 @@ Formula
     /
  
   
-    phi: Formula2 "->" psi: Formula {
+    phi: Formula2 _ "->" _ psi: Formula {
     	return {type: "->", args: [phi, psi]};
     }
     
@@ -51,7 +53,7 @@ Factor
      /
      
     ("not") _ phi:Factor {
-    	return  {type: "not", arg: phi};
+    	return  {type: "not", args: [phi]};
     } 
     /
     AtomicFormula

@@ -7,10 +7,10 @@ export type FunctionSymbol = string;
 export type Term = { type: "term", func: FunctionSymbol, args: Term[] };
 
 export type Formula = { type: "and" | "or" | "->", args: Formula[] } |
-{ type: "not", arg: Formula } |
-{ type: "exists" | "forall", var: VariableSymbol, arg: Formula } |
+{ type: "not", args: Formula[] } |
+{ type: "exists" | "forall", var: VariableSymbol, args: Formula } |
 { type: "atomic", pred: PredicateSymbol, args: Term[] } |
-{ type: "true"} | {type: "false"};
+{ type: "true", args: Formula[]} | {type: "false", args: Formula[]};
 
 
 /*
@@ -33,4 +33,15 @@ export function getDirectSubFormulas(f: Formula): Formula[] {
         return [f];
     else
         return (<any>f).args.map((f) => getDirectSubFormulas(f)).flat();
+}
+
+
+
+export class FormulaUtility {
+    static getNotSub = (f: Formula) => {     return f.args[0]; }
+
+
+
+
+
 }

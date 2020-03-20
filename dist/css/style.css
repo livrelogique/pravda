@@ -21,8 +21,7 @@ textarea {
 
 
 .justification {
-    margin-left: 0px;
-    padding-left:0px;
+    padding-left: 16px;
     border-left: none;
     padding-top: 10px;
     border-color: #ccc;

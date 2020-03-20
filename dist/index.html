@@ -16,19 +16,19 @@
   <h2>Resolution in propositional logic</h2>
 
   <h3>Resolution rule: special case modus ponens</h3>
-  <prover proofSystem="ResolutionProofSystem" goal="q">not p or q *
+  <textarea proofSystem="ResolutionProofSystem" goal="q">not p or q *
     p *
     //q
-  </prover>
+  </textarea>
   <h3>A small refutation proof</h3>
-  <prover proofSystem="ResolutionProofSystem" goal="bottom">not p or not q or r *
+  <textarea proofSystem="ResolutionProofSystem" goal="bottom">not p or not q or r *
     not r *
     not p or q *
     p *
     //not p or not q
     //not p
     //bottom
-  </prover>
+  </textarea>
 
 
 
@@ -38,11 +38,29 @@
   <h2>Resolution in first-order logic</h2>
 
   <h3>Small applications of resolution rules</h3>
-  <prover proofSystem="ResolutionProofSystem" goal="Q(x)">P(x)   *
+  <textarea proofSystem="ResolutionProofSystem" goal="Q(x)">P(x)   *
     not P(x) or Q(x)     *
     //Q(x)
-  </prover>
+  </textarea>
 
+
+
+
+
+
+
+
+
+
+
+
+  <h2>Hilbert system in propositional logic</h2>
+  <textarea proofSystem="HilbertProofSystem" goal="p -> p">
+    p -> q -> p
+
+
+    
+  </textarea>
 
 
 </body>
