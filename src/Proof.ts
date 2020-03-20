@@ -1,10 +1,12 @@
 
-import { Formula, stringToFormula} from "./Formula.js";
+import { Formula, stringToFormula } from "./Formula.js";
 
 export class Proof {
     formulas: Formula[] = new Array();
     justification: string[] = [];
-    get length() { return this.formulas.length };
+
+    public get length() { return this.formulas.length };
+    public isCorrect() { return !(this.justification.find((line) => line.indexOf("???") >= 0)); }
 }
 
 
@@ -20,12 +22,12 @@ export function stringToProof(str: string): Proof {
             formulaLine = formulaLine.trim();
             proof.justification[i] = "???";
             try {
-                proof.formulas.push(stringToFormula(formulaLine));
+                proof.formulas[i] = stringToFormula(formulaLine);
                 if (pos >= 0)
                     proof.justification[i] = "input";
             }
             catch (e) {
-                proof.justification[i] = "parsing error: " + e.message;
+                proof.justification[i] = "??? parsing error: " + e.message;
             }
         }
     return proof;
