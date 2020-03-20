@@ -1,4 +1,6 @@
-INSTALLATION
+INSTALLATION of the Typescript
+
+INSTALLATION of OCAML (in case one day we may use Ocaml)
 
 Install the OCAML installer:
 sudo dnf install opam
