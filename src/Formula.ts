@@ -9,17 +9,17 @@ export type Term = { type: "term", func: FunctionSymbol, args: Term[] };
 export type Formula = { type: "and" | "or" | "->", args: Formula[] } |
 { type: "not", arg: Formula } |
 { type: "exists" | "forall", var: VariableSymbol, arg: Formula } |
-{ type: "atomic", pred: PredicateSymbol, args: Term[] };
+{ type: "atomic", pred: PredicateSymbol, args: Term[] } |
+{ type: "true"} | {type: "false"};
 
+
+/*
+ @param a string, e.g. "forall x (P(x) or Q(x))"
+ @returns the internal representation of the corresponding formula
+*/
 export function stringToFormula(str: string): Formula {
-    try {
-        return (<any>FormulaParser).parse(str);
-    }
-    catch (e) {
-        console.log("error in parsing " + str);
-        console.log(e);
-        return null;
-    }
+    return (<any>FormulaParser).parse(str);
+
 }
 
 /*
@@ -27,8 +27,10 @@ export function stringToFormula(str: string): Formula {
 @output the array of litterals
 */
 export function getDirectSubFormulas(f: Formula): Formula[] {
-    if ((<any> f).type != "or")
+    if(((<any>f).type == "true") || ((<any>f).type == "false"))
+        return [];
+    if ((<any>f).type != "or")
         return [f];
     else
-        return (<any> f).args.map((f) => getDirectSubFormulas(f)).flat();
+        return (<any>f).args.map((f) => getDirectSubFormulas(f)).flat();
 }

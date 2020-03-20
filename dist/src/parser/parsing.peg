@@ -1,5 +1,8 @@
 Formula
-  =
+  = ("bottom") {return "bottom"}
+    /
+    ("top") {return "top"}
+    /
     "exists" _ x:VariableSymbol _ phi: Formula {
     	return {type: "exists", var: x, arg: phi};
     }
@@ -19,7 +22,7 @@ Formula
     
     /
     
-    phi:Formula2 tail:(_ ("or") _ Formula)* {
+    phi:Formula2 tail:(_ ("or" / "") _ Formula)* {
       let args = [phi];
       tail.forEach(function(element) {args.push(element[3]); });
       if(args.length == 1)
@@ -55,7 +58,9 @@ Factor
 
 
 
-AtomicFormula = PropositionSymbol /
+AtomicFormula = p:PropositionSymbol {
+     return {type: "atomic", pred:p, args: []};
+} /
 	p:PredicateSymbol "("  args: TermList ")" {
 	return {type: "atomic", pred:p, args: args};
 }
@@ -74,7 +79,9 @@ TermList
 
 
 Term 
- = VariableSymbol / ConstantSymbol /
+ = VariableSymbol / ConstantSymbol
+  	{return {type: "term", func:f, args: []};} 
+    /
    f:FunctionSymbol "(" args: TermList ")" {
    	return {type: "term", func:f, args: args};
    }
