@@ -1,32 +1,54 @@
 import { Formula, stringToFormula, getLitterals } from "./src/Formula.js";
 
-type Proof = Formula[];
+class Proof {
+    formulas: Formula[] = new Array();
+    justification: string[] = [];
+
+    get length() { return this.formulas.length };
+}
 
 
 
 function stringToProof(str: string): Proof {
-    let proof: Proof = new Array();
-    str.split("\n").forEach((line) => { if (line != "") proof.push(stringToFormula(line)) });
+    let proof: Proof = new Proof();
+    let lines: string[] = str.split("\n");
+    for (let i in lines)
+        if (lines[i] != "") {
+            let pos = lines[i].indexOf("*");
+            let formulaLine: string;
+            if (pos < 0) formulaLine = lines[i]; else formulaLine = lines[i].substr(0, pos - 1);
+            formulaLine = formulaLine.trim();
+            proof.formulas.push(stringToFormula(formulaLine));
+            if (pos >= 0)
+                proof.justification[i] = "input";
+        }
     return proof;
 }
 
 function checkProof(proof: Proof) {
-    for(let i = 0; i < proof.length; i++)
-        for(let j = 0; i < j; j++)
-        for(let k = 0; k < j; k++)
-        if(resolution([proof[k], proof[j]], proof[i]))
-            console.log(i + "obtained from " + j + " and " + k);
-    console.log(proof);
+    for (let i = 0; i < proof.length; i++)
+        if (proof.justification[i] != "input")
+            for (let j = 0; j < i; j++)
+                for (let k = 0; k < j; k++)
+                    if (resolution(proof.formulas[k], proof.formulas[j], proof.formulas[i]))
+                        proof.justification[i] = "resolution rule on " + j + " and " + k;
+                    else
+                    proof.justification[i] = "???";
     return;
 }
 
 function update() {
     let proofString = (<HTMLTextAreaElement>document.getElementById("proof")).value;
-    checkProof(stringToProof(proofString));
+    let proof: Proof = stringToProof(proofString);
+    checkProof(proof);
+    (<HTMLTextAreaElement>document.getElementById("justification")).value =
+        proof.justification.join("\n");
+    console.log(proof);
 }
 
 (<HTMLTextAreaElement>document.getElementById("proof")).onchange = update;
 (<HTMLTextAreaElement>document.getElementById("proof")).onclick = update;
+(<HTMLTextAreaElement>document.getElementById("proof")).onkeyup = update;
 
 function same(obj1, obj2) {
     return JSON.stringify(obj1) == JSON.stringify(obj2);
@@ -36,17 +58,16 @@ function same(obj1, obj2) {
 
 function contains(element: any, array: any[]): boolean {
     for (let e of array) {
-        if (same(e, element))
+        if (same(e, element)) {
             return true;
+        }
     }
     return false;
 }
 
-function resolution(c: Formula[], res: Formula) {
-    if (c.length != 2) return false;
-
-    let c0: Formula[] = getLitterals(c[0]);
-    let c1: Formula[] = getLitterals(c[1]);
+function resolution(cc0: Formula, cc1: Formula, res: Formula) {
+    let c0: Formula[] = getLitterals(cc0);
+    let c1: Formula[] = getLitterals(cc1);
     let r: Formula[] = getLitterals(res);
 
     for (let l of r)
@@ -63,6 +84,8 @@ function resolution(c: Formula[], res: Formula) {
     let l0 = getLit(c0, r);
     let l1 = getLit(c1, r);
 
+    console.log(l0)
+    console.log(l1)
     if (l0 == undefined) return false;
     if (l1 == undefined) return false;
 
@@ -75,7 +98,7 @@ function resolution(c: Formula[], res: Formula) {
             return false;
 
     if (l0.type != "not")
-        [l1, l0] = [l1, l0];
+        [l1, l0] = [l0, l1];
 
     if (l0.type == "not" && l1.type == "atomic" && same(l0.arg, l1))
         return true;
