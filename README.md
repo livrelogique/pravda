@@ -1,4 +1,4 @@
-INSTALLATION of the Typescript
+INSTALLATION of the Typescript compiler
 
 INSTALLATION of OCAML (in case one day we may use Ocaml)
 
