@@ -1,0 +1,55 @@
+.proof {
+    background: url(../images/linenumbers.png);
+    background-attachment: local;
+    background-repeat: no-repeat;
+    padding-left: 35px;
+    padding-top: 10px;
+    padding-bottom: 0px;
+    border-color: #ccc;
+    margin-right: 0px;
+    padding-right: 0px;
+    border-right: none;
+    font-size: 1.07em;
+    border: none;
+}
+
+
+.justification {
+    margin-left: 0px;
+    padding-left:0px;
+    border-left: none;
+    padding-top: 10px;
+    border-color: #ccc;
+    font-size: 1.07em;
+    color: gray;
+    border: none;
+}
+
+
+textarea {
+    resize: none;
+    background-color: lightyellow;
+}
+
+
+prover {
+    display: inline;
+    padding: 0px;
+    box-shadow: 0 7px 7px 0 rgba(0, 0, 0, 0.8);
+}
+
+
+.win {
+    background-color: lightgreen;
+}
+
+
+
+.solutionButton {
+    background-color: greenyellow;
+    border: 2px brown solid;
+    margin: 8px;
+    padding: 4px;
+    border-radius: 8px;
+    cursor: pointer;
+}
