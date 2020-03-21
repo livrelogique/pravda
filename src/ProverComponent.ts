@@ -48,6 +48,7 @@ export class ProverComponent {
         let justificationElement = <HTMLTextAreaElement>document.createElement("TEXTAREA");
         justificationElement.rows = proofLinesInput.length;
         justificationElement.cols = 60;
+        justificationElement.setAttribute("readonly", "true");
         justificationElement.setAttribute("class", "justification");
         domElement.appendChild(justificationElement);
 
@@ -66,9 +67,9 @@ export class ProverComponent {
             return button;
         }
 
-        let buttonReset = addButton("reset", () => { proofElement.value = proofString; compute() });
+        let buttonReset = addButton("reset", () => { proofElement.value = proofString; onInput(); compute() });
         //addButton("submit", () => { compute(); });
-        let buttonSolution = addButton("solution", () => { proofElement.value = solution; compute() });
+        let buttonSolution = addButton("solution", () => { proofElement.value = solution; onInput(); compute() });
 
 
 

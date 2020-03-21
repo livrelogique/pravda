@@ -1,7 +1,7 @@
 textarea {
     resize: none;
     border: none;
-    background-color: lightyellow;
+    background-color: white;
 }
 
 .proof {
@@ -35,21 +35,24 @@ textarea {
 
 
 .prover {
+    position: relative;
     display: inline-block;
     white-space: nowrap;
-    padding: 0px;
+    padding: 2px;
+    margin: 8px;
     
 }
 
 
 .buttonPanel {
-    display: block;
+    position: absolute;
+    display: inline-block;
 }
 
 
 
 .win {
-    background-color: lightgreen;
+    background-color: rgb(194, 255, 194);
 }
 
 button {

@@ -8,15 +8,13 @@ export class Proof {
     public setJustificationInputFor(i) {
         this.justification[i] = "input";
     }
-    
+
     public get length() { return this.formulas.length };
     public isCorrect() {
-        return !(this.justification.find(
-            (line) => {
-
-                line.indexOf("???") >= 0;
-
-            }));
+        for (let line of this.justification) {
+            if (line.indexOf("???") >= 0) return false;
+        }
+        return true;
     }
 }
 
@@ -41,6 +39,8 @@ export function stringToProof(str: string): Proof {
                 proof.justification[i] = "??? parsing error: " + e.message;
             }
         }
+        else
+            proof.justification[i] = "";
     return proof;
 }
 
