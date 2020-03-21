@@ -1,4 +1,3 @@
-
 import { Formula, stringToFormula } from "./Formula.js";
 
 export class Proof {
