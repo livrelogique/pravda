@@ -86,7 +86,6 @@ function unification(t, u) {
     catch (e) {
         return null;
     }
-
 }
 
 unitTest("unifying p and p", unification(stringToFormula("p"), stringToFormula("p")) != null);
@@ -103,13 +102,12 @@ function getClashingLitterals(c0, c1) {
             if (l1.type == "not") {
                 let mgu = unification(l0, FormulaUtility.getNotSub(l1));
                 if (mgu) clashingLitterals.push({ l0: l0, l1: l1, mgu: mgu });
-            }   
+            }
             if (l0.type == "not") {
                 let mgu = unification(l1, FormulaUtility.getNotSub(l0));
                 if (mgu) clashingLitterals.push({ l0: l0, l1: l1, mgu: mgu });
             }
         }
-
     return clashingLitterals;
 }
 
@@ -119,6 +117,15 @@ function getClashingLitterals(c0, c1) {
 
 unitTest("clashing lit P(x) and not P(x)", getClashingLitterals([stringToFormula("P(x)")], [stringToFormula("not P(x)")]));
 unitTest("clashing lit P(x) and not P(a)", getClashingLitterals([stringToFormula("P(x)")], [stringToFormula("not P(a)")]));
+
+
+unitTest("clashing lit q and not q",
+    getClashingLitterals([stringToFormula("q")],
+        [stringToFormula("not q")]));
+unitTest("clashing lit not p or q and not p or not q",
+    getClashingLitterals([stringToFormula("not p"), stringToFormula("q")],
+        [stringToFormula("not p"), stringToFormula("not q")]));
+
 
 
 function substitutionApply(t, sub) {
@@ -131,8 +138,8 @@ function substitutionApply(t, sub) {
     else {
         let n: any = {};
         n.type = t.type;
-        n.pred = t.pred;
-        n.func = t.func;
+        if (t.pred) n.pred = t.pred;
+        if (t.func) n.func = t.func;
         n.args = [];
         for (let a of t.args) {
             n.args.push(substitutionApply(a, sub));
@@ -153,23 +160,33 @@ function getResolvant(c0, c1, cl) {
     let resolvant = [];
 
     for (let l of c0) if (!Utils.same(l, l0)) {
-        resolvant.push(substitutionApply(l, mgu));
+        Utils.setAdd(resolvant, substitutionApply(l, mgu));
     }
 
-
     for (let l of c1) if (!Utils.same(l, l1)) {
-        resolvant.push(substitutionApply(l, mgu));
+        Utils.setAdd(resolvant, substitutionApply(l, mgu));
     }
 
     return resolvant;
 }
 
 
+
+
 unitTest("getResolvant P(x) and not P(x)",
     getResolvant([stringToFormula("P(x)")], [stringToFormula("not P(x)")],
         { l0: stringToFormula("P(x)"), l1: stringToFormula("not P(x)"), mgu: { "x": "x" } }));
 
+unitTest("getResolvant lit q and not p or not q",
+    Utils.same(stringToFormula("not p"), getResolvant([stringToFormula("q")],
+        [stringToFormula("not p"), stringToFormula("not q")],
+        { l0: stringToFormula("q"), l1: stringToFormula("not q"), mgu: {} })));
 
+
+unitTest("getResolvant lit not p or q and not p or not q",
+    getResolvant([stringToFormula("not p"), stringToFormula("q")],
+        [stringToFormula("not p"), stringToFormula("not q")],
+        { l0: stringToFormula("q"), l1: stringToFormula("not q"), mgu: {} }));
 
 
 function resolution(ac0: Formula, ac1: Formula, ares: Formula) {
@@ -179,19 +196,19 @@ function resolution(ac0: Formula, ac1: Formula, ares: Formula) {
 
     let clashingLitterals = getClashingLitterals(c0, c1);
 
-    for (let cl of clashingLitterals) {
-        let resolvant = getResolvant(c0, c1, cl);
-
+    for (let clashingLiteral of clashingLitterals) {
+        let resolvant = getResolvant(c0, c1, clashingLiteral);
         if (Utils.same(res, resolvant))
             return "resolution rule";
-
-
-
     }
     return undefined;
 }
 
+unitTest("resolution q and not q", resolution(stringToFormula("q"), stringToFormula("not q"), stringToFormula("bottom")));
+unitTest("resolution q and not p or not q", resolution(stringToFormula("q"), stringToFormula("not p or not q"), stringToFormula("not p")));
+unitTest("resolution not p or q and not p or not q", resolution(stringToFormula("not p or q"), stringToFormula("not p or not q"), stringToFormula("not p")));
 
+/*************** CONTRACTION */
 
 
 function getContractionPossible(c0) {
@@ -201,33 +218,35 @@ function getContractionPossible(c0) {
             console.log(c0[i]);
             console.log(c0[j]);
             let mgu = unification(c0[i], c0[j]);
-            if(mgu)
+            if (mgu)
                 contractions.push(getContractedClause(c0, mgu));
         }
     return contractions;
 }
 
-unitTest("contractionPossible of P(x) P(a)", getContractionPossible([stringToFormula("P(x)"), stringToFormula("P(a)")]));
+
+
+unitTest("contractionPossible of P(x) P(a)",
+    getContractionPossible([stringToFormula("P(x)"), stringToFormula("P(a)")]));
+
+
 
 function getContractedClause(c0, mgu) {
     let c = [];
-    for(let l of c0) {
+    for (let l of c0) {
         const nl = substitutionApply(l, mgu);
-        if(!Utils.contains(nl, c)) c.push(nl);
+        if (!Utils.contains(nl, c)) c.push(nl);
     }
 
     return c;
 }
 
-
-//to be implemented
 function contraction(f: Formula, g: Formula) {
     let c0: Formula[] = getDirectSubFormulas(f);
     let c1: Formula[] = getDirectSubFormulas(g);
 
-
-    for(let c of getContractionPossible(c0)) {
-        if(Utils.same(c, c1)) return "contraction";
+    for (let contraction of getContractionPossible(c0)) {
+        if (Utils.same(contraction, c1)) return "contraction";
     }
 
     return false;
