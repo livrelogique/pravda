@@ -73,7 +73,7 @@ AtomicFormula = ("bottom" / "false") {return {type: "false"};}
 TermList
  = term:Term tail:( _ (",") _ Term)* {
       let args = [term];
-      tail.forEach(function(element) {args.push(element[3][0]); });
+      tail.forEach(function(element) {args.push(element[3]); });
       return args;
     }
     
@@ -82,8 +82,8 @@ TermList
 
 
 Term 
- = VariableSymbol / ConstantSymbol
-  	{return {type: "term", func:f, args: []};} 
+ = VariableSymbol / c: ConstantSymbol
+  	{return {type: "term", func:c, args: []};} 
     /
    f:FunctionSymbol "(" args: TermList ")" {
    	return {type: "term", func:f, args: args};
@@ -91,13 +91,13 @@ Term
  
  
 VariableSymbol
- = "x" / "y" / "z" { return text();}
+ = "x" / "y" / "z" / "x'" / "y'" / "z'" / "u" / "v" { return text();}
  
 ConstantSymbol
- = "0" / "1" / "a" / "b" / "c" / "d" / "e" { return text();}
+ = "0" / "1" / "a" / "b" / "c" / "d" / "e" / "a'" / "b'" / "c'" / "d'" / "e'" { return text();}
 
 FunctionSymbol
- = "f" / "g" / "h" { return text();}
+ = "f" / "g" / "h" / "f'" / "g'" / "h'" { return text();}
  
 
 PropositionSymbol
