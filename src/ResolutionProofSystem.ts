@@ -189,7 +189,83 @@ unitTest("getResolvant lit not p or q and not p or not q",
         { l0: stringToFormula("q"), l1: stringToFormula("not q"), mgu: {} }));
 
 
+
+
+function getFormulaWithNewNames(f) {
+    if (isVariable(f))
+        return f + "'";
+    else {
+        let n: any = {};
+        n.type = f.type;
+        if (f.pred) n.pred = f.pred;
+        if (f.func) n.func = f.func;
+        n.args = [];
+        for (let a of f.args) {
+            n.args.push(getFormulaWithNewNames(a));
+        }
+        return n;
+    }
+}
+
+
+unitTest("getFormulaWithNewNames(p)", getFormulaWithNewNames(stringToFormula("p")));
+unitTest("getFormulaWithNewNames(P(x))", getFormulaWithNewNames(stringToFormula("P(x)")));
+
+
+function sameModuloVariableRenaming(f, g) {
+    function sameModuloVariableRenaming2(f, g, renaming) {
+        if (isVariable(f)) {
+            if (!isVariable(g)) throw "aïe, not a variable on the other side";
+            if (renaming[f] && renaming[f] != g) throw "aïe, not a good correspondence";
+            renaming[f] = g;
+            return renaming;
+        }
+        else if (f instanceof Array) {
+            if (!(g instanceof Array)) throw "aïe, not an array";
+
+            if (f.length != f.length)
+                throw "pattern matching error because not the same number of arguments";
+            for (let i in f) {
+                renaming = sameModuloVariableRenaming2(f[i], g[i], renaming);
+            }
+            return renaming;
+        }
+        else {
+            if (f.type != g.type)
+                throw "pattern matching error because different type";
+            if (f.type == "atomic" && (f.pred != g.pred))
+                throw "pattern matching error because different pred";
+            if (f.type == "term" && (f.func != g.func))
+                throw "pattern matching error because different func";
+            if ((f.args).length != (g.args).length)
+                throw "pattern matching error because not the same number of arguments";
+            for (let i in f.args) {
+                renaming = sameModuloVariableRenaming2(f.args[i], g.args[i], renaming);
+            }
+            return renaming;
+        }
+
+    }
+
+    try {
+        return sameModuloVariableRenaming2(f, g, {});
+    }
+    catch (e) {
+        return null;
+    }
+
+}
+
+
+unitTest("sameModuloVariableRenaming(p, p)",
+    sameModuloVariableRenaming(stringToFormula("p"), stringToFormula("p")));
+unitTest("sameModuloVariableRenaming(P(x), P(y))",
+    sameModuloVariableRenaming(stringToFormula("P(x)"), stringToFormula("P(y)")));
+unitTest("sameModuloVariableRenaming(not P(x) or P(z), not P(y) or P(x))",
+    sameModuloVariableRenaming(stringToFormula("not P(x) or P(z)"), stringToFormula("not P(y) or P(x)")));
+
 function resolution(ac0: Formula, ac1: Formula, ares: Formula) {
+    ac1 = <any>getFormulaWithNewNames(ac1);
     let c0: Formula[] = getDirectSubFormulas(ac0);
     let c1: Formula[] = getDirectSubFormulas(ac1);
     let res: Formula[] = getDirectSubFormulas(ares);
@@ -197,8 +273,11 @@ function resolution(ac0: Formula, ac1: Formula, ares: Formula) {
     let clashingLitterals = getClashingLitterals(c0, c1);
 
     for (let clashingLiteral of clashingLitterals) {
+
         let resolvant = getResolvant(c0, c1, clashingLiteral);
-        if (Utils.same(res, resolvant))
+/*        console.log(JSON.stringify(res));
+        console.log(JSON.stringify(resolvant));*/
+        if (sameModuloVariableRenaming(res, resolvant))
             return "resolution rule";
     }
     return undefined;
@@ -215,8 +294,6 @@ function getContractionPossible(c0) {
     let contractions = [];
     for (let i in c0)
         for (let j in c0) if (i < j) {
-            console.log(c0[i]);
-            console.log(c0[j]);
             let mgu = unification(c0[i], c0[j]);
             if (mgu)
                 contractions.push(getContractedClause(c0, mgu));

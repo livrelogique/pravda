@@ -34,7 +34,7 @@ textarea {
 
 
 
-div {
+.prover {
     display: inline-block;
     white-space: nowrap;
     padding: 0px;
@@ -42,17 +42,30 @@ div {
 }
 
 
-.win {
-    background-color: lightgreen;
+.buttonPanel {
+    display: block;
 }
 
 
 
-.solutionButton {
-    background-color: orange;
-    border: 2px brown solid;
+.win {
+    background-color: lightgreen;
+}
+
+button {
     margin: 8px;
     padding: 4px;
     border-radius: 8px;
     cursor: pointer;
+}
+.solutionButton {
+    background-color: orange;
+    border: 2px brown solid;
+}
+
+
+
+.resetButton {
+    background-color: lightblue;
+    border: 2px brown solid;
 }

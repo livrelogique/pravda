@@ -5,6 +5,10 @@ export class Proof {
     formulas: Formula[] = new Array();
     justification: string[] = [];
 
+    public setJustificationInputFor(i) {
+        this.justification[i] = "input";
+    }
+    
     public get length() { return this.formulas.length };
     public isCorrect() {
         return !(this.justification.find(
