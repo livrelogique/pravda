@@ -14,6 +14,7 @@ function unitTest(name, e) {
 export class ResolutionProofSystem extends ProofSystem {
     constructor() {
         super();
+        this.addRule1(contraction);
         this.addRule2(resolution);
     }
 }
@@ -27,32 +28,38 @@ unitTest("isVariable(x)", isVariable("x"));
 unitTest("isVariable(P(x))", !isVariable(stringToFormula("P(x)")));
 
 
+type UnificationEquation = { term1: any, term2: any };
 
-function set(sub, v, t) {
-    if (sub[v] == undefined)
-        sub[v] = t;
-    else {
-        sub = unification2(sub[v], t, sub);
-    }
+function unification2(E: UnificationEquation[], sub: {}) {
+    /*console.log(JSON.stringify(E));
+    console.log(JSON.stringify(sub));*/
 
-    return sub;
-}
+    if (E.length == 0) return sub;
 
+    let equation = E.pop();
 
+    let t = equation.term1;
+    let u = equation.term2;
 
-
-
-function unification2(t, u, sub) {
-    console.log(t, u, sub)
     if (isVariable(t)) {
-        if(u == undefined) throw "bizarre";
-        return set(sub, t, u);
+        sub[t] = u;
+        E = E.map((eq) => ({
+            term1: substitutionApply(eq.term1, sub),
+            term2: substitutionApply(eq.term2, sub)
+        }));
+
+        for (let x in sub) {
+            sub[x] = substitutionApply(sub[x], sub);
+        }
+
+        return unification2(E, sub);
     }
+
     else if (isVariable(u)) {
-        return set(sub, u, t);
+        E.push({ term1: u, term2: t });
+        return unification2(E, sub);
     }
     else {
-
         if (t.type != u.type) throw "different type";
         switch (t.type) {
             case "atomic": if (t.pred != u.pred) throw "different pred";
@@ -62,18 +69,19 @@ function unification2(t, u, sub) {
         if (t.args.length != u.args.length) throw "different number of args";
 
         for (let i in t.args) {
-            sub = unification2(t.args[i], u.args[i], sub);
+            E.push({ term1: t.args[i], term2: u.args[i] });
         }
-
-        return sub;
+        return unification2(E, sub);
     }
+
 
 }
 
 
+
 function unification(t, u) {
     try {
-        return unification2(t, u, {});
+        return unification2([{ term1: t, term2: u }], {});
     }
     catch (e) {
         return null;
@@ -81,18 +89,25 @@ function unification(t, u) {
 
 }
 
-unitTest("unifying P(x) and P(x)", unification(stringToFormula("P(x)"), stringToFormula("P(x)")));
+unitTest("unifying p and p", unification(stringToFormula("p"), stringToFormula("p")) != null);
+unitTest("unifying P(x) and P(x)", unification(stringToFormula("P(x)"), stringToFormula("P(x)")) != null);
 unitTest("unifying P(x) and P(a)", unification(stringToFormula("P(x)"), stringToFormula("P(a)")));
 unitTest("unifyfing R(z, z) and R(u, f(y))",
-    unification2(stringToFormula("R(z,z)"), stringToFormula("R(u, f(y))"), {}));
+    unification(stringToFormula("R(z,z)"), stringToFormula("R(u, f(y))")));
 
 
 function getClashingLitterals(c0, c1) {
     let clashingLitterals = [];
     for (let l0 of c0)
         for (let l1 of c1) {
-            let mgu = unification(l0, FormulaUtility.getNotSub(l1));
-            if (mgu) clashingLitterals.push({ l0: l0, l1: l1, mgu: mgu });
+            if (l1.type == "not") {
+                let mgu = unification(l0, FormulaUtility.getNotSub(l1));
+                if (mgu) clashingLitterals.push({ l0: l0, l1: l1, mgu: mgu });
+            }   
+            if (l0.type == "not") {
+                let mgu = unification(l1, FormulaUtility.getNotSub(l0));
+                if (mgu) clashingLitterals.push({ l0: l0, l1: l1, mgu: mgu });
+            }
         }
 
     return clashingLitterals;
@@ -176,45 +191,44 @@ function resolution(ac0: Formula, ac1: Formula, ares: Formula) {
     return undefined;
 }
 
-/*
-function resolution(ac0: Formula, ac1: Formula, ares: Formula) {
-    let c0: Formula[] = getDirectSubFormulas(ac0);
-    let c1: Formula[] = getDirectSubFormulas(ac1);
-    let res: Formula[] = getDirectSubFormulas(ares);
 
 
-    for (let l of res)
-        if (!Utils.contains(l, c0) && !Utils.contains(l, c1)) return false;
 
-    function getLit(myClause, r) {
-        for (let a0 of myClause)
-            if (!Utils.contains(a0, r)) {
-                return a0;
-            }
-        return undefined;
+function getContractionPossible(c0) {
+    let contractions = [];
+    for (let i in c0)
+        for (let j in c0) if (i < j) {
+            console.log(c0[i]);
+            console.log(c0[j]);
+            let mgu = unification(c0[i], c0[j]);
+            if(mgu)
+                contractions.push(getContractedClause(c0, mgu));
+        }
+    return contractions;
+}
+
+unitTest("contractionPossible of P(x) P(a)", getContractionPossible([stringToFormula("P(x)"), stringToFormula("P(a)")]));
+
+function getContractedClause(c0, mgu) {
+    let c = [];
+    for(let l of c0) {
+        const nl = substitutionApply(l, mgu);
+        if(!Utils.contains(nl, c)) c.push(nl);
     }
 
-    let l0 = getLit(c0, res);
-    let l1 = getLit(c1, res);
+    return c;
+}
 
-    if (l0 == undefined) return false;
-    if (l1 == undefined) return false;
 
-    for (let l of c0)
-        if (!Utils.same(l, l0) && !Utils.contains(l, res))
-            return false;
+//to be implemented
+function contraction(f: Formula, g: Formula) {
+    let c0: Formula[] = getDirectSubFormulas(f);
+    let c1: Formula[] = getDirectSubFormulas(g);
 
-    for (let l of c1)
-        if (!Utils.same(l, l1) && !Utils.contains(l, res))
-            return false;
 
-    if (l0.type != "not")
-        [l1, l0] = [l0, l1];
-
-    if (l0.type == "not" && l1.type == "atomic" && Utils.same(FormulaUtility.getNotSub(l0), l1))
-        return "resolution rule";
+    for(let c of getContractionPossible(c0)) {
+        if(Utils.same(c, c1)) return "contraction";
+    }
 
     return false;
 }
-*/
-

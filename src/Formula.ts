@@ -39,7 +39,7 @@ export function getDirectSubFormulas(f: Formula): Formula[] {
 
 export class FormulaUtility {
     static getNotSub = (f: Formula) => {     return f.args[0]; }
-
+    
 
 
 

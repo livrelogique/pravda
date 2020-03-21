@@ -43,18 +43,24 @@
     //Q(x)
   </textarea>
 
-  <textarea proofSystem="ResolutionProofSystem" goal="Q(x)">P(a)   *
+  <textarea proofSystem="ResolutionProofSystem" goal="Q(a)">P(a)   *
     not P(x) or Q(x)     *
     //Q(a)
   </textarea>
 
 
   <h3>Refutation proofs</h3>
-  
-  <textarea proofSystem="ResolutionProofSystem" goal="Q(x)">R(z,z) or R(z, a)
-    not R(u, f(y)) or R(u, y)
-    R(f(y), a) or R(f(y), y)
+
+  <textarea proofSystem="ResolutionProofSystem" goal="bottom">R(z,z) or R(z, a)    *
+    not R(u, f(y)) or R(u, y)   *
+    R(f(y), a) or R(f(y), y)    *
+    not R(x, a) or R(x, x)     *
+    not R(v, f(y)) or not R(v, y)     *
+    //R(f(a), a)
     
+    //not R(f(y), a) or not R(f(y), y)
+    //not R(f(a), a)
+    //bottom
   </textarea>
 
 
