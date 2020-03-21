@@ -1,10 +1,22 @@
+.prover {
+    position: relative;
+    display: inline;
+    white-space: nowrap;
+    padding: 2px;
+    margin: 8px;
+}
+
+
 textarea {
+    display: inline-block;
     resize: none;
     border: none;
     background-color: white;
+    line-height: 16px;
 }
 
 .proof {
+    display: inline-block;
     background: url(../images/linenumbers.png);
     background-attachment: local;
     background-repeat: no-repeat;
@@ -16,36 +28,49 @@ textarea {
     padding-right: 0px;
     border-right: 1px solid orange;
     font-size: 1.07em;
-    
 }
 
 
-.justification {
+.justifications {
+    position: relative;
+    display: inline-block;
     padding-left: 16px;
     border-left: none;
     padding-top: 10px;
     border-color: #ccc;
-    font-size: 1.07em;
-    color: gray;
     border: none;
-}
-
-
-
-
-
-.prover {
-    position: relative;
-    display: inline-block;
     white-space: nowrap;
-    padding: 2px;
-    margin: 8px;
-    
+    vertical-align: top;
+    min-width: 200px;
+    max-width: 500px;
 }
 
+
+
+.justification {
+    padding: 0px;
+    min-height: 16px;
+    height: 16px;
+    font-size: 0.9em;
+
+}
+
+
+.inputJustification {
+    color: gray;
+}
+
+.errorJustification {
+    color: red;
+    background: rgb(255, 196, 85);
+}
+
+.ruleJustification {
+    color: green;
+}
 
 .buttonPanel {
-    position: absolute;
+    vertical-align: top;
     display: inline-block;
 }
 
@@ -56,11 +81,13 @@ textarea {
 }
 
 button {
+    display: block;
     margin: 8px;
     padding: 4px;
     border-radius: 8px;
     cursor: pointer;
 }
+
 .solutionButton {
     background-color: orange;
     border: 2px brown solid;
@@ -70,5 +97,5 @@ button {
 
 .resetButton {
     background-color: lightblue;
-    border: 2px brown solid;
+    border: 2px blue solid;
 }

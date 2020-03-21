@@ -6,12 +6,12 @@ import { HilbertProofSystem } from './HilbertProofSystem.js';
 export class ProverComponent {
     constructor(oldDomElement: HTMLTextAreaElement) {
         const proofStringOriginal = oldDomElement.value;
-        const domElement = document.createElement("DIV");
-        domElement.setAttribute("class", "prover");
+        const proverElement = document.createElement("DIV");
+        proverElement.setAttribute("class", "prover");
 
-        oldDomElement.parentElement.replaceChild(domElement, oldDomElement);
+        oldDomElement.parentElement.replaceChild(proverElement, oldDomElement);
 
-        const proofElement = <HTMLTextAreaElement>document.createElement("TEXTAREA");
+        const proofTextArea = <HTMLTextAreaElement>document.createElement("TEXTAREA");
 
         let proofLinesInput = proofStringOriginal.split("\n").map((line) => line.trim());
 
@@ -39,23 +39,20 @@ export class ProverComponent {
         }
 
 
-        proofElement.rows = proofLinesInput.length;
-        proofElement.cols = 60;
-        proofElement.setAttribute("class", "proof");
-        proofElement.value = proofString;
-        domElement.appendChild(proofElement);
+        proofTextArea.rows = proofLinesInput.length;
+        proofTextArea.cols = 60;
+        proofTextArea.setAttribute("class", "proof");
+        proofTextArea.value = proofString;
+        proverElement.appendChild(proofTextArea);
 
-        let justificationElement = <HTMLTextAreaElement>document.createElement("TEXTAREA");
-        justificationElement.rows = proofLinesInput.length;
-        justificationElement.cols = 60;
-        justificationElement.setAttribute("readonly", "true");
-        justificationElement.setAttribute("class", "justification");
-        domElement.appendChild(justificationElement);
+        let justificationsElement = document.createElement("div");
+        justificationsElement.setAttribute("class", "justifications");
+        proverElement.appendChild(justificationsElement);
 
 
         const buttonPanel = document.createElement("DIV");
         buttonPanel.setAttribute("class", "buttonPanel");
-        domElement.appendChild(buttonPanel);
+        proverElement.appendChild(buttonPanel);
 
 
         function addButton(name, onclickEvent) {
@@ -67,36 +64,48 @@ export class ProverComponent {
             return button;
         }
 
-        let buttonReset = addButton("reset", () => { proofElement.value = proofString; onInput(); compute() });
+        let buttonReset = addButton("reset", () => { proofTextArea.value = proofString; onInput(); compute() });
         //addButton("submit", () => { compute(); });
-        let buttonSolution = addButton("solution", () => { proofElement.value = solution; onInput(); compute() });
+        let buttonSolution = addButton("solution", () => { proofTextArea.value = solution; onInput(); compute() });
 
 
+        function getJustification(just: string) {
+            let justificationElement = document.createElement("div");
 
+            if (just == "input")
+                justificationElement.setAttribute("class", "justification inputJustification");
+            else if (just.indexOf("???") >= 0)
+                justificationElement.setAttribute("class", "justification errorJustification");
+            else justificationElement.setAttribute("class", "justification ruleJustification");
+            justificationElement.innerHTML = just;
+            return justificationElement;
+        }
 
         function compute() {
-            let proofString = proofElement.value;
+            let proofString = proofTextArea.value;
             let proof: Proof = stringToProof(proofString);
 
             for (let i in lineInput)
                 proof.setJustificationInputFor(i);
             proofSystem.checkProof(proof);
-            justificationElement.value = proof.justification.join("\n");
+
+            justificationsElement.innerHTML = '';
+            for (let just of proof.justification)
+                justificationsElement.appendChild(getJustification(just));
+
             if ((proofString.split("\n").map((line) => line.trim()).indexOf(goal) >= 0) && proof.isCorrect()) {
-                proofElement.setAttribute("class", "proof win");
-                justificationElement.setAttribute("class", "justification win");
+                proofTextArea.setAttribute("class", "proof win");
                 buttonSolution.hidden = true;
             }
             else {
-                proofElement.setAttribute("class", "proof");
-                justificationElement.setAttribute("class", "justification");
+                proofTextArea.setAttribute("class", "proof");
                 buttonSolution.hidden = false;
             }
         }
 
 
         function onInput() {
-            let proofString = proofElement.value;
+            let proofString = proofTextArea.value;
             let proofLines = proofString.split("\n");
 
             let changed = false;
@@ -107,17 +116,15 @@ export class ProverComponent {
             }
 
             if (changed)
-                proofElement.value = proofLines.join("\n");
+                proofTextArea.value = proofLines.join("\n");
 
             const numberOfLines = proofLines.length;
-            proofElement.rows = numberOfLines;
-            justificationElement.rows = numberOfLines;
-            justificationElement.value = "";
+            proofTextArea.rows = numberOfLines;
         }
 
-        
 
-        proofElement.oninput = () => { onInput(); compute(); };
+
+        proofTextArea.oninput = () => { onInput(); compute(); };
         onInput();
         compute();
 
