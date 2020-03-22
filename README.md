@@ -1,10 +1,8 @@
-INSTALLATION of the Typescript compiler
+#Pravda
 
-INSTALLATION of OCAML (in case one day we may use Ocaml)
+This tool provides exercices in formal logic, more precisely for proof systems.
 
-Install the OCAML installer:
-sudo dnf install opam
-
-Install OCAML to JS:
-opam install js_of_ocaml js_of_ocaml-ppx js_of_ocaml-lwt
-
+# Building the tool
+Be sure to have installed tsc, the TypeScript compiler.
+Run tsc in the root folder.
+The release version is then in the folder dist.
