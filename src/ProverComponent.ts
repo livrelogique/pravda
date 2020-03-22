@@ -76,7 +76,10 @@ export class ProverComponent {
                 justificationElement.setAttribute("class", "justification inputJustification");
             else if (just.indexOf("???") >= 0)
                 justificationElement.setAttribute("class", "justification errorJustification");
-            else justificationElement.setAttribute("class", "justification ruleJustification");
+            else if (just != "")
+                justificationElement.setAttribute("class", "justification ruleJustification");
+            else
+                justificationElement.setAttribute("class", "justification");
 
             if (just == "???")
                 just = "does not match any rule";

@@ -59,6 +59,27 @@ Humanity is in danger! We need you to save the world. For this mission, you need
 
 
   <h3>Refutation proofs</h3>
+  
+  <textarea proofSystem="ResolutionProofSystem" goal="bottom">
+    P(x) or not P(f(x))    *
+    not P(a)      *
+    P(f(f(a)))  *
+    //not P(f(a))
+    //not P(f(f(a)))
+    //bottom
+  </textarea>
+  
+  <textarea proofSystem="ResolutionProofSystem" goal="bottom">
+    R(x,y) or R(f(x),x)    *
+    R(x,y) or R(x,f(x))      *
+    not R(x,y) or not R(y,z) or R(x,z)  *
+    not R(x,x)    *
+    //R(f(x),x)
+    //R(x,f(x))
+    //not R(z,f(x)) or R(z,x)
+    //R(x,x)
+    //bottom
+  </textarea>
 
   <textarea proofSystem="ResolutionProofSystem" goal="bottom">R(z,z) or R(z, a)    *
     not R(u, f(y)) or R(u, y)   *
@@ -70,6 +91,7 @@ Humanity is in danger! We need you to save the world. For this mission, you need
     //not R(f(a), a)
     //bottom
   </textarea>
+<<<<<<< HEAD
 
   <textarea proofSystem="ResolutionProofSystem" goal="bottom">
     P(x) or not P(f(x))    *
@@ -80,6 +102,11 @@ Humanity is in danger! We need you to save the world. For this mission, you need
     //bottom
   </textarea>
 
+=======
+  
+  
+  
+>>>>>>> 10b6b596c75c1ff20ac6e53c5967cf5ce9ebfd51
   <textarea proofSystem="ResolutionProofSystem" goal="bottom">
     not P(x) or Q(f(x),x)    *
     not P(x) or not Q(y,x) or R(y)      *
@@ -92,6 +119,7 @@ Humanity is in danger! We need you to save the world. For this mission, you need
     //not P(x)
     //bottom
   </textarea>
+<<<<<<< HEAD
 
   <textarea proofSystem="ResolutionProofSystem" goal="bottom">
     R(x,y) or R(f(x),x)    *
@@ -109,6 +137,15 @@ Humanity is in danger! We need you to save the world. For this mission, you need
 
 
 
+=======
+  
+  
+  
+ 
+  
+  
+  
+>>>>>>> 10b6b596c75c1ff20ac6e53c5967cf5ce9ebfd51
 
 
 
