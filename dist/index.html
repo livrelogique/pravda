@@ -50,17 +50,6 @@
 
 
   <h3>Refutation proofs</h3>
-
-  <textarea proofSystem="ResolutionProofSystem" goal="bottom">R(z,z) or R(z, a)    *
-    not R(u, f(y)) or R(u, y)   *
-    R(f(y), a) or R(f(y), y)    *
-    not R(x, a) or R(x, x)     *
-    not R(v, f(y)) or not R(v, y)     *
-    //R(f(a), a)
-    //not R(f(y), a) or not R(f(y), y)
-    //not R(f(a), a)
-    //bottom
-  </textarea>
   
   <textarea proofSystem="ResolutionProofSystem" goal="bottom">
     P(x) or not P(f(x))    *
@@ -68,19 +57,6 @@
     P(f(f(a)))  *
     //not P(f(a))
     //not P(f(f(a)))
-    //bottom
-  </textarea>
-  
-  <textarea proofSystem="ResolutionProofSystem" goal="bottom">
-    not P(x) or Q(f(x),x)    *
-    not P(x) or not Q(y,x) or R(y)      *
-    not R(y) or not S(y) or not P(x) or not Q(y,x)  *
-    not S(y) or R(y)    *
-    P(a)     *
-    not R(x) or S(x)       *
-    //not R(y) or not P(x) or not Q(y,x)
-    //not P(x) or not Q(y,x)
-    //not P(x)
     //bottom
   </textarea>
   
@@ -95,6 +71,34 @@
     //R(x,x)
     //bottom
   </textarea>
+
+  <textarea proofSystem="ResolutionProofSystem" goal="bottom">R(z,z) or R(z, a)    *
+    not R(u, f(y)) or R(u, y)   *
+    R(f(y), a) or R(f(y), y)    *
+    not R(x, a) or R(x, x)     *
+    not R(v, f(y)) or not R(v, y)     *
+    //R(f(a), a)
+    //not R(f(y), a) or not R(f(y), y)
+    //not R(f(a), a)
+    //bottom
+  </textarea>
+  
+  
+  
+  <textarea proofSystem="ResolutionProofSystem" goal="bottom">
+    not P(x) or Q(f(x),x)    *
+    not P(x) or not Q(y,x) or R(y)      *
+    not R(y) or not S(y) or not P(x) or not Q(y,x)  *
+    not S(y) or R(y)    *
+    P(a)     *
+    not R(x) or S(x)       *
+    //not R(y) or not P(x) or not Q(y,x)
+    //not P(x) or not Q(y,x)
+    //not P(x)
+    //bottom
+  </textarea>
+  
+  
   
  
   
