@@ -77,6 +77,13 @@ export class ProverComponent {
             else if (just.indexOf("???") >= 0)
                 justificationElement.setAttribute("class", "justification errorJustification");
             else justificationElement.setAttribute("class", "justification ruleJustification");
+
+            if (just == "???")
+                just = "does not match any rule";
+
+            if (just.indexOf("parsing error") >= 0)
+                just = "parsing error";
+
             justificationElement.innerHTML = just;
             return justificationElement;
         }

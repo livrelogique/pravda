@@ -1,9 +1,9 @@
 .prover {
     position: relative;
-    display: inline;
     white-space: nowrap;
     padding: 2px;
     margin: 8px;
+    margin-bottom: 16px;
 }
 
 
@@ -51,8 +51,7 @@ textarea {
     padding: 0px;
     min-height: 16px;
     height: 16px;
-    font-size: 0.9em;
-
+    font-size: 0.85em;
 }
 
 
@@ -65,8 +64,18 @@ textarea {
     background: rgb(255, 196, 85);
 }
 
+
+
+.errorJustification::before {
+    content: url(../images/notok.png);
+}
+
 .ruleJustification {
     color: green;
+}
+
+.ruleJustification::before {
+    content: url(../images/ok.png);
 }
 
 .buttonPanel {
