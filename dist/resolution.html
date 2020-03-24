@@ -1,0 +1,134 @@
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <script src="./src/parser/parser.js"></script>
+  <script src="Main.js" type="module"></script>
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+</head>
+
+<body>
+
+  <h1>Pravda - resolution</h1>
+
+  <h2>Resolution in propositional logic</h2>
+
+  <h3>Resolution rule: special case modus ponens</h3>
+  <textarea proofSystem="ResolutionProofSystem" goal="q">not p or q *
+    p *
+    //q
+  </textarea>
+
+  <h3>Resolution rule: general case</h3>
+  <textarea proofSystem="ResolutionProofSystem" goal="not s or q or r or t">not s or not p or q or r*
+    q or p or t *
+    //not s or q or r or t
+  </textarea>
+
+
+
+  <h3>A small refutation proof</h3>
+  <textarea proofSystem="ResolutionProofSystem" goal="bottom">not p or not q or r *
+    not r *
+    not p or q *
+    p *
+    //not p or not q
+    //not p
+    //bottom
+  </textarea>
+
+
+  <h2>Resolution in first-order logic</h2>
+
+  <h3>Resolution rule</h3>
+  <textarea proofSystem="ResolutionProofSystem" goal="Q(x)">P(x)   *
+    not P(x) or Q(x)     *
+    //Q(x)
+  </textarea>
+
+  <textarea proofSystem="ResolutionProofSystem" goal="Q(a)">P(a)   *
+    not P(x) or Q(x)     *
+    //Q(a)
+  </textarea>
+
+  <h3>Contraction rule</h3>
+
+  <textarea proofSystem="ResolutionProofSystem" goal="Q(a)">P(a) or P(x) or Q(x)  *
+    //P(a) or Q(a)
+  </textarea>
+
+
+
+  <h3>Refutation proofs</h3>
+  
+  <textarea proofSystem="ResolutionProofSystem" goal="bottom">
+    P(x) or not P(f(x))    *
+    not P(a)      *
+    P(f(f(a)))  *
+    //not P(f(a))
+    //not P(f(f(a)))
+    //bottom
+  </textarea>
+  
+  <textarea proofSystem="ResolutionProofSystem" goal="bottom">
+    R(x,y) or R(f(x),x)    *
+    R(x,y) or R(x,f(x))      *
+    not R(x,y) or not R(y,z) or R(x,z)  *
+    not R(x,x)    *
+    //R(f(x),x)
+    //R(x,f(x))
+    //not R(z,f(x)) or R(z,x)
+    //R(x,x)
+    //bottom
+  </textarea>
+
+  <textarea proofSystem="ResolutionProofSystem" goal="bottom">R(z,z) or R(z, a)    *
+    not R(u, f(y)) or R(u, y)   *
+    R(f(y), a) or R(f(y), y)    *
+    not R(x, a) or R(x, x)     *
+    not R(v, f(y)) or not R(v, y)     *
+    //R(f(a), a)
+    //not R(f(y), a) or not R(f(y), y)
+    //not R(f(a), a)
+    //bottom
+  </textarea>
+
+
+  
+  
+  
+  <textarea proofSystem="ResolutionProofSystem" goal="bottom">
+    not P(x) or Q(f(x),x)    *
+    not P(x) or not Q(y,x) or R(y)      *
+    not R(y) or not S(y) or not P(x) or not Q(y,x)  *
+    not S(y) or R(y)    *
+    P(a)     *
+    not R(x) or S(x)       *
+    //not R(y) or not P(x) or not Q(y,x)
+    //not P(x) or not Q(y,x)
+    //not P(x)
+    //bottom
+  </textarea>
+
+
+
+
+
+  
+  
+  
+ 
+  
+  
+  
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -108,3 +108,72 @@ button {
     background-color: lightblue;
     border: 2px blue solid;
 }
+
+
+
+.mission {
+    background-color: rgb(245, 245, 245);
+    padding: 16px;
+    margin: 16px;
+    border: 2px black solid;
+    border-radius: 16px;
+}
+
+
+h2 {
+    background-color: rgb(212, 192, 149);
+}
+
+
+
+
+div.gallery {
+    text-align: center;
+    display: block;
+}
+
+.buttonproofsystem {
+    position: relative;
+    background-color: white;
+    display: inline-block;
+    margin: 64px;
+    padding: 32px;
+    width: 350px;
+    height: 150px;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    color: black;
+    text-decoration: none;
+}
+
+.buttonproofsystem:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.8);
+}
+
+.buttonproofsystem a {
+    position: relative;
+    cursor: pointer;
+    color: black;
+    text-decoration: none;
+}
+
+
+
+
+
+.title {
+    display: block;
+}
+
+
+
+.advantage {
+    font-size: 0.8em; 
+    color: green;
+}
+
+
+.drawback {
+    font-size: 0.8em; 
+    color: brown;
+}

@@ -1,0 +1,28 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="./src/parser/parser.js"></script>
+    <script src="Main.js" type="module"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+</head>
+
+<body>
+
+    <h1>Pravda - Hilbert's proof systems</h1>
+
+    <h2>Hilbert system in propositional logic</h2>
+    <textarea proofSystem="HilbertProofSystem" goal="p -> p">
+      p -> (p -> p)
+      (p -> ((p -> p) -> p))
+      (p -> ((p -> p) -> p)) -> ((p -> (p -> p)) -> (p -> p))
+      //((p -> (p -> p)) -> (p -> p))
+      p -> p
+    </textarea>
+  
+  
+
+
+
+
+</body>

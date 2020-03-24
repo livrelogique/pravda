@@ -11,132 +11,61 @@
 
   <h1>Pravda - the pedagogical prover of ENS Rennes - exercices in proof systems</h1>
 
+  <div class="mission">
+    Humanity is in danger! We need you to save the world. For this mission, you need to provide proofs in formal logic.
+    We will consider propositional logic and first-order logic. The syntax uses is:
 
-Humanity is in danger! We need you to save the world. For this mission, you need to prove proofs in formal logic. We will consider propositional logic and first-order logic. The syntax uses is:
+    <ul>
+      <li>atomic propositions in propositional logic: <code>p</code>, <code>q</code>, <code>r</code></li>
+      <li>predicate symbols: <code>P</code>, <code>Q</code>, <code>R</code></li>
+      <li>constant symbols: <code>a</code>, <code>b</code>, <code>c</code></li>
+      <li>function symbols: <code>f</code>, <code>g</code>, <code>h</code></li>
+      <li>variable symbols: <code>x</code>, <code>y</code>, <code>z</code>, <code>u</code>, <code>v</code></li>
+    </ul>
+  </div>
 
-<ul>
-  <li>atomic propositions in propositional logic: <code>p</code>, <code>q</code>, <code>r</code></li>
-  <li>predicate symbols: <code>P</code>, <code>Q</code>, <code>R</code></li>
-  <li>constant symbols: <code>a</code>, <code>b</code>, <code>c</code></li>
-  <li>function symbols: <code>f</code>, <code>g</code>, <code>h</code></li>
-  <li>variable symbols: <code>x</code>, <code>y</code>, <code>z</code>, <code>u</code>, <code>v</code></li>
-</ul>
-
-  <h2>Resolution in propositional logic</h2>
-
-  <h3>Resolution rule: special case modus ponens</h3>
-  <textarea proofSystem="ResolutionProofSystem" goal="q">not p or q *
-    p *
-    //q
-  </textarea>
-  <h3>A small refutation proof</h3>
-  <textarea proofSystem="ResolutionProofSystem" goal="bottom">not p or not q or r *
-    not r *
-    not p or q *
-    p *
-    //not p or not q
-    //not p
-    //bottom
-  </textarea>
+  Code available on <a href="https://gitlab.inria.fr/fschwarz/pravda/">gitlab Inria</a>
 
 
 
 
+  <div class="gallery">
+    <div class="buttonproofsystem">
+      <a href="resolution.html">
+        <div class="content">
+          <h2>Resolution</h2>
+          Resolution proof system has been designed by Robinson.
 
+          <div class="advantage">A single rule (or two in first-order)</div>
+          <div class="drawback">Requires formulas to be in clausal form (skolemisation et tutti quanti)</div>
+        </div>
+      </a>
+    </div>
+    <div class="buttonproofsystem">
+      <a href="hibert.html">
+        <div class="content">
+          <h2>Hibert's proof system</h2>
+          Hibert's proof system were invented by Hilbert.
 
-  <h2>Resolution in first-order logic</h2>
+          <div class="advantage">A proof is just a list of formulas</div>
+          <div class="drawback">Proofs are very difficult to read by humans</div>
+        </div>
+      </a>
+    </div>
 
-  <h3>Small applications of resolution rules</h3>
-  <textarea proofSystem="ResolutionProofSystem" goal="Q(x)">P(x)   *
-    not P(x) or Q(x)     *
-    //Q(x)
-  </textarea>
-
-  <textarea proofSystem="ResolutionProofSystem" goal="Q(a)">P(a)   *
-    not P(x) or Q(x)     *
-    //Q(a)
-  </textarea>
-
-
-  <h3>Refutation proofs</h3>
-  
-  <textarea proofSystem="ResolutionProofSystem" goal="bottom">
-    P(x) or not P(f(x))    *
-    not P(a)      *
-    P(f(f(a)))  *
-    //not P(f(a))
-    //not P(f(f(a)))
-    //bottom
-  </textarea>
-  
-  <textarea proofSystem="ResolutionProofSystem" goal="bottom">
-    R(x,y) or R(f(x),x)    *
-    R(x,y) or R(x,f(x))      *
-    not R(x,y) or not R(y,z) or R(x,z)  *
-    not R(x,x)    *
-    //R(f(x),x)
-    //R(x,f(x))
-    //not R(z,f(x)) or R(z,x)
-    //R(x,x)
-    //bottom
-  </textarea>
-
-  <textarea proofSystem="ResolutionProofSystem" goal="bottom">R(z,z) or R(z, a)    *
-    not R(u, f(y)) or R(u, y)   *
-    R(f(y), a) or R(f(y), y)    *
-    not R(x, a) or R(x, x)     *
-    not R(v, f(y)) or not R(v, y)     *
-    //R(f(a), a)
-    //not R(f(y), a) or not R(f(y), y)
-    //not R(f(a), a)
-    //bottom
-  </textarea>
-
+    <div class="buttonproofsystem">
+      <a href="naturaldeduction.html">
+        <div class="content">
+          <h2>Natural deduction</h2>
+          Hibert's proof system were invented by Hilbert.
+          <div class="advantage">Proofs look like what mathematicians do, thus are easy to read.</div>
+          <div class="drawback">Proofs are no longer a list of formulas, but a list of sequents.</div>
+        </div>
+      </a>
+    </div>
+  </div>
 
   
-  
-  
-  <textarea proofSystem="ResolutionProofSystem" goal="bottom">
-    not P(x) or Q(f(x),x)    *
-    not P(x) or not Q(y,x) or R(y)      *
-    not R(y) or not S(y) or not P(x) or not Q(y,x)  *
-    not S(y) or R(y)    *
-    P(a)     *
-    not R(x) or S(x)       *
-    //not R(y) or not P(x) or not Q(y,x)
-    //not P(x) or not Q(y,x)
-    //not P(x)
-    //bottom
-  </textarea>
-
-
-
-
-
-  
-  
-  
- 
-  
-  
-  
-
-
-
-
-
-
-
-  <h2>Hilbert system in propositional logic</h2>
-  <textarea proofSystem="HilbertProofSystem" goal="p -> p">
-    p -> (p -> p)
-    (p -> ((p -> p) -> p))
-    (p -> ((p -> p) -> p)) -> ((p -> (p -> p)) -> (p -> p))
-    //((p -> (p -> p)) -> (p -> p))
-    p -> p
-  </textarea>
-
-
 </body>
 
 </html>
