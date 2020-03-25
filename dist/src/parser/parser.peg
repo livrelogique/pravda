@@ -10,7 +10,7 @@ FormulaList = phi: Formula tail:(_ ("," / "") _ Formula)* {
        /   EmptyList
 
 
-FormulaListVariable = "Gamma" / "Sigma" / "Delta" {
+FormulaListVariable = "Gamma+" / "Gamma" / "Sigma" / "Delta" {
 return text()}
 
 
@@ -76,9 +76,9 @@ Factor
 
 
 
-AtomicFormula = ("bottom" / "false") {return {type: "false"};}
+AtomicFormula = ("bottom" / "false") {return {type: "false", args: []};}
     /
-    ("top" / "true") {return {type: "true"};}
+    ("top" / "true") {return {type: "true", args: []};}
     /
     ("phi" / "psi" / "chi" / "eta") {return text();}
     /
