@@ -1,3 +1,24 @@
+Sequent =  args1: (FormulaListVariable / FormulaList) _ "|-" _ args2: (Formula) {
+          return {type: "sequent", args: [args1, args2]};} / Formula
+         
+         
+ 
+FormulaList = phi: Formula tail:(_ ("," / "") _ Formula)* {
+      let args = [phi];
+      tail.forEach(function(element) {args.push(element[3]); });
+      return {type: "list", args: args};}
+       /   EmptyList
+
+
+FormulaListVariable = "Gamma" / "Sigma" / "Delta" {
+return text()}
+
+
+
+EmptyList = _ {return {type: "list", args: []}; }
+
+
+
 Formula
   = 
     "exists" _ x:VariableSymbol _ phi: Formula {

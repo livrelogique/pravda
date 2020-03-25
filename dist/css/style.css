@@ -132,6 +132,13 @@ div.gallery {
     display: block;
 }
 
+
+.buttonproofsystem a::before {
+    content: url(../images/fly.png);
+    padding: 0px;
+}
+
+
 .buttonproofsystem {
     position: relative;
     background-color: white;
@@ -139,7 +146,6 @@ div.gallery {
     margin: 64px;
     padding: 32px;
     width: 350px;
-    height: 150px;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.4);
     cursor: pointer;
     color: black;
@@ -176,4 +182,14 @@ div.gallery {
 .drawback {
     font-size: 0.8em; 
     color: brown;
+}
+
+
+.gitlab {
+    display: block;
+    background: violet;
+    color: black;
+    float: right;
+    padding: 16px;
+    border-radius: 32px;
 }

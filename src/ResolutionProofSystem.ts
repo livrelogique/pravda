@@ -312,7 +312,7 @@ function getContractedClause(c0, mgu) {
     let c = [];
     for (let l of c0) {
         const nl = substitutionApply(l, mgu);
-        if (!Utils.contains(nl, c)) c.push(nl);
+        if (!Utils.contains(c, nl)) c.push(nl);
     }
 
     return c;

@@ -4,7 +4,7 @@ export function same(obj1, obj2) {
 
 
 
-export function contains(element: any, array: any[]): boolean {
+export function contains(array: any[], element: any): boolean {
     for (let e of array) {
         if (same(e, element)) {
             return true;
@@ -13,9 +13,35 @@ export function contains(element: any, array: any[]): boolean {
     return false;
 }
 
+export function includes(bigArray: any[], array: any[]): boolean {
+    for (let e of array) {
+        if (!contains(bigArray, e)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+/**
+ * 
+ * @param bigArray 
+ * @param array 
+ * @param element 
+ * @return true iff bigArray = array U {element}
+ */
+export function isSetPlusElement(bigArray: any[], array: any[], element: any): boolean {
+    if (bigArray.length != array.length + 1)
+        return false;
+
+    if (!contains(bigArray, element))
+        return false;
+
+    return includes(bigArray, array);
+}
 
 
 export function setAdd(array: any[], element: any): void {
-    if (!contains(element, array))
+    if (!contains(array, element))
         array.push(element);
 }

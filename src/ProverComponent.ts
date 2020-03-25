@@ -2,6 +2,7 @@ import { ProofSystem } from 'ProofSystem.js';
 import { Proof, stringToProof } from "./Proof.js";
 import { ResolutionProofSystem } from "./ResolutionProofSystem.js";
 import { HilbertProofSystem } from './HilbertProofSystem.js';
+import { NaturalDeduction } from './NaturalDeduction.js';
 
 export class ProverComponent {
     constructor(oldDomElement: HTMLTextAreaElement) {
@@ -35,6 +36,7 @@ export class ProverComponent {
         switch (oldDomElement.getAttribute("proofSystem")) {
             case "ResolutionProofSystem": proofSystem = new ResolutionProofSystem(); break;
             case "HilbertProofSystem": proofSystem = new HilbertProofSystem(); break;
+            case "NaturalDeduction": proofSystem = new NaturalDeduction(); break;
             default: proofSystem = new HilbertProofSystem();
         }
 
