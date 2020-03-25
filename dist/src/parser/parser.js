@@ -174,12 +174,12 @@
         peg$c17 = "exists",
         peg$c18 = peg$literalExpectation("exists", false),
         peg$c19 = function(x, phi) {
-            	return {type: "exists", var: x, arg: phi};
+            	return {type: "exists", args: [x, phi]};
             },
         peg$c20 = "forall",
         peg$c21 = peg$literalExpectation("forall", false),
         peg$c22 = function(x, phi) {
-            	return {type: "forall", var: x, arg: phi};
+            	return {type: "forall", args: [x, phi]};
             },
         peg$c23 = "->",
         peg$c24 = peg$literalExpectation("->", false),

@@ -22,13 +22,13 @@ EmptyList = _ {return {type: "list", args: []}; }
 Formula
   = 
     "exists" _ x:VariableSymbol _ phi: Formula {
-    	return {type: "exists", var: x, arg: phi};
+    	return {type: "exists", args: [x, phi]};
     }
 
     /
     
     "forall" _ x:VariableSymbol _ phi: Formula {
-    	return {type: "forall", var: x, arg: phi};
+    	return {type: "forall", args: [x, phi]};
     }
  
     /

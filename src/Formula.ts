@@ -13,7 +13,7 @@ export type Formula = { type: "and" | "or" | "->", args: Formula[] } |
 { type: "not", args: Formula[] } |
 { type: "exists" | "forall", var: VariableSymbol, args: Formula } |
 { type: "atomic", pred: PredicateSymbol, args: Term[] } |
-{ type: "true", args: Formula[]} | {type: "false", args: Formula[]};
+{ type: "true", args: Formula[] } | { type: "false", args: Formula[] };
 
 
 /*
@@ -30,7 +30,7 @@ export function stringToFormula(str: string): Formula {
 @output the array of litterals
 */
 export function getDirectSubFormulas(f: Formula): Formula[] {
-    if(((<any>f).type == "true") || ((<any>f).type == "false"))
+    if (((<any>f).type == "true") || ((<any>f).type == "false"))
         return [];
     if ((<any>f).type != "or")
         return [f];
@@ -41,9 +41,9 @@ export function getDirectSubFormulas(f: Formula): Formula[] {
 
 
 export class FormulaUtility {
-    static getNotSub = (f: Formula) => {     return f.args[0]; }
-    static not = (f: Formula) => {return { type: "not", args: [f] }};
-
+    static getNotSub = (f: Formula) => { return f.args[0]; }
+    static not = (f: Formula) => { return { type: "not", args: [f] } };
+    static isFreeVariable = (f: Formula, x: string) => { return true };
 
 
 
