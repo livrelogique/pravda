@@ -11,17 +11,64 @@
 
   <h1>Pravda - natural deduction</h1>
 
-  <textarea proofSystem="NaturalDeduction" goal="Q(x)">q |- q
-   not p |- bottom
-   |- p
 
-p |- q
+
+  <h2>In propositional logic</h2>
+
+  <h3>Rules</h3>
+
+
+  <textarea proofSystem="NaturalDeduction">
+    q |- q
+  </textarea>
+
+
+  <textarea proofSystem="NaturalDeduction">
+  not p |- bottom  *
+  |- p
+  </textarea>
+
+
+  <textarea proofSystem="NaturalDeduction">
+p |- q  *
 p, r |- q
+</textarea>
 
 
-  p  |-  q
+  <textarea proofSystem="NaturalDeduction">
+  p  |-  q   *
    |- p -> q
   </textarea>
 
+
+
+
+  <textarea proofSystem="NaturalDeduction" goal="p |- q and r">
+p |- q *
+p |- r *
+p |- q and r
+</textarea>
+
+
+  <textarea proofSystem="NaturalDeduction" goal="p |- q">
+  p |- q and r *
+  p |- q
+</textarea>
+
+  <textarea proofSystem="NaturalDeduction" goal="p |- r">
+  p |- q and r *
+  p |- r
+</textarea>
+
+  <textarea proofSystem="NaturalDeduction" goal="p |- r">
+  p, q |- bottom *
+  q |- not p
+</textarea>
+
+  <textarea proofSystem="NaturalDeduction" goal="p |- r">
+  p |- q   *
+  p |- not q   *
+  p |- bottom
+</textarea>
 
 </body>
