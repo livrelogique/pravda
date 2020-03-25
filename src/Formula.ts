@@ -1,3 +1,6 @@
+import * as Utils from "./Utils.js";
+import * as UnitTest from "./UnitTest.js"
+
 declare function FormulaParser(): any;
 
 export type VariableSymbol = string;
@@ -39,9 +42,13 @@ export function getDirectSubFormulas(f: Formula): Formula[] {
 
 export class FormulaUtility {
     static getNotSub = (f: Formula) => {     return f.args[0]; }
-    
+    static not = (f: Formula) => {return { type: "not", args: [f] }};
+
 
 
 
 
 }
+
+
+UnitTest.run("not", Utils.same(stringToFormula("not p"), FormulaUtility.not(stringToFormula("p"))));

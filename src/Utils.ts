@@ -1,3 +1,6 @@
+import * as UnitTest from "./UnitTest.js";
+
+
 export function same(obj1, obj2) {
     return JSON.stringify(obj1) == JSON.stringify(obj2);
 }
@@ -39,6 +42,10 @@ export function isSetPlusElement(bigArray: any[], array: any[], element: any): b
 
     return includes(bigArray, array);
 }
+
+
+
+UnitTest.run("isSetPlusElement", isSetPlusElement(["p"], [], "p"));
 
 
 export function setAdd(array: any[], element: any): void {

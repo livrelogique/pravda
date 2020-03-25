@@ -11,9 +11,16 @@
 
   <h1>Pravda - natural deduction</h1>
 
-  <textarea proofSystem="NaturalDeduction" goal="Q(x)">P(x)   *
-    not P(x) or Q(x)     *
-    //Q(x)
+  <textarea proofSystem="NaturalDeduction" goal="Q(x)">q |- q
+   not p |- bottom
+   |- p
+
+p |- q
+p, r |- q
+
+
+  p  |-  q
+   |- p -> q
   </textarea>
 
 

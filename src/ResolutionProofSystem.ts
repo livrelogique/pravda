@@ -1,14 +1,10 @@
 import { ProofSystem } from "./ProofSystem.js";
 import { Formula, FormulaUtility, getDirectSubFormulas, stringToFormula } from "./Formula.js";
 import * as Utils from "./Utils.js";
+import * as UnitTest from "./UnitTest.js";
 
 
 
-
-function unitTest(name, e) {
-    console.log("unit test " + name + ":");
-    console.log(e);
-}
 
 
 export class ResolutionProofSystem extends ProofSystem {
@@ -24,8 +20,8 @@ function isVariable(t) {
     return (typeof t == "string");
 }
 
-unitTest("isVariable(x)", isVariable("x"));
-unitTest("isVariable(P(x))", !isVariable(stringToFormula("P(x)")));
+UnitTest.run("isVariable(x)", isVariable("x"));
+UnitTest.run("isVariable(P(x))", !isVariable(stringToFormula("P(x)")));
 
 
 type UnificationEquation = { term1: any, term2: any };
@@ -88,10 +84,10 @@ function unification(t, u) {
     }
 }
 
-unitTest("unifying p and p", unification(stringToFormula("p"), stringToFormula("p")) != null);
-unitTest("unifying P(x) and P(x)", unification(stringToFormula("P(x)"), stringToFormula("P(x)")) != null);
-unitTest("unifying P(x) and P(a)", unification(stringToFormula("P(x)"), stringToFormula("P(a)")));
-unitTest("unifyfing R(z, z) and R(u, f(y))",
+UnitTest.run("unifying p and p", unification(stringToFormula("p"), stringToFormula("p")) != null);
+UnitTest.run("unifying P(x) and P(x)", unification(stringToFormula("P(x)"), stringToFormula("P(x)")) != null);
+UnitTest.run("unifying P(x) and P(a)", unification(stringToFormula("P(x)"), stringToFormula("P(a)")));
+UnitTest.run("unifyfing R(z, z) and R(u, f(y))",
     unification(stringToFormula("R(z,z)"), stringToFormula("R(u, f(y))")));
 
 
@@ -115,14 +111,14 @@ function getClashingLitterals(c0, c1) {
 
 
 
-unitTest("clashing lit P(x) and not P(x)", getClashingLitterals([stringToFormula("P(x)")], [stringToFormula("not P(x)")]));
-unitTest("clashing lit P(x) and not P(a)", getClashingLitterals([stringToFormula("P(x)")], [stringToFormula("not P(a)")]));
+UnitTest.run("clashing lit P(x) and not P(x)", getClashingLitterals([stringToFormula("P(x)")], [stringToFormula("not P(x)")]));
+UnitTest.run("clashing lit P(x) and not P(a)", getClashingLitterals([stringToFormula("P(x)")], [stringToFormula("not P(a)")]));
 
 
-unitTest("clashing lit q and not q",
+UnitTest.run("clashing lit q and not q",
     getClashingLitterals([stringToFormula("q")],
         [stringToFormula("not q")]));
-unitTest("clashing lit not p or q and not p or not q",
+UnitTest.run("clashing lit not p or q and not p or not q",
     getClashingLitterals([stringToFormula("not p"), stringToFormula("q")],
         [stringToFormula("not p"), stringToFormula("not q")]));
 
@@ -148,7 +144,7 @@ function substitutionApply(t, sub) {
     }
 }
 
-unitTest("substituying  [x := a] in P(x)",
+UnitTest.run("substituying  [x := a] in P(x)",
     substitutionApply(stringToFormula("P(x)"), { "x": { type: "term", func: "a", args: [] } }));
 
 
@@ -173,17 +169,17 @@ function getResolvant(c0, c1, cl) {
 
 
 
-unitTest("getResolvant P(x) and not P(x)",
+UnitTest.run("getResolvant P(x) and not P(x)",
     getResolvant([stringToFormula("P(x)")], [stringToFormula("not P(x)")],
         { l0: stringToFormula("P(x)"), l1: stringToFormula("not P(x)"), mgu: { "x": "x" } }));
 
-unitTest("getResolvant lit q and not p or not q",
+UnitTest.run("getResolvant lit q and not p or not q",
     Utils.same(stringToFormula("not p"), getResolvant([stringToFormula("q")],
         [stringToFormula("not p"), stringToFormula("not q")],
         { l0: stringToFormula("q"), l1: stringToFormula("not q"), mgu: {} })));
 
 
-unitTest("getResolvant lit not p or q and not p or not q",
+UnitTest.run("getResolvant lit not p or q and not p or not q",
     getResolvant([stringToFormula("not p"), stringToFormula("q")],
         [stringToFormula("not p"), stringToFormula("not q")],
         { l0: stringToFormula("q"), l1: stringToFormula("not q"), mgu: {} }));
@@ -208,8 +204,8 @@ function getFormulaWithNewNames(f) {
 }
 
 
-unitTest("getFormulaWithNewNames(p)", getFormulaWithNewNames(stringToFormula("p")));
-unitTest("getFormulaWithNewNames(P(x))", getFormulaWithNewNames(stringToFormula("P(x)")));
+UnitTest.run("getFormulaWithNewNames(p)", getFormulaWithNewNames(stringToFormula("p")));
+UnitTest.run("getFormulaWithNewNames(P(x))", getFormulaWithNewNames(stringToFormula("P(x)")));
 
 
 function sameModuloVariableRenaming(f, g) {
@@ -257,11 +253,11 @@ function sameModuloVariableRenaming(f, g) {
 }
 
 
-unitTest("sameModuloVariableRenaming(p, p)",
+UnitTest.run("sameModuloVariableRenaming(p, p)",
     sameModuloVariableRenaming(stringToFormula("p"), stringToFormula("p")));
-unitTest("sameModuloVariableRenaming(P(x), P(y))",
+UnitTest.run("sameModuloVariableRenaming(P(x), P(y))",
     sameModuloVariableRenaming(stringToFormula("P(x)"), stringToFormula("P(y)")));
-unitTest("sameModuloVariableRenaming(not P(x) or P(z), not P(y) or P(x))",
+UnitTest.run("sameModuloVariableRenaming(not P(x) or P(z), not P(y) or P(x))",
     sameModuloVariableRenaming(stringToFormula("not P(x) or P(z)"), stringToFormula("not P(y) or P(x)")));
 
 function resolution(ac0: Formula, ac1: Formula, ares: Formula) {
@@ -283,9 +279,9 @@ function resolution(ac0: Formula, ac1: Formula, ares: Formula) {
     return undefined;
 }
 
-unitTest("resolution q and not q", resolution(stringToFormula("q"), stringToFormula("not q"), stringToFormula("bottom")));
-unitTest("resolution q and not p or not q", resolution(stringToFormula("q"), stringToFormula("not p or not q"), stringToFormula("not p")));
-unitTest("resolution not p or q and not p or not q", resolution(stringToFormula("not p or q"), stringToFormula("not p or not q"), stringToFormula("not p")));
+UnitTest.run("resolution q and not q", resolution(stringToFormula("q"), stringToFormula("not q"), stringToFormula("bottom")));
+UnitTest.run("resolution q and not p or not q", resolution(stringToFormula("q"), stringToFormula("not p or not q"), stringToFormula("not p")));
+UnitTest.run("resolution not p or q and not p or not q", resolution(stringToFormula("not p or q"), stringToFormula("not p or not q"), stringToFormula("not p")));
 
 /*************** CONTRACTION */
 
@@ -303,7 +299,7 @@ function getContractionPossible(c0) {
 
 
 
-unitTest("contractionPossible of P(x) P(a)",
+UnitTest.run("contractionPossible of P(x) P(a)",
     getContractionPossible([stringToFormula("P(x)"), stringToFormula("P(a)")]));
 
 
