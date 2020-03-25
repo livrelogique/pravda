@@ -39,11 +39,37 @@ export function getDirectSubFormulas(f: Formula): Formula[] {
 }
 
 
+function isFreeVariable(f, x): boolean {
+    if (f instanceof Array) {
+        for (let o of f) {
+            if (isFreeVariable(o, x))
+                return true;
+        }
+        return false;
+    }
+    else if (typeof f == "string") {
+        return f == x;
+    }
+    else if (f.type == "forall" || f.type == "exists") {
+        if (f.args[0] == x)
+            return false;
+        return isFreeVariable(f.args[1], x);
+    }
+    else {
+        for (let o of f.args) {
+            if (isFreeVariable(o, x))
+                return true;
+        }
+        return false;
+    }
+}
+
+
 
 export class FormulaUtility {
     static getNotSub = (f: Formula) => { return f.args[0]; }
     static not = (f: Formula) => { return { type: "not", args: [f] } };
-    static isFreeVariable = (f: Formula, x: string) => { return true };
+    static isFreeVariable = isFreeVariable;
 
 
 
@@ -52,3 +78,10 @@ export class FormulaUtility {
 
 
 UnitTest.run("not", Utils.same(stringToFormula("not p"), FormulaUtility.not(stringToFormula("p"))));
+
+UnitTest.run("isFreeVariable", FormulaUtility.isFreeVariable("x", "x"));
+UnitTest.run("isFreeVariable", !FormulaUtility.isFreeVariable(stringToFormula("forall x P(x)"), "x"));
+UnitTest.run("isFreeVariable", !FormulaUtility.isFreeVariable("y", "x"));
+UnitTest.run("isFreeVariable", FormulaUtility.isFreeVariable(stringToFormula("P(x)"), "x"));
+UnitTest.run("isFreeVariable", !FormulaUtility.isFreeVariable(stringToFormula("P(y)"), "x"));
+UnitTest.run("isFreeVariable", FormulaUtility.isFreeVariable(stringToFormula("P(y) and P(x)"), "x"));

@@ -1,4 +1,4 @@
-import { ProofSystem } from "./ProofSystem.js";
+import { ProofSystem, RuleOutput } from "./ProofSystem.js";
 import { Formula, FormulaUtility, getDirectSubFormulas, stringToFormula } from "./Formula.js";
 import * as Utils from "./Utils.js";
 import * as UnitTest from "./UnitTest.js";
@@ -260,7 +260,7 @@ UnitTest.run("sameModuloVariableRenaming(P(x), P(y))",
 UnitTest.run("sameModuloVariableRenaming(not P(x) or P(z), not P(y) or P(x))",
     sameModuloVariableRenaming(stringToFormula("not P(x) or P(z)"), stringToFormula("not P(y) or P(x)")));
 
-function resolution(ac0: Formula, ac1: Formula, ares: Formula) {
+function resolution(ac0: Formula, ac1: Formula, ares: Formula) : RuleOutput {
     ac1 = <any>getFormulaWithNewNames(ac1);
     let c0: Formula[] = getDirectSubFormulas(ac0);
     let c1: Formula[] = getDirectSubFormulas(ac1);
@@ -274,9 +274,9 @@ function resolution(ac0: Formula, ac1: Formula, ares: Formula) {
 /*        console.log(JSON.stringify(res));
         console.log(JSON.stringify(resolvant));*/
         if (sameModuloVariableRenaming(res, resolvant))
-            return "resolution rule";
+            return ProofSystem.ruleSuccess("resolution");
     }
-    return undefined;
+    return false;
 }
 
 UnitTest.run("resolution q and not q", resolution(stringToFormula("q"), stringToFormula("not q"), stringToFormula("bottom")));
@@ -314,12 +314,12 @@ function getContractedClause(c0, mgu) {
     return c;
 }
 
-function contraction(f: Formula, g: Formula) {
+function contraction(f: Formula, g: Formula) : RuleOutput {
     let c0: Formula[] = getDirectSubFormulas(f);
     let c1: Formula[] = getDirectSubFormulas(g);
 
     for (let contraction of getContractionPossible(c0)) {
-        if (Utils.same(contraction, c1)) return "contraction";
+        if (Utils.same(contraction, c1)) return ProofSystem.ruleSuccess("contraction");
     }
 
     return false;

@@ -17,6 +17,9 @@ export function contains(array: any[], element: any): boolean {
 }
 
 export function includes(bigArray: any[], array: any[]): boolean {
+    if (bigArray.length < array.length)
+        return false;
+        
     for (let e of array) {
         if (!contains(bigArray, e)) {
             return false;
