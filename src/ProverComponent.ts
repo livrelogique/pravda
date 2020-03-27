@@ -4,6 +4,8 @@ import { ResolutionProofSystem } from "./ResolutionProofSystem.js";
 import { HilbertProofSystem } from './HilbertProofSystem.js';
 import { NaturalDeduction } from './NaturalDeduction.js';
 
+const NB_COLS_MIN = 60;
+
 export class ProverComponent {
     constructor(oldDomElement: HTMLTextAreaElement) {
         const proofStringOriginal = oldDomElement.value;
@@ -29,7 +31,12 @@ export class ProverComponent {
         let solution = proofLinesInput.map((line) => line.replace("//", "")).join("\n");
         const proofString = proofLinesInput.map((line) => { if (line.startsWith("//")) return ""; else return line; }).join("\n");
 
-        let goal = oldDomElement.getAttribute("goal");
+        function getGoal() {
+            let s = solution.split("\n");
+            //console.log("GOAL: " + s[s.length-2])
+            return s[s.length - 2];
+        }
+        let goal = getGoal();//oldDomElement.getAttribute("goal");
 
         let proofSystem: ProofSystem;
 
@@ -42,7 +49,7 @@ export class ProverComponent {
 
 
         proofTextArea.rows = proofLinesInput.length;
-        proofTextArea.cols = 60;
+        proofTextArea.cols = NB_COLS_MIN;
         proofTextArea.setAttribute("class", "proof");
         proofTextArea.value = proofString;
         proverElement.appendChild(proofTextArea);
@@ -130,8 +137,13 @@ export class ProverComponent {
             if (changed)
                 proofTextArea.value = proofLines.join("\n");
 
+            let m = 0;
+            for (let line of proofLines) {
+                m = Math.max(m, line.length);
+            }
             const numberOfLines = proofLines.length;
             proofTextArea.rows = numberOfLines;
+            proofTextArea.cols = Math.max(m, NB_COLS_MIN);
         }
 
 

@@ -41,46 +41,46 @@ p, r |- q
   </textarea>
 
 
-  <textarea proofSystem="NaturalDeduction" goal="p |- q">
+  <textarea proofSystem="NaturalDeduction">
   p |- q  *
   p |- q or r
 </textarea>
 
-  <textarea proofSystem="NaturalDeduction" goal="p |- q">
+  <textarea proofSystem="NaturalDeduction">
   p |- r *
   p |- q or r
 </textarea>
 
-  <textarea proofSystem="NaturalDeduction" goal="p |- q">
+  <textarea proofSystem="NaturalDeduction">
   p |- q or r *
-  p,q |- s
-  p,r |- s 
+  p,q |- s *
+  p,r |- s *
   p |- s
 </textarea>
 
-  <textarea proofSystem="NaturalDeduction" goal="p |- q and r">
+  <textarea proofSystem="NaturalDeduction">
 p |- q *
 p |- r *
 p |- q and r
 </textarea>
 
 
-  <textarea proofSystem="NaturalDeduction" goal="p |- q">
+  <textarea proofSystem="NaturalDeduction">
   p |- q and r *
   p |- q
 </textarea>
 
-  <textarea proofSystem="NaturalDeduction" goal="p |- r">
+  <textarea proofSystem="NaturalDeduction">
   p |- q and r *
   p |- r
 </textarea>
 
-  <textarea proofSystem="NaturalDeduction" goal="p |- r">
+  <textarea proofSystem="NaturalDeduction">
   p, q |- bottom *
   q |- not p
 </textarea>
 
-  <textarea proofSystem="NaturalDeduction" goal="p |- r">
+  <textarea proofSystem="NaturalDeduction">
   p |- q   *
   p |- not q   *
   p |- bottom
@@ -99,17 +99,16 @@ p |- q and r
 <h3>Examples of proofs</h3>
 
 Show that we can deduce p -> r from (p or q) -> r.  
-  <textarea proofSystem="NaturalDeduction" goal="(p and not q) -> r">
+  <textarea proofSystem="NaturalDeduction">
   (p or q) -> r,p |- (p or q) -> r   *
   //(p or q) -> r,p |- p
   //(p or q) -> r,p |- p or q
   //(p or q) -> r,p |- r
   //(p or q) -> r |- p -> r
-  
 </textarea>
 
 Show that we can prove not (p or q) -> not p and not q
-<textarea proofSystem="NaturalDeduction" goal="not (p or q) -> not p and not q">
+<textarea proofSystem="NaturalDeduction">
   
 </textarea>
 
