@@ -41,7 +41,22 @@ p, r |- q
   </textarea>
 
 
+  <textarea proofSystem="NaturalDeduction" goal="p |- q">
+  p |- q  *
+  p |- q or r
+</textarea>
 
+  <textarea proofSystem="NaturalDeduction" goal="p |- q">
+  p |- r *
+  p |- q or r
+</textarea>
+
+  <textarea proofSystem="NaturalDeduction" goal="p |- q">
+  p |- q or r *
+  p,q |- s
+  p,r |- s 
+  p |- s
+</textarea>
 
   <textarea proofSystem="NaturalDeduction" goal="p |- q and r">
 p |- q *
