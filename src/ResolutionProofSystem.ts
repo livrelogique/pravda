@@ -217,10 +217,13 @@ function sameModuloVariableRenaming(f, g) {
             return renaming;
         }
         else if (f instanceof Array) {
+            console.log(f);
+            console.log(g);
             if (!(g instanceof Array)) throw "aïe, not an array";
 
-            if (f.length != f.length)
+            if (f.length != g.length)
                 throw "pattern matching error because not the same number of arguments";
+
             for (let i in f) {
                 renaming = sameModuloVariableRenaming2(f[i], g[i], renaming);
             }
@@ -253,6 +256,8 @@ function sameModuloVariableRenaming(f, g) {
 }
 
 
+UnitTest.run("sameModuloVariableRenaming([], [p])",
+    sameModuloVariableRenaming([], [stringToFormula("p")]));
 UnitTest.run("sameModuloVariableRenaming(p, p)",
     sameModuloVariableRenaming(stringToFormula("p"), stringToFormula("p")));
 UnitTest.run("sameModuloVariableRenaming(P(x), P(y))",
@@ -271,8 +276,8 @@ function resolution(ac0: Formula, ac1: Formula, ares: Formula) : RuleOutput {
     for (let clashingLiteral of clashingLitterals) {
 
         let resolvant = getResolvant(c0, c1, clashingLiteral);
-/*        console.log(JSON.stringify(res));
-        console.log(JSON.stringify(resolvant));*/
+        console.log(JSON.stringify(res));
+        console.log(JSON.stringify(resolvant));
         if (sameModuloVariableRenaming(res, resolvant))
             return ProofSystem.ruleSuccess("resolution");
     }
@@ -281,6 +286,7 @@ function resolution(ac0: Formula, ac1: Formula, ares: Formula) : RuleOutput {
 
 UnitTest.run("resolution q and not q", resolution(stringToFormula("q"), stringToFormula("not q"), stringToFormula("bottom")));
 UnitTest.run("resolution q and not p or not q", resolution(stringToFormula("q"), stringToFormula("not p or not q"), stringToFormula("not p")));
+UnitTest.run("resolution q and not p or not q should not be bottom", resolution(stringToFormula("q"), stringToFormula("not p or not q"), stringToFormula("bottom")));
 UnitTest.run("resolution not p or q and not p or not q", resolution(stringToFormula("not p or q"), stringToFormula("not p or not q"), stringToFormula("not p")));
 
 /*************** CONTRACTION */
