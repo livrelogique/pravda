@@ -149,12 +149,18 @@ Show that we can prove not (p or q) -> not p and not q
 
 <h3>Examples of proofs</h3>
 
-Show that we can prove forall x (p(x) and q(x) from forall x p(x) and forall x q(x)
+Show that we can prove forall x (P(x) and Q(x)) from forall x pP(x) and forall x Q(x)
 <textarea proofSystem="NaturalDeduction" goal="p |- r">
-    
+    //forall x P(x) and forall x Q(x) |- forall x P(x) and forall x Q(x)
+    //forall x P(x) and forall x Q(x) |- forall x P(x) 
+    //forall x P(x) and forall x Q(x) |- forall x Q(x)
+    //forall x P(x) and forall x Q(x) |- P(t)
+    //forall x P(x) and forall x Q(x) |- Q(t)
+    //forall x P(x) and forall x Q(x) |- P(t) and Q(t)
+    //forall x P(x) and forall x Q(x) |- forall x (P(x) and Q(x))
 </textarea>
 
-Show that we can prove not (forall x P(x)) from exists x not P(x)
+Show that exists x not P(x) -> not (forall x P(x))
 <textarea proofSystem="NaturalDeduction" goal="p |- r">
     
 </textarea>
