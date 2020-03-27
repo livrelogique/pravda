@@ -83,9 +83,20 @@ p |- q and r
 
 <h3>Examples of proofs</h3>
 
+Show that we can deduce p -> r from (p or q) -> r.  
+  <textarea proofSystem="NaturalDeduction" goal="(p and not q) -> r">
+  (p or q) -> r,p |- (p or q) -> r   *
+  //(p or q) -> r,p |- p
+  //(p or q) -> r,p |- p or q
+  //(p or q) -> r,p |- r
+  //(p or q) -> r |- p -> r
+  
+</textarea>
 
-
-
+Show that we can prove not (p or q) -> not p and not q
+<textarea proofSystem="NaturalDeduction" goal="not (p or q) -> not p and not q">
+  
+</textarea>
 
 
 
@@ -138,7 +149,15 @@ p |- q and r
 
 <h3>Examples of proofs</h3>
 
+Show that we can prove forall x (p(x) and q(x) from forall x p(x) and forall x q(x)
+<textarea proofSystem="NaturalDeduction" goal="p |- r">
+    
+</textarea>
+
+Show that we can prove not (forall x P(x)) from exists x not P(x)
+<textarea proofSystem="NaturalDeduction" goal="p |- r">
+    
+</textarea>
 
 
-COMING SOON
 </body>
