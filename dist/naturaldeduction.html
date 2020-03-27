@@ -163,18 +163,18 @@ Show that we can prove not (p or q) -> not p and not q
 
 <h3>Examples of proofs</h3>
 
-Show that we can prove forall x (P(x) and Q(x)) from forall x pP(x) and forall x Q(x)
+Show that we can prove <code>forall x (P(x) and Q(x))</code> from <code>(forall x P(x)) and (forall x Q(x))</code>.
 <textarea proofSystem="NaturalDeduction" goal="p |- r">
-    //forall x P(x) and forall x Q(x) |- forall x P(x) and forall x Q(x)
-    //forall x P(x) and forall x Q(x) |- forall x P(x) 
-    //forall x P(x) and forall x Q(x) |- forall x Q(x)
-    //forall x P(x) and forall x Q(x) |- P(c)
-    //forall x P(x) and forall x Q(x) |- Q(c)
-    //forall x P(x) and forall x Q(x) |- P(c) and Q(c)
-    //forall x P(x) and forall x Q(x) |- forall x (P(x) and Q(x))
+    //(forall x P(x)) and (forall x Q(x)) |- (forall x P(x)) and (forall x Q(x))
+    //(forall x P(x)) and (forall x Q(x)) |- forall x P(x) 
+    //(forall x P(x)) and (forall x Q(x)) |- forall x Q(x)
+    //(forall x P(x)) and (forall x Q(x)) |- P(c)
+    //(forall x P(x)) and (forall x Q(x)) |- Q(c)
+    //(forall x P(x)) and (forall x Q(x)) |- P(c) and Q(c)
+    //(forall x P(x)) and (forall x Q(x)) |- forall x (P(x) and Q(x))
 </textarea>
 
-Show that exists x not P(x) -> not (forall x P(x))
+Give a proof of <code>exists x not P(x) -> not (forall x P(x))</code>.
 <textarea proofSystem="NaturalDeduction" goal="p |- r">
     
 </textarea>
