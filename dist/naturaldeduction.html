@@ -109,7 +109,18 @@ Show that we can deduce <code>p -> r</code> from <code>(p or q) -> r</code>.
 
 Show that we can prove <code>not (p or q) -> not p and not q</code>.
   <textarea proofSystem="NaturalDeduction">
-  
+  not (p or q), p |- p
+  not (p or q), p |- not (p or q)
+  //not (p or q), p |- p or q
+  //not (p or q), p |- bottom
+  //not (p or q) |- not p
+  //not (p or q), q |- q
+  //not (p or q), q |- p or q
+  //not (p or q), q |- not (p or q) 
+  //not (p or q), q |- bottom
+  //not (p or q) |- not q
+  //not (p or q) |- not p and not q
+  // |- not (p or q) -> not p and not q
 </textarea>
 
 
@@ -165,7 +176,7 @@ Show that we can prove <code>not (p or q) -> not p and not q</code>.
 
 Show the law of excluded middle : <code>|- p or not p </code>
 
-  <textarea proofSystem="NaturalDeduction" goal="|- p or not p">
+  <textarea proofSystem="NaturalDeduction">
     not (p or not p),p |- p
     not (p or not p),p |- not (p or not p)
     //not (p or not p),p |- p or not p
@@ -176,7 +187,7 @@ Show the law of excluded middle : <code>|- p or not p </code>
 </textarea>
 
 Show that we can prove <code>forall x (P(x) and Q(x))</code> from <code>(forall x P(x)) and (forall x Q(x))</code>.
-  <textarea proofSystem="NaturalDeduction" goal="(forall x P(x)) and (forall x Q(x)) |- forall x (P(x) and Q(x))">
+  <textarea proofSystem="NaturalDeduction">
     //(forall x P(x)) and (forall x Q(x)) |- (forall x P(x)) and (forall x Q(x))
     //(forall x P(x)) and (forall x Q(x)) |- forall x P(x) 
     //(forall x P(x)) and (forall x Q(x)) |- forall x Q(x)
@@ -187,7 +198,7 @@ Show that we can prove <code>forall x (P(x) and Q(x))</code> from <code>(forall 
 </textarea>
 
 Give a proof of <code>exists x not P(x) -> not (forall x P(x))</code>.
-  <textarea proofSystem="NaturalDeduction" goal="p |- r">
+  <textarea proofSystem="NaturalDeduction">
     
 </textarea>
 
