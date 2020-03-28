@@ -122,7 +122,7 @@ UnitTest.run("clashing lit not p or q and not p or not q",
     getClashingLitterals([stringToFormula("not p"), stringToFormula("q")],
         [stringToFormula("not p"), stringToFormula("not q")]));
 UnitTest.run("clashing lit resolution 2",
-    getClashingLitterals([stringToFormula("not Q(y,x)"), stringToFormula("R(y)")],
+    getClashingLitterals([getFormulaWithNewNames(stringToFormula("not Q(y,x)")), getFormulaWithNewNames(stringToFormula("R(y)"))],
         [stringToFormula("not R(y)"), stringToFormula("not Q(y,x)")]));
 
 function substitutionApply(t, sub) {
@@ -140,7 +140,7 @@ function substitutionApply(t, sub) {
         n.args = [];
         for (let a of t.args)
             n.args.push(substitutionApply(a, sub));
-        
+
         return n;
     }
 }
@@ -152,7 +152,7 @@ UnitTest.run("substituying  [] in P(x)",
 UnitTest.run("substituying  [] in Q(x,y)",
     formulaToString(substitutionApply(stringToFormula("Q(x,y)"), {})));
 UnitTest.run("substituying  [x, y] in Q(x,y)",
-    formulaToString(substitutionApply(stringToFormula("Q(x,y)"), {x: "x", y: "y"})));
+    formulaToString(substitutionApply(stringToFormula("Q(x,y)"), { x: "x", y: "y" })));
 
 function getResolvant(c0, c1, cl) {
     let l0 = cl.l0;
@@ -227,8 +227,6 @@ function sameModuloVariableRenaming(f, g) {
             return renaming;
         }
         else if (f instanceof Array) {
-            console.log(f);
-            console.log(g);
             if (!(g instanceof Array)) throw "aïe, not an array";
 
             if (f.length != g.length)
@@ -275,8 +273,14 @@ UnitTest.run("sameModuloVariableRenaming(P(x), P(y))",
 UnitTest.run("sameModuloVariableRenaming(not P(x) or P(z), not P(y) or P(x))",
     sameModuloVariableRenaming(stringToFormula("not P(x) or P(z)"), stringToFormula("not P(y) or P(x)")));
 
-UnitTest.run("sameModuloVariableRenaming(not Q(y,x), not Q(y,x))", sameModuloVariableRenaming(stringToFormula("not Q(y,x)"),
-    stringToFormula("not Q(y,x)")));
+UnitTest.run("sameModuloVariableRenaming(not Q(y,x), not Q(v,x))", sameModuloVariableRenaming(stringToFormula("not Q(y,x)"),
+    stringToFormula("not Q(v,x)")));
+
+UnitTest.run("sameModuloVariableRenaming(not Q(y,x), not Q(v,u))", sameModuloVariableRenaming(stringToFormula("not Q(y,x)"),
+    stringToFormula("not Q(v,u)")));
+UnitTest.run("sameModuloVariableRenaming(not Q(y,x), not Q(y',x'))", sameModuloVariableRenaming(stringToFormula("not Q(y,x)"),
+    getFormulaWithNewNames(stringToFormula("not Q(y,x)"))));
+
 
 function resolution(ac0: Formula, ac1: Formula, ares: Formula): RuleOutput {
     ac1 = <any>getFormulaWithNewNames(ac1);
@@ -289,8 +293,9 @@ function resolution(ac0: Formula, ac1: Formula, ares: Formula): RuleOutput {
     for (let clashingLiteral of clashingLitterals) {
 
         let resolvant = getResolvant(c0, c1, clashingLiteral);
+       /* console.log(JSON.stringify(clashingLiteral));
         console.log(JSON.stringify(res));
-        console.log(JSON.stringify(resolvant));
+        console.log(JSON.stringify(resolvant));*/
         if (sameModuloVariableRenaming(res, resolvant))
             return ProofSystem.ruleSuccess("resolution");
     }

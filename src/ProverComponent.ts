@@ -12,12 +12,12 @@ const NB_COLS_MIN = 40;
 export class ProverComponent {
     constructor(oldDomElement: HTMLTextAreaElement) {
         const proofStringOriginal = oldDomElement.value;
-        const proverElement = document.createElement("DIV");
+        const proverElement = document.createElement("div");
         proverElement.setAttribute("class", "prover");
 
         oldDomElement.parentElement.replaceChild(proverElement, oldDomElement);
 
-        const proofTextArea = <HTMLTextAreaElement>document.createElement("TEXTAREA");
+        const proofTextArea = <HTMLTextAreaElement>document.createElement("textarea");
 
         const proofLinesInput = proofStringOriginal.split("\n").map((line) => line.trim());
 
@@ -25,11 +25,9 @@ export class ProverComponent {
         function getLineInput(): string[] {
             let lineInput: string[] = [];
 
-            for (let i in proofLinesInput) {
-                if (proofLinesInput[i].indexOf("*") >= 0) {
-                    lineInput[i] = proofLinesInput[i].replace("*", "");
-                    proofLinesInput[i] = lineInput[i];
-                }
+            for (let i in proofLinesInput) if (proofLinesInput[i].indexOf("*") >= 0) {
+                lineInput[i] = proofLinesInput[i].replace("*", "");
+                proofLinesInput[i] = lineInput[i];
             }
 
             return lineInput;
@@ -37,7 +35,7 @@ export class ProverComponent {
 
         const lineInput = getLineInput();
 
-        const solution = proofLinesInput.map((line) => line.replace("//", "")).join("\n");
+        const solutionProofString = proofLinesInput.map((line) => line.replace("//", "")).join("\n");
 
 
 
@@ -52,16 +50,16 @@ export class ProverComponent {
         }).join("\n");
 
         function getGoal(): Formula {
-            let s = solution.split("\n");
+            let s = solutionProofString.split("\n");
             //console.log("GOAL: " + s[s.length-2])
             try {
                 return stringToFormula(s[s.length - 2]);
             }
-            catch(e) {
+            catch (e) {
                 console.log("failed to create the prover component because issue in parsing the goal");
                 return null;
             }
-            
+
         }
         const goal: Formula = getGoal();//oldDomElement.getAttribute("goal");
 
@@ -100,9 +98,9 @@ export class ProverComponent {
             return button;
         }
 
-        const buttonReset = addButton("reset", () => { proofTextArea.value = initialProofString; onInput(); compute() });
-        //addButton("submit", () => { compute(); });
-        const buttonSolution = addButton("solution", () => { proofTextArea.value = solution; onInput(); compute() });
+        addButton("reset", () => { proofTextArea.value = initialProofString; onInput(); compute() });
+        const buttonSolution = addButton("solution",
+            () => { proofTextArea.value = solutionProofString; onInput(); compute() });
 
 
         function createJustificationHTMLElement(just: string) {
@@ -162,7 +160,6 @@ export class ProverComponent {
                 buttonSolution.setAttribute("class", "hidden");
             }
             else {
-                console.log(isPropositionContainsGoal())
                 proofTextArea.setAttribute("class", "proof");
                 buttonSolution.setAttribute("class", "solutionButton");
             }

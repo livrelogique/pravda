@@ -112,7 +112,8 @@ Term
  
  
 VariableSymbol
- = "x" / "y" / "z" / "x'" / "y'" / "z'" / "u" / "v" { return text();}
+ = "x" / "y" / "z" / "u" / "v" /
+   "x'" / "y'" / "z'" /  "u'" / "v'" { return text();}
  
 ConstantSymbol
  = "0" / "1" / "a" / "b" / "c" / "d" / "e" / "a'" / "b'" / "c'" / "d'" / "e'" { return text();}
