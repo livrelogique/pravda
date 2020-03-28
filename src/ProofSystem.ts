@@ -33,11 +33,11 @@ export class ProofSystem {
     protected addRule3(test: Rule3) { this.rules3.push(test); }
 
     public checkProof(proof: Proof) {
-        for (let i = 0; i < proof.length; i++) if (proof.formulas[i] && proof.justification[i].indexOf("???") >= 0) {
+        for (let i = 0; i < proof.length; i++) if (proof.formulas[i] && proof.justifications[i] == null) {
             for (let rule of this.rules0) {
                 let output = rule(proof.formulas[i]);
                 if (output) {
-                    proof.justification[i] = output.msg;
+                    proof.justifications[i] = output;
                     if (output.type == "success")
                         break;
                 }
@@ -49,7 +49,8 @@ export class ProofSystem {
                 for (let j = 0; j < i; j++) if (proof.formulas[j]) {
                     let output = rule(proof.formulas[j], proof.formulas[i]);
                     if (output) {
-                        proof.justification[i] = output.msg + " (" + (j + 1) + ")";
+                        output.msg = output.msg + " (" + (j + 1) + ")";
+                        proof.justifications[i] = output;
                     }
                 }
 
@@ -59,7 +60,8 @@ export class ProofSystem {
                     for (let k = 0; k < j; k++) if (proof.formulas[k]) {
                         let output = rule(proof.formulas[k], proof.formulas[j], proof.formulas[i]);
                         if (output) {
-                            proof.justification[i] = output.msg + " (" + (k + 1) + " , " + (j + 1) + ")";
+                            output.msg = output.msg + " (" + (k + 1) + " , " + (j + 1) + ")";
+                            proof.justifications[i] = output;
                         }
                     }
 
@@ -70,10 +72,12 @@ export class ProofSystem {
                         for (let l = 0; l < k; l++) if (proof.formulas[l]) {
                             let output = rule(proof.formulas[l], proof.formulas[k], proof.formulas[j], proof.formulas[i]);
                             if (output) {
-                                proof.justification[i] = output.msg + " (" + (k + 1) + " , " + (j + 1) + ", " + (l + 1) + ")";
+                                output.msg = output.msg + " (" + (k + 1) + " , " + (j + 1) + ", " + (l + 1) + ")";
+                                proof.justifications[i] = output;
                             }
                         }
-
+            if(proof.justifications[i] == null)
+                        proof.justifications[i] = {type: "issue", msg: "does not match any rule"};
         }
 
     }

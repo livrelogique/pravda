@@ -1,5 +1,5 @@
 import { ProofSystem } from 'ProofSystem.js';
-import { Proof, stringToProof } from "./Proof.js";
+import { Proof, stringToProof, Justification } from "./Proof.js";
 import { ResolutionProofSystem } from "./ResolutionProofSystem.js";
 import { HilbertProofSystem } from './HilbertProofSystem.js';
 import { NaturalDeduction } from './NaturalDeduction.js';
@@ -103,25 +103,26 @@ export class ProverComponent {
             () => { proofTextArea.value = solutionProofString; onInput(); compute() });
 
 
-        function createJustificationHTMLElement(just: string) {
+        function createJustificationHTMLElement(just: Justification) {
             const justificationElement = document.createElement("div");
 
-            if (just == "input")
+            if (just == null) {
+                justificationElement.setAttribute("class", "justification");
+                return justificationElement;
+            }
+            else if (just.type == "input") {
                 justificationElement.setAttribute("class", "justification inputJustification");
-            else if (just.indexOf("???") >= 0)
+                justificationElement.innerHTML = "input";
+                return justificationElement;
+            }
+            else if (just.type == "issue")
                 justificationElement.setAttribute("class", "justification errorJustification");
-            else if (just != "")
+            else if (just.type == "success")
                 justificationElement.setAttribute("class", "justification ruleJustification");
             else
-                justificationElement.setAttribute("class", "justification");
+                throw "error";
 
-            if (just == "???")
-                just = "does not match any rule";
-
-            if (just.indexOf("parsing error") >= 0)
-                just = "parsing error";
-
-            justificationElement.innerHTML = just;
+            justificationElement.innerHTML = just.msg;
             return justificationElement;
         }
 
@@ -152,7 +153,7 @@ export class ProverComponent {
             proofSystem.checkProof(proof);
 
             justificationsElement.innerHTML = '';
-            for (let just of proof.justification)
+            for (let just of proof.justifications)
                 justificationsElement.appendChild(createJustificationHTMLElement(just));
 
             if (!isASolutionProvided || (isPropositionContainsGoal() && proof.isCorrect())) {

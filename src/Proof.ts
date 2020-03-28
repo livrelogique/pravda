@@ -1,17 +1,22 @@
 import { Formula, stringToFormula } from "./Formula.js";
+import {RuleOutput} from "./ProofSystem.js";
+
+export type Justification =  {type: "success" | "issue" | "input", msg: string}
+
+
 
 export class Proof {
     formulas: Formula[] = new Array();
-    justification: string[] = [];
+    justifications: Justification[] = [];
 
     public setJustificationInputFor(i) {
-        this.justification[i] = "input";
+        this.justifications[i] = {type: "input", msg:""};
     }
 
     public get length() { return this.formulas.length };
     public isCorrect() {
-        for (let line of this.justification) {
-            if (line.indexOf("???") >= 0) return false;
+        for (let justification of this.justifications) {
+            if (justification.type != "success") return false;
         }
         return true;
     }
@@ -28,18 +33,18 @@ export function stringToProof(str: string): Proof {
             let formulaLine: string;
             if (pos < 0) formulaLine = lines[i]; else formulaLine = lines[i].substr(0, pos - 1);
             formulaLine = formulaLine.trim();
-            proof.justification[i] = "???";
+            proof.justifications[i] = null;
             try {
                 proof.formulas[i] = stringToFormula(formulaLine);
                 if (pos >= 0)
-                    proof.justification[i] = "input";
+                    proof.setJustificationInputFor(i);
             }
             catch (e) {
-                proof.justification[i] = "??? parsing error: " + e.message;
+                proof.justifications[i] = {type: "issue", msg: "parsing error | " + e.message};
             }
         }
         else
-            proof.justification[i] = "";
+            proof.justifications[i] = null;
     return proof;
 }
 
