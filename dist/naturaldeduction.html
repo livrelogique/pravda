@@ -147,38 +147,38 @@ Show that we can prove <code>not (p or q) -> not p and not q</code>.
 
 
 
-<textarea proofSystem="NaturalDeduction">
+  <textarea proofSystem="NaturalDeduction">
   Q(x) |- P(a)  *
   Q(x) |- exists x P(x)
 </textarea>
 
 
-<textarea proofSystem="NaturalDeduction">
+  <textarea proofSystem="NaturalDeduction">
   Q(x) |- exists x P(x)    *
   Q(x), P(x) |- p       *
   Q(x) |- p
 </textarea>
 
-<textarea proofSystem="NaturalDeduction">
+  <textarea proofSystem="NaturalDeduction">
   Q(a) |- exists x P(x)    *
   Q(a), P(x) |- p       *
   Q(a) |- p
 </textarea>
 
-<textarea proofSystem="NaturalDeduction">
+  <textarea proofSystem="NaturalDeduction">
   Q(y) |- P(x)       *
   Q(y) |- forall x P(x)
 </textarea>
 
 
 
-<textarea proofSystem="NaturalDeduction">
+  <textarea proofSystem="NaturalDeduction">
   Q(x) |- P(x)          *
   Q(x) |- forall x P(x)
 </textarea>
 
 
-<textarea proofSystem="NaturalDeduction">
+  <textarea proofSystem="NaturalDeduction">
   Q(x) |- forall x P(x)          *
   Q(x) |- P(a)
 </textarea>
