@@ -1,5 +1,5 @@
 import { ProofSystem, RuleOutput } from "./ProofSystem.js";
-import { Formula, FormulaUtility, getDirectSubFormulas, stringToFormula } from "./Formula.js";
+import { Formula, FormulaUtility, getDirectSubFormulas, stringToFormula, formulaToString } from "./Formula.js";
 import * as Utils from "./Utils.js";
 import * as UnitTest from "./UnitTest.js";
 
@@ -121,8 +121,9 @@ UnitTest.run("clashing lit q and not q",
 UnitTest.run("clashing lit not p or q and not p or not q",
     getClashingLitterals([stringToFormula("not p"), stringToFormula("q")],
         [stringToFormula("not p"), stringToFormula("not q")]));
-
-
+UnitTest.run("clashing lit resolution 2",
+    getClashingLitterals([stringToFormula("not Q(y,x)"), stringToFormula("R(y)")],
+        [stringToFormula("not R(y)"), stringToFormula("not Q(y,x)")]));
 
 function substitutionApply(t, sub) {
     if (isVariable(t)) {
@@ -137,16 +138,21 @@ function substitutionApply(t, sub) {
         if (t.pred) n.pred = t.pred;
         if (t.func) n.func = t.func;
         n.args = [];
-        for (let a of t.args) {
+        for (let a of t.args)
             n.args.push(substitutionApply(a, sub));
-        }
+        
         return n;
     }
 }
 
 UnitTest.run("substituying  [x := a] in P(x)",
     substitutionApply(stringToFormula("P(x)"), { "x": { type: "term", func: "a", args: [] } }));
-
+UnitTest.run("substituying  [] in P(x)",
+    formulaToString(substitutionApply(stringToFormula("P(x)"), {})));
+UnitTest.run("substituying  [] in Q(x,y)",
+    formulaToString(substitutionApply(stringToFormula("Q(x,y)"), {})));
+UnitTest.run("substituying  [x, y] in Q(x,y)",
+    formulaToString(substitutionApply(stringToFormula("Q(x,y)"), {x: "x", y: "y"})));
 
 function getResolvant(c0, c1, cl) {
     let l0 = cl.l0;
@@ -184,7 +190,11 @@ UnitTest.run("getResolvant lit not p or q and not p or not q",
         [stringToFormula("not p"), stringToFormula("not q")],
         { l0: stringToFormula("q"), l1: stringToFormula("not q"), mgu: {} }));
 
-
+UnitTest.run("getResolvant hard resolution 2",
+    getResolvant([stringToFormula("not Q(y,x)"), stringToFormula("R(y)")],
+        [stringToFormula("not R(y)"), stringToFormula("not Q(y,x)")],
+        { l0: stringToFormula("R(y)"), l1: stringToFormula("not R(y)"), mgu: { "y": "y" } }).map((f) =>
+            formulaToString(f)).join(" or "));
 
 
 function getFormulaWithNewNames(f) {
@@ -206,7 +216,7 @@ function getFormulaWithNewNames(f) {
 
 UnitTest.run("getFormulaWithNewNames(p)", getFormulaWithNewNames(stringToFormula("p")));
 UnitTest.run("getFormulaWithNewNames(P(x))", getFormulaWithNewNames(stringToFormula("P(x)")));
-
+UnitTest.run("getFormulaWithNewNames(not Q(y,x))", getFormulaWithNewNames(stringToFormula("not Q(y,x)")));
 
 function sameModuloVariableRenaming(f, g) {
     function sameModuloVariableRenaming2(f, g, renaming) {
@@ -265,6 +275,9 @@ UnitTest.run("sameModuloVariableRenaming(P(x), P(y))",
 UnitTest.run("sameModuloVariableRenaming(not P(x) or P(z), not P(y) or P(x))",
     sameModuloVariableRenaming(stringToFormula("not P(x) or P(z)"), stringToFormula("not P(y) or P(x)")));
 
+UnitTest.run("sameModuloVariableRenaming(not Q(y,x), not Q(y,x))", sameModuloVariableRenaming(stringToFormula("not Q(y,x)"),
+    stringToFormula("not Q(y,x)")));
+
 function resolution(ac0: Formula, ac1: Formula, ares: Formula): RuleOutput {
     ac1 = <any>getFormulaWithNewNames(ac1);
     let c0: Formula[] = getDirectSubFormulas(ac0);
@@ -292,11 +305,14 @@ UnitTest.run("resolution not p or q and not p or not q", resolution(stringToForm
 UnitTest.run("hard resolution 0", resolution(stringToFormula("R(y)"),
     stringToFormula("not R(y)"),
     stringToFormula("bottom")));
-    
-UnitTest.run("hard resolution 1", resolution(stringToFormula("not Q(y,x) or R(y)"),
+UnitTest.run("hard resolution 1", resolution(stringToFormula("not Q(y) or R(y)"),
+    stringToFormula("not R(y) or not Q(y)"),
+    stringToFormula("not Q(y)")));
+UnitTest.run("hard resolution 2", resolution(stringToFormula("not Q(y,x) or R(y)"),
     stringToFormula("not R(y) or not Q(y,x)"),
     stringToFormula("not Q(y,x)")));
-UnitTest.run("hard resolution 2", resolution(stringToFormula("not P(x) or not Q(y,x) or R(y)"),
+
+UnitTest.run("hard resolution 3", resolution(stringToFormula("not P(x) or not Q(y,x) or R(y)"),
     stringToFormula("not R(y) or not P(x) or not Q(y,x)"),
     stringToFormula("not P(x) or not Q(y,x)")));
 
