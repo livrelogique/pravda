@@ -107,9 +107,32 @@ Show that we can deduce <code>p -> r</code> from <code>(p or q) -> r</code>.
   //(p or q) -> r |- p -> r
 </textarea>
 
+Show the contraposition rule : deduce <code>p |- q -> r </code> from <code>p |- not r -> not q</code>.
+  <textarea proofSystem="NaturalDeduction">
+    p |- not r -> not q     *
+    //p, q, not r |- not r -> not q
+    //p, q, not r |- not r
+    //p, q, not r |- not q
+    //p, q, not r |- q
+    //p, q, not r |- bottom
+    //p, q |- r
+    //p |- q -> r
+  </textarea>
+
 Show that we can prove <code>not (p or q) -> not p and not q</code>.
   <textarea proofSystem="NaturalDeduction">
-  
+  not (p or q), p |- p
+  not (p or q), p |- not (p or q)
+  //not (p or q), p |- p or q
+  //not (p or q), p |- bottom
+  //not (p or q) |- not p
+  //not (p or q), q |- q
+  //not (p or q), q |- p or q
+  //not (p or q), q |- not (p or q) 
+  //not (p or q), q |- bottom
+  //not (p or q) |- not q
+  //not (p or q) |- not p and not q
+  // |- not (p or q) -> not p and not q
 </textarea>
 
 
@@ -165,7 +188,7 @@ Show that we can prove <code>not (p or q) -> not p and not q</code>.
 
 Show the law of excluded middle : <code>|- p or not p </code>
 
-  <textarea proofSystem="NaturalDeduction" goal="|- p or not p">
+  <textarea proofSystem="NaturalDeduction">
     not (p or not p),p |- p
     not (p or not p),p |- not (p or not p)
     //not (p or not p),p |- p or not p
@@ -176,7 +199,7 @@ Show the law of excluded middle : <code>|- p or not p </code>
 </textarea>
 
 Show that we can prove <code>forall x (P(x) and Q(x))</code> from <code>(forall x P(x)) and (forall x Q(x))</code>.
-  <textarea proofSystem="NaturalDeduction" goal="(forall x P(x)) and (forall x Q(x)) |- forall x (P(x) and Q(x))">
+  <textarea proofSystem="NaturalDeduction">
     //(forall x P(x)) and (forall x Q(x)) |- (forall x P(x)) and (forall x Q(x))
     //(forall x P(x)) and (forall x Q(x)) |- forall x P(x) 
     //(forall x P(x)) and (forall x Q(x)) |- forall x Q(x)
@@ -186,9 +209,15 @@ Show that we can prove <code>forall x (P(x) and Q(x))</code> from <code>(forall 
     //(forall x P(x)) and (forall x Q(x)) |- forall x (P(x) and Q(x))
 </textarea>
 
-Give a proof of <code>exists x not P(x) -> not (forall x P(x))</code>.
-  <textarea proofSystem="NaturalDeduction" goal="p |- r">
-    
+Give a proof of <code>not exists x P(x) -> forall x not P(x)</code>.
+  <textarea proofSystem="NaturalDeduction">
+    //not exists x P(x), P(x) |- P(x)
+    //not exists x P(x), P(x) |- exists x P(x)
+    //not exists x P(x), P(x) |- not exists x P(x)
+    //not exists x P(x), P(x) |- bottom
+    //not exists x P(x) |- not P(x)
+    //not exists x P(x) |- forall x not P(x)
+    //not exists x P(x) -> forall x not P(x)
 </textarea>
 
 
