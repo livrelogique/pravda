@@ -16,9 +16,7 @@ export class ResolutionProofSystem extends ProofSystem {
 }
 
 
-function isVariable(t) {
-    return (typeof t == "string");
-}
+function isVariable(t) { return (typeof t == "string"); }
 
 UnitTest.run("isVariable(x)", isVariable("x"));
 UnitTest.run("isVariable(P(x))", !isVariable(stringToFormula("P(x)")));
@@ -293,9 +291,9 @@ function resolution(ac0: Formula, ac1: Formula, ares: Formula): RuleOutput {
     for (let clashingLiteral of clashingLitterals) {
 
         let resolvant = getResolvant(c0, c1, clashingLiteral);
-       /* console.log(JSON.stringify(clashingLiteral));
-        console.log(JSON.stringify(res));
-        console.log(JSON.stringify(resolvant));*/
+        /* console.log(JSON.stringify(clashingLiteral));
+         console.log(JSON.stringify(res));
+         console.log(JSON.stringify(resolvant));*/
         if (sameModuloVariableRenaming(res, resolvant))
             return ProofSystem.ruleSuccess("resolution");
     }
