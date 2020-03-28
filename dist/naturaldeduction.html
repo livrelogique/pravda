@@ -107,6 +107,18 @@ Show that we can deduce <code>p -> r</code> from <code>(p or q) -> r</code>.
   //(p or q) -> r |- p -> r
 </textarea>
 
+Show the contraposition rule : deduce <code>p |- q -> r </code> from <code>p |- not r -> not q</code>.
+  <textarea proofSystem="NaturalDeduction">
+    p |- not r -> not q     *
+    //p, q, not r |- not r -> not q
+    //p, q, not r |- not r
+    //p, q, not r |- not q
+    //p, q, not r |- q
+    //p, q, not r |- bottom
+    //p, q |- r
+    //p |- q -> r
+  </textarea>
+
 Show that we can prove <code>not (p or q) -> not p and not q</code>.
   <textarea proofSystem="NaturalDeduction">
   not (p or q), p |- p
