@@ -16,6 +16,8 @@ export class Proof {
     public get length() { return this.formulas.length };
     public isCorrect() {
         for (let justification of this.justifications) {
+            if(justification != null)
+            if(justification.type != "input")
             if (justification.type != "success") return false;
         }
         return true;

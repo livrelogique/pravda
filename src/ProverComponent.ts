@@ -98,7 +98,7 @@ export class ProverComponent {
             return button;
         }
 
-        addButton("reset", () => { proofTextArea.value = initialProofString; onInput(); compute() });
+        const buttonReset = addButton("reset", () => { proofTextArea.value = initialProofString; onInput(); compute() });
         const buttonSolution = addButton("solution",
             () => { proofTextArea.value = solutionProofString; onInput(); compute() });
 
@@ -156,6 +156,7 @@ export class ProverComponent {
             for (let just of proof.justifications)
                 justificationsElement.appendChild(createJustificationHTMLElement(just));
 
+                console.log(isPropositionContainsGoal() && proof.isCorrect())
             if (!isASolutionProvided || (isPropositionContainsGoal() && proof.isCorrect())) {
                 proofTextArea.setAttribute("class", "proof win");
                 buttonSolution.setAttribute("class", "hidden");
@@ -171,6 +172,11 @@ export class ProverComponent {
         function onInput() {
             let proofString = proofTextArea.value;
             let proofLines = proofString.split("\n");
+
+            if (proofString == initialProofString)
+                buttonReset.setAttribute("class", "hidden");
+            else
+                buttonReset.setAttribute("class", "resetButton");
 
             let changed = false;
             for (let i in lineInput) {
