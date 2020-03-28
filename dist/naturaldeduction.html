@@ -189,13 +189,13 @@ Show that we can prove <code>not (p or q) -> not p and not q</code>.
 Show the law of excluded middle : <code>|- p or not p </code>
 
   <textarea proofSystem="NaturalDeduction">
-    not (p or not p),p |- p
-    not (p or not p),p |- not (p or not p)
-    //not (p or not p),p |- p or not p
-    //not (p or not p),p |- bottom
-    //not (p or not p) |- not p
-    //not (p or not p) |- p or not p
-    //|- p or not p
+    not (P(x) or not P(x)),P(x) |- P(x)
+    not (P(x) or not P(x)),P(x) |- not (P(x) or not P(x))
+    //not (P(x) or not P(x)),P(x) |- P(x) or not P(x)
+    //not (P(x) or not P(x)),P(x) |- bottom
+    //not (P(x) or not P(x)) |- not P(x)
+    //not (P(x) or not P(x)) |- P(x) or not P(x)
+    //|- P(x) or not P(x)
 </textarea>
 
 Show that we can prove <code>forall x (P(x) and Q(x))</code> from <code>(forall x P(x)) and (forall x Q(x))</code>.
@@ -211,13 +211,13 @@ Show that we can prove <code>forall x (P(x) and Q(x))</code> from <code>(forall 
 
 Give a proof of <code>not exists x P(x) -> forall x not P(x)</code>.
   <textarea proofSystem="NaturalDeduction">
-    //not exists x P(x), P(x) |- P(x)
-    //not exists x P(x), P(x) |- exists x P(x)
-    //not exists x P(x), P(x) |- not exists x P(x)
-    //not exists x P(x), P(x) |- bottom
-    //not exists x P(x) |- not P(x)
-    //not exists x P(x) |- forall x not P(x)
-    //not exists x P(x) -> forall x not P(x)
+    //not (exists x P(x)), P(x) |- P(x)
+    //not (exists x P(x)), P(x) |- exists x P(x)
+    //not (exists x P(x)), P(x) |- not (exists x P(x))
+    //not (exists x P(x)), P(x) |- bottom
+    //not (exists x P(x)) |- not P(x)
+    //not (exists x P(x)) |- forall x not P(x)
+    //|- not (exists x P(x)) -> forall x not P(x)
 </textarea>
 
 
