@@ -156,7 +156,6 @@ export class ProverComponent {
             for (let just of proof.justifications)
                 justificationsElement.appendChild(createJustificationHTMLElement(just));
 
-                console.log(isPropositionContainsGoal() && proof.isCorrect())
             if (!isASolutionProvided || (isPropositionContainsGoal() && proof.isCorrect())) {
                 proofTextArea.setAttribute("class", "proof win");
                 buttonSolution.setAttribute("class", "hidden");
