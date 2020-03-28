@@ -265,7 +265,7 @@ UnitTest.run("sameModuloVariableRenaming(P(x), P(y))",
 UnitTest.run("sameModuloVariableRenaming(not P(x) or P(z), not P(y) or P(x))",
     sameModuloVariableRenaming(stringToFormula("not P(x) or P(z)"), stringToFormula("not P(y) or P(x)")));
 
-function resolution(ac0: Formula, ac1: Formula, ares: Formula) : RuleOutput {
+function resolution(ac0: Formula, ac1: Formula, ares: Formula): RuleOutput {
     ac1 = <any>getFormulaWithNewNames(ac1);
     let c0: Formula[] = getDirectSubFormulas(ac0);
     let c1: Formula[] = getDirectSubFormulas(ac1);
@@ -288,6 +288,19 @@ UnitTest.run("resolution q and not q", resolution(stringToFormula("q"), stringTo
 UnitTest.run("resolution q and not p or not q", resolution(stringToFormula("q"), stringToFormula("not p or not q"), stringToFormula("not p")));
 UnitTest.run("resolution q and not p or not q should not be bottom", resolution(stringToFormula("q"), stringToFormula("not p or not q"), stringToFormula("bottom")));
 UnitTest.run("resolution not p or q and not p or not q", resolution(stringToFormula("not p or q"), stringToFormula("not p or not q"), stringToFormula("not p")));
+
+UnitTest.run("hard resolution 0", resolution(stringToFormula("R(y)"),
+    stringToFormula("not R(y)"),
+    stringToFormula("bottom")));
+    
+UnitTest.run("hard resolution 1", resolution(stringToFormula("not Q(y,x) or R(y)"),
+    stringToFormula("not R(y) or not Q(y,x)"),
+    stringToFormula("not Q(y,x)")));
+UnitTest.run("hard resolution 2", resolution(stringToFormula("not P(x) or not Q(y,x) or R(y)"),
+    stringToFormula("not R(y) or not P(x) or not Q(y,x)"),
+    stringToFormula("not P(x) or not Q(y,x)")));
+
+
 
 /*************** CONTRACTION */
 
@@ -320,7 +333,7 @@ function getContractedClause(c0, mgu) {
     return c;
 }
 
-function contraction(f: Formula, g: Formula) : RuleOutput {
+function contraction(f: Formula, g: Formula): RuleOutput {
     let c0: Formula[] = getDirectSubFormulas(f);
     let c1: Formula[] = getDirectSubFormulas(g);
 

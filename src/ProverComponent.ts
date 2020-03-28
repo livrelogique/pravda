@@ -3,8 +3,11 @@ import { Proof, stringToProof } from "./Proof.js";
 import { ResolutionProofSystem } from "./ResolutionProofSystem.js";
 import { HilbertProofSystem } from './HilbertProofSystem.js';
 import { NaturalDeduction } from './NaturalDeduction.js';
+import { stringToFormula, Formula } from './Formula.js';
+import * as Utils from "./Utils.js";
 
-const NB_COLS_MIN = 60;
+
+const NB_COLS_MIN = 40;
 
 export class ProverComponent {
     constructor(oldDomElement: HTMLTextAreaElement) {
@@ -16,27 +19,51 @@ export class ProverComponent {
 
         const proofTextArea = <HTMLTextAreaElement>document.createElement("TEXTAREA");
 
-        let proofLinesInput = proofStringOriginal.split("\n").map((line) => line.trim());
+        const proofLinesInput = proofStringOriginal.split("\n").map((line) => line.trim());
 
-        let lineInput: string[] = [];
 
-        for (let i in proofLinesInput) {
-            if (proofLinesInput[i].indexOf("*") >= 0) {
-                lineInput[i] = proofLinesInput[i].replace("*", "");
-                proofLinesInput[i] = lineInput[i];
+        function getLineInput(): string[] {
+            let lineInput: string[] = [];
+
+            for (let i in proofLinesInput) {
+                if (proofLinesInput[i].indexOf("*") >= 0) {
+                    lineInput[i] = proofLinesInput[i].replace("*", "");
+                    proofLinesInput[i] = lineInput[i];
+                }
             }
+
+            return lineInput;
         }
 
+        const lineInput = getLineInput();
 
-        let solution = proofLinesInput.map((line) => line.replace("//", "")).join("\n");
-        const proofString = proofLinesInput.map((line) => { if (line.startsWith("//")) return ""; else return line; }).join("\n");
+        const solution = proofLinesInput.map((line) => line.replace("//", "")).join("\n");
 
-        function getGoal() {
+
+
+
+
+        let isASolutionProvided = false;
+        const initialProofString = proofLinesInput.map((line) => {
+            if (line.startsWith("//")) {
+                isASolutionProvided = true;
+                return "";
+            } else return line;
+        }).join("\n");
+
+        function getGoal(): Formula {
             let s = solution.split("\n");
             //console.log("GOAL: " + s[s.length-2])
-            return s[s.length - 2];
+            try {
+                return stringToFormula(s[s.length - 2]);
+            }
+            catch(e) {
+                console.log("failed to create the prover component because issue in parsing the goal");
+                return null;
+            }
+            
         }
-        let goal = getGoal();//oldDomElement.getAttribute("goal");
+        const goal: Formula = getGoal();//oldDomElement.getAttribute("goal");
 
         let proofSystem: ProofSystem;
 
@@ -51,15 +78,15 @@ export class ProverComponent {
         proofTextArea.rows = proofLinesInput.length;
         proofTextArea.cols = NB_COLS_MIN;
         proofTextArea.setAttribute("class", "proof");
-        proofTextArea.value = proofString;
+        proofTextArea.value = initialProofString;
         proverElement.appendChild(proofTextArea);
 
-        let justificationsElement = document.createElement("div");
+        const justificationsElement = document.createElement("div");
         justificationsElement.setAttribute("class", "justifications");
         proverElement.appendChild(justificationsElement);
 
 
-        const buttonPanel = document.createElement("DIV");
+        const buttonPanel = document.createElement("div");
         buttonPanel.setAttribute("class", "buttonPanel");
         proverElement.appendChild(buttonPanel);
 
@@ -73,13 +100,13 @@ export class ProverComponent {
             return button;
         }
 
-        let buttonReset = addButton("reset", () => { proofTextArea.value = proofString; onInput(); compute() });
+        const buttonReset = addButton("reset", () => { proofTextArea.value = initialProofString; onInput(); compute() });
         //addButton("submit", () => { compute(); });
-        let buttonSolution = addButton("solution", () => { proofTextArea.value = solution; onInput(); compute() });
+        const buttonSolution = addButton("solution", () => { proofTextArea.value = solution; onInput(); compute() });
 
 
-        function getJustification(just: string) {
-            let justificationElement = document.createElement("div");
+        function createJustificationHTMLElement(just: string) {
+            const justificationElement = document.createElement("div");
 
             if (just == "input")
                 justificationElement.setAttribute("class", "justification inputJustification");
@@ -100,9 +127,27 @@ export class ProverComponent {
             return justificationElement;
         }
 
+        /**
+         * @returns the text of the proof written by the student
+         */
+        function getCurrentProofString() {
+            return proofTextArea.value;
+        }
+
+
+
+        /**
+         * @returns true when the proposition of the student contains the goal
+         */
+        function isPropositionContainsGoal() {
+            return getCurrentProofString().split("\n").find((line) => {
+                try { return Utils.same(stringToFormula(line.trim()), goal); }
+                catch (e) { return false; }
+            });
+        }
+
         function compute() {
-            let proofString = proofTextArea.value;
-            let proof: Proof = stringToProof(proofString);
+            const proof: Proof = stringToProof(getCurrentProofString());
 
             for (let i in lineInput)
                 proof.setJustificationInputFor(i);
@@ -110,16 +155,18 @@ export class ProverComponent {
 
             justificationsElement.innerHTML = '';
             for (let just of proof.justification)
-                justificationsElement.appendChild(getJustification(just));
+                justificationsElement.appendChild(createJustificationHTMLElement(just));
 
-            if ((proofString.split("\n").map((line) => line.trim()).indexOf(goal) >= 0) && proof.isCorrect()) {
+            if (!isASolutionProvided || (isPropositionContainsGoal() && proof.isCorrect())) {
                 proofTextArea.setAttribute("class", "proof win");
-                buttonSolution.hidden = true;
+                buttonSolution.setAttribute("class", "hidden");
             }
             else {
+                console.log(isPropositionContainsGoal())
                 proofTextArea.setAttribute("class", "proof");
-                buttonSolution.hidden = false;
+                buttonSolution.setAttribute("class", "solutionButton");
             }
+
         }
 
 

@@ -26,7 +26,6 @@ textarea {
     padding-bottom: 0px;
     margin-right: 0px;
     padding-right: 0px;
-    border-right: 1px solid orange;
     font-size: 1.07em;
 }
 
@@ -102,7 +101,9 @@ button {
     border: 2px brown solid;
 }
 
-
+.hidden {
+    display: none;
+}
 
 .resetButton {
     background-color: lightblue;

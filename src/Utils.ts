@@ -1,10 +1,38 @@
 import * as UnitTest from "./UnitTest.js";
 
-
+/**
+ * 
+ * @param obj1 
+ * @param obj2 
+ * @return true iff the two objects obj1 and obj2 are the same
+ */
 export function same(obj1, obj2) {
     return JSON.stringify(obj1) == JSON.stringify(obj2);
 }
+/*
+export function same(obj1, obj2) {
+    if (obj1 instanceof Array) {
+        if (!(obj2 instanceof Array))
+            return false;
 
+        if (obj1.length != obj2.length)
+            return false;
+
+        for (let i in obj1)
+            if (!same(obj1[i], obj2[i]))
+                return false;
+
+        return true;
+    }
+    else if (typeof obj1 == "string") {
+        return obj1 == obj2;
+    }
+    else if (obj1.type != obj2.type)
+        return false;
+    else
+        return same(obj1.args, obj2.args);
+}
+*/
 
 
 export function contains(array: any[], element: any): boolean {
@@ -19,7 +47,7 @@ export function contains(array: any[], element: any): boolean {
 export function includes(bigArray: any[], array: any[]): boolean {
     if (bigArray.length < array.length)
         return false;
-        
+
     for (let e of array) {
         if (!contains(bigArray, e)) {
             return false;

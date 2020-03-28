@@ -96,9 +96,9 @@ p |- q and r
 
 
 
-<h3>Examples of proofs</h3>
+  <h3>Examples of proofs</h3>
 
-Show that we can deduce p -> r from (p or q) -> r.  
+  Show that we can deduce p -> r from (p or q) -> r.
   <textarea proofSystem="NaturalDeduction">
   (p or q) -> r,p |- (p or q) -> r   *
   //(p or q) -> r,p |- p
@@ -107,9 +107,9 @@ Show that we can deduce p -> r from (p or q) -> r.
   //(p or q) -> r |- p -> r
 </textarea>
 
-Show that we can prove not (p or q) -> not p and not q
-<textarea proofSystem="NaturalDeduction">
-  
+  Show that we can prove not (p or q) -> not p and not q
+  <textarea proofSystem="NaturalDeduction">
+
 </textarea>
 
 
@@ -118,53 +118,53 @@ Show that we can prove not (p or q) -> not p and not q
 
 
 
-<h2>First-order logic</h2>
+  <h2>First-order logic</h2>
 
-<h3>Examples of direct applications of rules</h3>
+  <h3>Examples of direct applications of rules</h3>
 
 
 
-<textarea proofSystem="NaturalDeduction">
+  <textarea proofSystem="NaturalDeduction">
   Q(x) |- P(a)  *
   Q(x) |- exists x P(x)
 </textarea>
 
 
-<textarea proofSystem="NaturalDeduction">
+  <textarea proofSystem="NaturalDeduction">
   Q(x) |- exists x P(x)    *
   Q(x), P(x) |- p       *
   Q(x) |- p
 </textarea>
 
-<textarea proofSystem="NaturalDeduction">
+  <textarea proofSystem="NaturalDeduction">
   Q(a) |- exists x P(x)    *
   Q(a), P(x) |- p       *
   Q(a) |- p
 </textarea>
 
-<textarea proofSystem="NaturalDeduction">
+  <textarea proofSystem="NaturalDeduction">
   Q(y) |- P(x)       *
   Q(y) |- forall x P(x)
 </textarea>
 
 
 
-<textarea proofSystem="NaturalDeduction">
+  <textarea proofSystem="NaturalDeduction">
   Q(x) |- P(x)          *
   Q(x) |- forall x P(x)
 </textarea>
 
 
-<textarea proofSystem="NaturalDeduction">
+  <textarea proofSystem="NaturalDeduction">
   Q(x) |- forall x P(x)          *
   Q(x) |- P(a)
 </textarea>
 
 
-<h3>Examples of proofs</h3>
+  <h3>Examples of proofs</h3>
 
-Show that we can prove <code>forall x (P(x) and Q(x))</code> from <code>(forall x P(x)) and (forall x Q(x))</code>.
-<textarea proofSystem="NaturalDeduction" goal="p |- r">
+  Show that we can prove <code>forall x (P(x) and Q(x))</code> from <code>(forall x P(x)) and (forall x Q(x))</code>.
+  <textarea proofSystem="NaturalDeduction" goal="p |- r">
     //(forall x P(x)) and (forall x Q(x)) |- (forall x P(x)) and (forall x Q(x))
     //(forall x P(x)) and (forall x Q(x)) |- forall x P(x) 
     //(forall x P(x)) and (forall x Q(x)) |- forall x Q(x)
@@ -174,9 +174,9 @@ Show that we can prove <code>forall x (P(x) and Q(x))</code> from <code>(forall 
     //(forall x P(x)) and (forall x Q(x)) |- forall x (P(x) and Q(x))
 </textarea>
 
-Give a proof of <code>exists x not P(x) -> not (forall x P(x))</code>.
-<textarea proofSystem="NaturalDeduction" goal="p |- r">
-    
+  Give a proof of <code>exists x not P(x) -> not (forall x P(x))</code>.
+  <textarea proofSystem="NaturalDeduction" goal="p |- r">
+
 </textarea>
 
 
