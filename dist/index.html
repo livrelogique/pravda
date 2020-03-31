@@ -39,8 +39,10 @@ Formal proofs are written one formula/sequent per line. Then the system checks w
           <h2>Resolution</h2>
           Resolution proof system has been designed by Robinson.
 
-          <div class="advantage">A single rule (or two in first-order)</div>
+          <div class="advantage">A single rule (or two in first-order) and that is it</div>
+          <div class="advantage">Easy to (semi-)automatize</div>
           <div class="drawback">Requires formulas to be in clausal form (skolemisation et tutti quanti)</div>
+          <div class="drawback">Proofs are boring to read for humans</div>
         </div>
       </a>
     </div>
@@ -50,8 +52,11 @@ Formal proofs are written one formula/sequent per line. Then the system checks w
           <h2>Hibert's proof system</h2>
           Hibert's proof system were invented by Hilbert.
 
+          <div class="advantage">Any formulas can be written, no syntactic restriction</div>
           <div class="advantage">A proof is just a list of formulas</div>
-          <div class="drawback">Proofs are very difficult to read by humans</div>
+          <div class="advantage">Easy to define. Often used when you quickly want to define a notion of formal proof</div>
+          <div class="drawback">Proofs are tedious to read by humans</div>
+          <div class="drawback">Difficult to (semi-)automatize</div>
         </div>
       </a>
     </div>
@@ -61,8 +66,9 @@ Formal proofs are written one formula/sequent per line. Then the system checks w
         <div class="content">
           <h2>Natural deduction</h2>
           Hibert's proof system were invented by Hilbert.
-          <div class="advantage">Proofs look like what mathematicians do, thus are easy to read.</div>
-          <div class="drawback">Proofs are no longer a list of formulas, but a list of sequents.</div>
+          <div class="advantage">Proofs look like what mathematicians do, thus are easy to read for humans.</div>
+          <div class="drawback">Proofs are not a list of formulas anymore, but a list of sequents.</div>
+          <div class="drawback">Difficult to (semi-)automatize</div>
         </div>
       </a>
     </div>

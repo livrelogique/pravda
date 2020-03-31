@@ -11,23 +11,42 @@
 
   <h1>Pravda - natural deduction</h1>
 
+On this page, you will learn natural deduction. In natural deduction, you manipulate sequents, e.g. <code>p, q |- p and q</code>, composed of:
+<ul>
+  <li>On the left-hand side, there is a list of hypothesis, e.g. <code>p, q</code>.</li>
+  <li>The symbol <code>|-</code> separates the left-hand side and the right-hand side.</li>
+  <li>On the right-hand side, there is a formula: the conclusion that is proven, e.g. <code>p and q</code>.</li>
+</ul> 
 
+The left-hand side can be empty, e.g. <code>|- p or not p</code>.
 
   <h2>In propositional logic</h2>
 
   <h3>Examples of direct applications of rules</h3>
 
-
+First, let us explore the rules in propositional logic. First, you can simply conclude an hypothesis:
   <textarea proofSystem="NaturalDeduction">
     q |- q
   </textarea>
 
+  <textarea proofSystem="NaturalDeduction">
+    p, q |- q
+  </textarea>
 
+
+If an hypothesis of the form <code>not phi</code> leads to a contradiction, you can derive <code>phi</code> and remove that hypothesis.
   <textarea proofSystem="NaturalDeduction">
   not p |- bottom  *
   |- p
   </textarea>
 
+  <textarea proofSystem="NaturalDeduction">
+    not p, q |- bottom  *
+    q |- p
+    </textarea>
+
+
+Of course, you can add hypothesis without destroying what you already proved:
 
   <textarea proofSystem="NaturalDeduction">
 p |- q  *
@@ -35,10 +54,19 @@ p, r |- q
 </textarea>
 
 
+
+Now, if you suppose <code>p</code> and derive <code>q</code>, you can irrevocably prove <code>p -> q</code>.
+
+
   <textarea proofSystem="NaturalDeduction">
   p  |-  q   *
    |- p -> q
   </textarea>
+
+  <textarea proofSystem="NaturalDeduction">
+    p, r  |-  q   *
+    r |- p -> q
+    </textarea>
 
 
   <textarea proofSystem="NaturalDeduction">
