@@ -25,7 +25,7 @@ UnitTest.run("isVariable(P(x))", !isVariable(stringToFormula("P(x)")));
 type UnificationEquation = { term1: any, term2: any };
 
 function unification2(E: UnificationEquation[], sub: {}) {
-    /*console.log(JSON.stringify(E));
+  /*  console.log(JSON.stringify(E));
     console.log(JSON.stringify(sub));*/
 
     if (E.length == 0) return sub;
@@ -35,7 +35,13 @@ function unification2(E: UnificationEquation[], sub: {}) {
     let t = equation.term1;
     let u = equation.term2;
 
-    if (isVariable(t)) {
+    if (isVariable(t) && t == u) {
+        return unification2(E, sub);
+    }
+    else if(isVariable(t)) {
+        if(FormulaUtility.isFreeVariable(u, t))
+            throw "u contains " + t + " as a variable";
+
         sub[t] = u;
         E = E.map((eq) => ({
             term1: substitutionApply(eq.term1, sub),
@@ -87,6 +93,8 @@ UnitTest.run("unifying P(x) and P(x)", unification(stringToFormula("P(x)"), stri
 UnitTest.run("unifying P(x) and P(a)", unification(stringToFormula("P(x)"), stringToFormula("P(a)")));
 UnitTest.run("unifyfing R(z, z) and R(u, f(y))",
     unification(stringToFormula("R(z,z)"), stringToFormula("R(u, f(y))")));
+UnitTest.run("unifyfing R(x, f(x)) and R(f(x), x)",
+    unification(stringToFormula("R(x,f(x))"), stringToFormula("R(f(x), x)")));
 
 
 function getClashingLitterals(c0, c1) {

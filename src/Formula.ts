@@ -73,7 +73,13 @@ export function getDirectSubFormulas(f: Formula): Formula[] {
         return (<any>f).args.map((f) => getDirectSubFormulas(f)).flat();
 }
 
-
+/**
+ * 
+ * @param f 
+ * @param x 
+ * 
+ * @returns true iff x appears as a free variable in f
+ */
 function isFreeVariable(f, x): boolean {
     if (f instanceof Array) {
         for (let o of f) {
