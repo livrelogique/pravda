@@ -128,7 +128,7 @@ p |- q and r
 
 Show that we can deduce <code>p -> r</code> from <code>(p or q) -> r</code>.  
   <textarea proofSystem="NaturalDeduction">
-  (p or q) -> r,p |- (p or q) -> r   *
+  (p or q) -> r,p |- (p or q) -> r   
   //(p or q) -> r,p |- p
   //(p or q) -> r,p |- p or q
   //(p or q) -> r,p |- r
@@ -214,7 +214,7 @@ Show that we can prove <code>not (p or q) -> not p and not q</code>.
 
 <h3>Examples of proofs</h3>
 
-Show the law of excluded middle : <code>|- p or not p </code>
+Show the law of excluded middle : <code>|- P(x) or not P(x) </code>
 
   <textarea proofSystem="NaturalDeduction">
     not (P(x) or not P(x)),P(x) |- P(x)
