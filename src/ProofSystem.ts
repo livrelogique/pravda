@@ -76,8 +76,8 @@ export class ProofSystem {
                                 proof.justifications[i] = output;
                             }
                         }
-            if(proof.justifications[i] == null)
-                        proof.justifications[i] = {type: "issue", msg: "does not match any rule"};
+            if (proof.justifications[i] == null)
+                proof.justifications[i] = { type: "issue", msg: "does not match any rule" };
         }
 
     }

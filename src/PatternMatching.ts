@@ -17,7 +17,7 @@ export function patternMatchingFormula(formula: Formula, pattern: Formula, initi
 
     function patternMatchingFormula2(formula: Formula, pattern: Formula, sub: Substitution) {
         if (isVariablePattern(pattern)) {
-            let v = <string>(<any>pattern);
+            const v = <string>(<any>pattern);
             if (sub[v] == undefined) sub[v] = formula;
             else if (!Utils.same(formula, sub[v]))
                 throw "pattern matching error because not the same formula registered in the substitution";
@@ -28,7 +28,7 @@ export function patternMatchingFormula(formula: Formula, pattern: Formula, initi
 
             if ((<any[]>formula.args).length != (<any[]>pattern.args).length)
                 throw "pattern matching error because not the same number of arguments";
-            for (let i in formula.args)
+            for (const i in formula.args)
                 patternMatchingFormula2(formula.args[i], pattern.args[i], sub);
         }
     }
@@ -36,7 +36,7 @@ export function patternMatchingFormula(formula: Formula, pattern: Formula, initi
     //enables to call patternMatchingFormula on several patterns ;)
     if (initialSubstitution == null) return null;
 
-    let sub = initialSubstitution;
+    const sub = initialSubstitution;
 
     try { patternMatchingFormula2(formula, pattern, sub); }
     catch (e) { return null; }
@@ -51,12 +51,12 @@ export function rulePattern(ruleName: string,
     patternStringConclusion: string,
     condition?: (Substitution) => RuleOutputTmp) {
 
-    let premissesPattern = premissesStringPattern.map((s) => stringToFormula(s));
-    let patternConclusion = stringToFormula(patternStringConclusion);
+    const premissesPattern = premissesStringPattern.map((s) => stringToFormula(s));
+    const patternConclusion = stringToFormula(patternStringConclusion);
 
-    let test = function (fs, f): RuleOutput {
+    const test = function (fs, f): RuleOutput {
         let sub = {};
-        for (let i in fs)
+        for (const i in fs)
             sub = patternMatchingFormula(fs[i], premissesPattern[i], sub);
         sub = patternMatchingFormula(f, patternConclusion, sub);
 
@@ -79,7 +79,7 @@ export function rulePattern(ruleName: string,
 
     if (premissesStringPattern.length == 2)
         return (fs, f: Formula) => {
-            let t = test([fs[0], fs[1]], f);
+            const t = test([fs[0], fs[1]], f);
             if (t) return t;
             return test([fs[1], fs[0]], f);
         };

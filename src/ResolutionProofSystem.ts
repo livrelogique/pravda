@@ -3,10 +3,6 @@ import { Formula, FormulaUtility, getDirectSubFormulas, stringToFormula, formula
 import * as Utils from "./Utils.js";
 import * as UnitTest from "./UnitTest.js";
 
-
-
-
-
 export class ResolutionProofSystem extends ProofSystem {
     constructor() {
         super();
@@ -102,11 +98,11 @@ function getClashingLitterals(c0, c1) {
     for (let l0 of c0)
         for (let l1 of c1) {
             if (l1.type == "not") {
-                let mgu = unification(l0, FormulaUtility.getNotSub(l1));
+                const mgu = unification(l0, FormulaUtility.getNotSub(l1));
                 if (mgu) clashingLitterals.push({ l0: l0, l1: l1, mgu: mgu });
             }
             if (l0.type == "not") {
-                let mgu = unification(l1, FormulaUtility.getNotSub(l0));
+                const mgu = unification(l1, FormulaUtility.getNotSub(l0));
                 if (mgu) clashingLitterals.push({ l0: l0, l1: l1, mgu: mgu });
             }
         }
@@ -139,12 +135,12 @@ function substitutionApply(t, sub) {
             return sub[t];
     }
     else {
-        let n: any = {};
+        const n: any = {};
         n.type = t.type;
         if (t.pred) n.pred = t.pred;
         if (t.func) n.func = t.func;
         n.args = [];
-        for (let a of t.args)
+        for (const a of t.args)
             n.args.push(substitutionApply(a, sub));
 
         return n;
@@ -161,17 +157,17 @@ UnitTest.run("substituying  [x, y] in Q(x,y)",
     formulaToString(substitutionApply(stringToFormula("Q(x,y)"), { x: "x", y: "y" })));
 
 function getResolvant(c0, c1, cl) {
-    let l0 = cl.l0;
-    let l1 = cl.l1;
-    let mgu = cl.mgu;
+    const l0 = cl.l0;
+    const l1 = cl.l1;
+    const mgu = cl.mgu;
 
-    let resolvant = [];
+    const resolvant = [];
 
-    for (let l of c0) if (!Utils.same(l, l0)) {
+    for (const l of c0) if (!Utils.same(l, l0)) {
         Utils.setAdd(resolvant, substitutionApply(l, mgu));
     }
 
-    for (let l of c1) if (!Utils.same(l, l1)) {
+    for (const l of c1) if (!Utils.same(l, l1)) {
         Utils.setAdd(resolvant, substitutionApply(l, mgu));
     }
 
@@ -202,17 +198,21 @@ UnitTest.run("getResolvant hard resolution 2",
         { l0: stringToFormula("R(y)"), l1: stringToFormula("not R(y)"), mgu: { "y": "y" } }).map((f) =>
             formulaToString(f)).join(" or "));
 
-
+/**
+ * 
+ * @param f 
+ * @return a copy of f in which variables (e.g. x, y, etc.) have been renamed (e.g. x', y', etc.)
+ */
 function getFormulaWithNewNames(f) {
     if (isVariable(f))
         return f + "'";
     else {
-        let n: any = {};
+        const n: any = {};
         n.type = f.type;
         if (f.pred) n.pred = f.pred;
         if (f.func) n.func = f.func;
         n.args = [];
-        for (let a of f.args) {
+        for (const a of f.args) {
             n.args.push(getFormulaWithNewNames(a));
         }
         return n;
@@ -238,7 +238,7 @@ function sameModuloVariableRenaming(f, g) {
             if (f.length != g.length)
                 throw "pattern matching error because not the same number of arguments";
 
-            for (let i in f) {
+            for (const i in f) {
                 renaming = sameModuloVariableRenaming2(f[i], g[i], renaming);
             }
             return renaming;
@@ -290,15 +290,15 @@ UnitTest.run("sameModuloVariableRenaming(not Q(y,x), not Q(y',x'))", sameModuloV
 
 function resolution(ac0: Formula, ac1: Formula, ares: Formula): RuleOutput {
     ac1 = <any>getFormulaWithNewNames(ac1);
-    let c0: Formula[] = getDirectSubFormulas(ac0);
-    let c1: Formula[] = getDirectSubFormulas(ac1);
-    let res: Formula[] = getDirectSubFormulas(ares);
+    const c0: Formula[] = getDirectSubFormulas(ac0);
+    const c1: Formula[] = getDirectSubFormulas(ac1);
+    const res: Formula[] = getDirectSubFormulas(ares);
 
-    let clashingLitterals = getClashingLitterals(c0, c1);
+    const clashingLitterals = getClashingLitterals(c0, c1);
 
-    for (let clashingLiteral of clashingLitterals) {
+    for (const clashingLiteral of clashingLitterals) {
 
-        let resolvant = getResolvant(c0, c1, clashingLiteral);
+        const resolvant = getResolvant(c0, c1, clashingLiteral);
         /* console.log(JSON.stringify(clashingLiteral));
          console.log(JSON.stringify(res));
          console.log(JSON.stringify(resolvant));*/
@@ -334,8 +334,8 @@ UnitTest.run("hard resolution 3", resolution(stringToFormula("not P(x) or not Q(
 
 function getContractionPossible(c0) {
     let contractions = [];
-    for (let i in c0)
-        for (let j in c0) if (i < j) {
+    for (const i in c0)
+        for (const j in c0) if (i < j) {
             let mgu = unification(c0[i], c0[j]);
             if (mgu)
                 contractions.push(getContractedClause(c0, mgu));
@@ -351,8 +351,8 @@ UnitTest.run("contractionPossible of P(x) P(a)",
 
 
 function getContractedClause(c0, mgu) {
-    let c = [];
-    for (let l of c0) {
+    const c = [];
+    for (const l of c0) {
         const nl = substitutionApply(l, mgu);
         if (!Utils.contains(c, nl)) c.push(nl);
     }
@@ -361,10 +361,10 @@ function getContractedClause(c0, mgu) {
 }
 
 function contraction(f: Formula, g: Formula): RuleOutput {
-    let c0: Formula[] = getDirectSubFormulas(f);
-    let c1: Formula[] = getDirectSubFormulas(g);
+    const c0: Formula[] = getDirectSubFormulas(f);
+    const c1: Formula[] = getDirectSubFormulas(g);
 
-    for (let contraction of getContractionPossible(c0)) {
+    for (const contraction of getContractionPossible(c0)) {
         if (Utils.same(contraction, c1)) return ProofSystem.ruleSuccess("contraction");
     }
 

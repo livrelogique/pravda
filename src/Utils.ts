@@ -48,7 +48,7 @@ export function includes(bigArray: any[], array: any[]): boolean {
     if (bigArray.length < array.length)
         return false;
 
-    for (let e of array) {
+    for (const e of array) {
         if (!contains(bigArray, e)) {
             return false;
         }

@@ -15,7 +15,7 @@ export class Proof {
 
     public get length() { return this.formulas.length };
     public isCorrect() {
-        for (let justification of this.justifications) {
+        for (const justification of this.justifications) {
             if(justification != null)
             if(justification.type != "input")
             if (justification.type != "success") return false;
@@ -27,11 +27,11 @@ export class Proof {
 
 
 export function stringToProof(str: string): Proof {
-    let proof: Proof = new Proof();
-    let lines: string[] = str.split("\n");
-    for (let i in lines)
+    const proof: Proof = new Proof();
+    const lines: string[] = str.split("\n");
+    for (const i in lines)
         if (lines[i] != "") {
-            let pos = lines[i].indexOf("*");
+            const pos = lines[i].indexOf("*");
             let formulaLine: string;
             if (pos < 0) formulaLine = lines[i]; else formulaLine = lines[i].substr(0, pos - 1);
             formulaLine = formulaLine.trim();

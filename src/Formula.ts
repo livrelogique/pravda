@@ -38,7 +38,7 @@ export function formulaToString(f: Formula): string {
 
         let s = formulaToString(array[0]);
 
-        for(let i = 1; i < array.length; i++) {
+        for (let i = 1; i < array.length; i++) {
             s += ", " + formulaToString(array[i]);
         }
 
@@ -82,25 +82,20 @@ export function getDirectSubFormulas(f: Formula): Formula[] {
  */
 function isFreeVariable(f, x): boolean {
     if (f instanceof Array) {
-        for (let o of f) {
-            if (isFreeVariable(o, x))
-                return true;
-        }
+        for (const o of f) if (isFreeVariable(o, x))
+            return true;
         return false;
     }
-    else if (typeof f == "string") {
+    else if (typeof f == "string")
         return f == x;
-    }
+
     else if (f.type == "forall" || f.type == "exists") {
-        if (f.args[0] == x)
-            return false;
+        if (f.args[0] == x) return false;
         return isFreeVariable(f.args[1], x);
     }
     else {
-        for (let o of f.args) {
-            if (isFreeVariable(o, x))
-                return true;
-        }
+        for (const o of f.args) if (isFreeVariable(o, x))
+            return true;
         return false;
     }
 }
@@ -111,10 +106,6 @@ export class FormulaUtility {
     static getNotSub = (f: Formula) => { return f.args[0]; }
     static not = (f: Formula) => { return { type: "not", args: [f] } };
     static isFreeVariable = isFreeVariable;
-
-
-
-
 }
 
 
