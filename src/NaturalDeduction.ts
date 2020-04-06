@@ -38,7 +38,7 @@ export class NaturalDeduction extends ProofSystem {
                 Utils.isSetPlusElement(sub["Delta"].args, sub["Gamma"].args, sub["psi"])));
 
         this.addRule1(
-            rule1Pattern("intro not", "Gamma+ |- psi", "Gamma |- not phi",
+            rule1Pattern("intro not", "Gamma+ |- bottom", "Gamma |- not phi",
                 (sub) => { return Utils.isSetPlusElement(sub["Gamma+"].args, sub["Gamma"].args, sub["phi"]); }));
 
         this.addRule2(rule2Pattern("elim not", "Gamma |- not phi", "Gamma |- phi", "Gamma |- bottom"));
