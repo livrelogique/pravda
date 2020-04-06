@@ -274,15 +274,14 @@ Let take a non empty bar. Prove in natural deduction the following setence : "th
     //not (exists x not P(x)) |- P(x) -> forall y P(y)
     //not (exists x not P(x)) |- exists x (P(x) -> forall y P(y))
     //
-    //not ((exists x not P(x)) or not (exists x not P(x))), exists x not P(x) |- exists x not P(x)
-    //not ((exists x not P(x)) or not (exists x not P(x))), exists x not P(x) |- (exists x not P(x)) or not (exists x not P(x))
-    //not ((exists x not P(x)) or not (exists x not P(x))), exists x not P(x) |- not ((exists x not P(x)) or not (exists x not P(x)))
-    //not ((exists x not P(x)) or not (exists x not P(x))), exists x not P(x) |- bottom
-    //not ((exists x not P(x)) or not (exists x not P(x))) |- not(exists x not P(x))
-    //not ((exists x not P(x)) or not (exists x not P(x))) |- not(exists x not P(x)) or (exists x not P(x))
-    //not ((exists x not P(x)) or not (exists x not P(x))) |- not ((exists x not P(x)) or not (exists x not P(x)))
-    //not ((exists x not P(x)) or not (exists x not P(x))) |- bottom
-    //|- (exists x not P(x)) or not (exists x not P(x))
+    //not (not (exists x not P(x)) or (exists x not P(x))), exists x not P(x) |- exists x not P(x)
+    //not (not (exists x not P(x)) or (exists x not P(x))), exists x not P(x) |- not (exists x not P(x)) or (exists x not P(x)) 
+    //not (not (exists x not P(x)) or (exists x not P(x))), exists x not P(x) |- not (not (exists x not P(x)) or (exists x not P(x)))
+    //not (not (exists x not P(x)) or (exists x not P(x))), exists x not P(x) |- bottom
+    //not (not (exists x not P(x)) or (exists x not P(x))) |- not(exists x not P(x))
+    //not (not (exists x not P(x)) or (exists x not P(x))) |- not(exists x not P(x)) or (exists x not P(x))
+    //not (not (exists x not P(x)) or (exists x not P(x))) |- not(not (exists x not P(x)) or (exists x not P(x)))
+    //not (not (exists x not P(x)) or (exists x not P(x))) |- bottom
     //
     //|- exists x (P(x) -> forall y P(y))
 </textarea>
