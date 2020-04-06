@@ -248,8 +248,42 @@ Give a proof of <code>not exists x P(x) -> forall x not P(x)</code>.
     //|- not (exists x P(x)) -> forall x not P(x)
 </textarea>
 
+<h3> Funny example</h3>
 
-
+Let take a non empty bar. Prove in natural deduction the following setence : "there exists a person such that if the person drinks then everybody in the bar drink".
+ <textarea proofSystem="NaturalDeduction">
+    //not P(x), P(x), not(forall y P(y)) |- not P(x)
+    //not P(x), P(x), not(forall y P(y)) |- P(x)
+    //not P(x), P(x), not(forall y P(y)) |- bottom
+    //not P(x), P(x) |- forall y P(y)
+    //not P(x) |- P(x) -> forall y P(y)
+    //not P(x) |- exists x (P(x) -> forall y P(y))
+    //not P(x), exists x not P(x) |- exists x (P(x) -> forall y P(y))
+    //exists x not P(x) |- exists x not P(x)
+    //exists x not P(x) |- exists x (P(x) -> forall y P(y))
+    //
+    //not (exists x not P(x)), not P(y) |- not P(y)
+    //not (exists x not P(x)), not P(y) |- exists x not P(x)
+    //not (exists x not P(x)), not P(y) |- not (exists x not P(x))
+    //not (exists x not P(x)), not P(y) |- bottom
+    //not (exists x not P(x)) |- P(y) 
+    //not (exists x not P(x)) |- forall y P(y) 
+    //not (exists x not P(x)), P(x) |- forall y P(y) 
+    //not (exists x not P(x)) |- P(x) -> forall y P(y)
+    //not (exists x not P(x)) |- exists x (P(x) -> forall y P(y))
+    //
+    //not ((exists x not P(x)) or not (exists x not P(x))), exists x not P(x) |- exists x not P(x)
+    //not ((exists x not P(x)) or not (exists x not P(x))), exists x not P(x) |- (exists x not P(x)) or not (exists x not P(x))
+    //not ((exists x not P(x)) or not (exists x not P(x))), exists x not P(x) |- not ((exists x not P(x)) or not (exists x not P(x)))
+    //not ((exists x not P(x)) or not (exists x not P(x))), exists x not P(x) |- bottom
+    //not ((exists x not P(x)) or not (exists x not P(x))) |- not(exists x not P(x))
+    //not ((exists x not P(x)) or not (exists x not P(x))) |- not(exists x not P(x)) or (exists x not P(x))
+    //not ((exists x not P(x)) or not (exists x not P(x))) |- not ((exists x not P(x)) or not (exists x not P(x)))
+    //not ((exists x not P(x)) or not (exists x not P(x))) |- bottom
+    //|- (exists x not P(x)) or not (exists x not P(x))
+    //
+    //|- exists x (P(x) -> forall y P(y))
+</textarea>
 
 <h2>Sandbox</h2>
 
