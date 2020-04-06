@@ -83,6 +83,26 @@ export function rulePattern(ruleName: string,
             if (t) return t;
             return test([fs[1], fs[0]], f);
         };
+
+    if (premissesStringPattern.length == 3)
+        return (fs, f: Formula) => {
+            let t = test([fs[0], fs[1], fs[2]], f);
+            if (t) return t;
+
+            t = test([fs[0], fs[2], fs[1]], f);
+            if (t) return t;
+            
+            t = test([fs[1], fs[0], fs[2]], f);
+            if (t) return t;
+
+            t = test([fs[1], fs[2], fs[0]], f);
+            if (t) return t;
+
+            t = test([fs[2], fs[0], fs[1]], f);
+            if (t) return t;
+
+            return test([fs[2], fs[1], fs[0]], f);
+        };
     return test;
 }
 

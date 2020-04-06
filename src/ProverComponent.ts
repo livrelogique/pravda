@@ -10,6 +10,8 @@ import * as Utils from "./Utils.js";
 const NB_COLS_MIN = 40;
 
 export class ProverComponent {
+
+
     constructor(oldDomElement: HTMLTextAreaElement) {
         const proofStringOriginal = oldDomElement.value;
         const proverElement = document.createElement("div");
