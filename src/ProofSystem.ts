@@ -32,53 +32,74 @@ export class ProofSystem {
     protected addRule2(test: Rule2) { this.rules2.push(test); }
     protected addRule3(test: Rule3) { this.rules3.push(test); }
 
-    public checkProof(proof: Proof) {
-        for (let i = 0; i < proof.length; i++) if (proof.formulas[i] && proof.justifications[i] == null) {
-            for (let rule of this.rules0) {
-                let output = rule(proof.formulas[i]);
-                if (output) {
-                    proof.justifications[i] = output;
-                    if (output.type == "success")
-                        break;
-                }
 
+
+
+
+    /**
+     * 
+     * @param proof 
+     * @param i, suchthat  proof.justifications[j] are filled for all j < i
+     * @effect modifies proof.justifications[i]
+     */
+    private checkFormula(proof, i) {
+        for (let rule of this.rules0) {
+            let output = rule(proof.formulas[i]);
+            if (output) {
+                proof.justifications[i] = output;
+                if (output.type == "success") return;
+            }
+
+        }
+
+
+        for (let rule of this.rules1)
+        if (rule(undefined, proof.formulas[i]))
+            for (let j = 0; j < i; j++) if (proof.formulas[j]) {
+                let output = rule(proof.formulas[j], proof.formulas[i]);
+                if (output) {
+                    output.msg = output.msg + " (" + (j + 1) + ")";
+                    proof.justifications[i] = output;
+                    if (output.type == "success") return;
+                }
             }
 
 
-            for (let rule of this.rules1)
-                for (let j = 0; j < i; j++) if (proof.formulas[j]) {
-                    let output = rule(proof.formulas[j], proof.formulas[i]);
-                    if (output) {
-                        output.msg = output.msg + " (" + (j + 1) + ")";
-                        proof.justifications[i] = output;
-                    }
-                }
-
-
-            for (let rule of this.rules2)
+        for (let rule of this.rules2)
+            if (rule(undefined, undefined, proof.formulas[i]))
                 for (let j = 0; j < i; j++) if (proof.formulas[j])
-                    for (let k = 0; k < j; k++) if (proof.formulas[k]) {
-                        let output = rule(proof.formulas[k], proof.formulas[j], proof.formulas[i]);
-                        if (output) {
-                            output.msg = output.msg + " (" + (k + 1) + " , " + (j + 1) + ")";
-                            proof.justifications[i] = output;
-                        }
-                    }
-
-
-            for (let rule of this.rules3)
-                for (let j = 0; j < i; j++) if (proof.formulas[j])
-                    for (let k = 0; k < j; k++) if (proof.formulas[k])
-                        for (let l = 0; l < k; l++) if (proof.formulas[l]) {
-                            let output = rule(proof.formulas[l], proof.formulas[k], proof.formulas[j], proof.formulas[i]);
+                    if (rule(undefined, proof.formulas[j], proof.formulas[i]))
+                        for (let k = 0; k < j; k++) if (proof.formulas[k]) {
+                            let output = rule(proof.formulas[k], proof.formulas[j], proof.formulas[i]);
                             if (output) {
-                                output.msg = output.msg + " (" + (k + 1) + " , " + (j + 1) + ", " + (l + 1) + ")";
+                                output.msg = output.msg + " (" + (k + 1) + " , " + (j + 1) + ")";
                                 proof.justifications[i] = output;
+                                if (output.type == "success") return;
                             }
                         }
-            if (proof.justifications[i] == null)
-                proof.justifications[i] = { type: "issue", msg: "does not match any rule" };
-        }
 
+
+        for (let rule of this.rules3)
+            for (let j = 0; j < i; j++) if (proof.formulas[j])
+                if (rule(undefined, undefined, proof.formulas[j], proof.formulas[i]))
+                    for (let k = 0; k < j; k++) if (proof.formulas[k])
+                        if (rule(undefined, proof.formulas[k], proof.formulas[j], proof.formulas[i]))
+                            for (let l = 0; l < k; l++) if (proof.formulas[l]) {
+                                let output = rule(proof.formulas[l], proof.formulas[k], proof.formulas[j], proof.formulas[i]);
+                                if (output) {
+                                    output.msg = output.msg + " (" + (k + 1) + " , " + (j + 1) + ", " + (l + 1) + ")";
+                                    proof.justifications[i] = output;
+                                    if (output.type == "success") return;
+                                }
+                            }
+        if (proof.justifications[i] == null)
+            proof.justifications[i] = { type: "issue", msg: "does not match any rule" };
+
+    }
+
+
+    public checkProof(proof: Proof) {
+        for (let i = 0; i < proof.length; i++) if (proof.formulas[i] && proof.justifications[i] == null)
+            this.checkFormula(proof, i);
     }
 }

@@ -45,7 +45,14 @@ export function patternMatchingFormula(formula: Formula, pattern: Formula, initi
 
 
 
-
+/**
+ * 
+ * @param ruleName 
+ * @param premissesStringPattern 
+ * @param patternStringConclusion 
+ * @param condition
+ * @returns a function that checks whether the rule is applied 
+ */
 export function rulePattern(ruleName: string,
     premissesStringPattern: string[],
     patternStringConclusion: string,
@@ -56,12 +63,15 @@ export function rulePattern(ruleName: string,
 
     const test = function (fs, f): RuleOutput {
         let sub = {};
-        for (const i in fs)
+
+        const isPartialCheck = (fs.indexOf(undefined) > -1); //not all the formulas are given (partial check)
+
+        for (const i in fs) if(fs[i] != undefined)
             sub = patternMatchingFormula(fs[i], premissesPattern[i], sub);
         sub = patternMatchingFormula(f, patternConclusion, sub);
 
         if (sub) {
-            if (condition == undefined)
+            if (condition == undefined || isPartialCheck)
                 return ProofSystem.ruleSuccess(ruleName);
 
             let r = condition(sub);

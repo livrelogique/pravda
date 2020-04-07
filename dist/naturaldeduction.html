@@ -18,7 +18,7 @@ On this page, you will learn natural deduction. In natural deduction, you manipu
   <li>On the right-hand side, there is a formula: the conclusion that is proven, e.g. <code>p and q</code>.</li>
 </ul> 
 
-The left-hand side can be empty, e.g. <code>|- p or not p</code>.
+The left-hand side can be empty, e.g. <code>|- p or not p</code>. In that case, it means that the conclusion <code>p or not p</code> without any hypothesis.
 
   <h2>In propositional logic</h2>
 
@@ -252,7 +252,7 @@ Give a proof of <code>not exists x P(x) -> forall x not P(x)</code>.
 
 <h3> Funny example</h3>
 
-Let take a non empty bar. Prove in natural deduction the following setence : "there exists a person such that if the person drinks then everybody in the bar drink".
+Let us take a non-empty bar. Give a proof in natural deduction of the following sentence : "there exists a person such that, if he/she drinks then everybody drinks". You may use the formula <code>P(x)</code> to formalize the fact that the person denoted by <code>x</code> drinks.
  <textarea proofSystem="NaturalDeduction">
     //not P(x), P(x), not(forall y P(y)) |- not P(x)
     //not P(x), P(x), not(forall y P(y)) |- P(x)

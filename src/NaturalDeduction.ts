@@ -2,7 +2,6 @@ import { FormulaUtility } from './Formula.js';
 import { ProofSystem } from "./ProofSystem.js";
 import { patternMatchingFormula, axiomPattern, rule1Pattern, rule2Pattern, rule3Pattern } from "./PatternMatching.js";
 import * as Utils from "./Utils.js";
-import * as UnitTest from "./UnitTest.js"
 
 export class NaturalDeduction extends ProofSystem {
     constructor() {
