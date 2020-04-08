@@ -3,8 +3,9 @@ import { Proof, stringToProof, Justification } from "./Proof.js";
 import { ResolutionProofSystem } from "./ResolutionProofSystem.js";
 import { HilbertProofSystem } from './HilbertProofSystem.js';
 import { NaturalDeduction } from './NaturalDeduction.js';
-import { stringToFormula, Formula } from './Formula.js';
+import { stringToFormula, Formula, formulaToLaTeX } from './Formula.js';
 import * as Utils from "./Utils.js";
+import { stringToLaTeX, proofToProofTreeLaTeX, askForMathJAX } from './LaTeX.js';
 
 
 const NB_COLS_MIN = 40;
@@ -20,7 +21,7 @@ export class ProverComponent {
         oldDomElement.parentElement.replaceChild(proverElement, oldDomElement);
 
         const proofTextArea = <HTMLTextAreaElement>document.createElement("textarea");
-
+        const proofTreeArea = <HTMLElement>document.createElement("div");
         const proofLinesInput = proofStringOriginal.split("\n").map((line) => line.trim());
 
 
@@ -81,6 +82,8 @@ export class ProverComponent {
         proofTextArea.value = initialProofString;
         proverElement.appendChild(proofTextArea);
 
+        
+
         const justificationsElement = document.createElement("div");
         justificationsElement.setAttribute("class", "justifications");
         proverElement.appendChild(justificationsElement);
@@ -106,6 +109,10 @@ export class ProverComponent {
 
 
         function createJustificationHTMLElement(just: Justification) {
+            function numberArrayToString(array) {
+                return (array.length == 0) ? "" : "(" + array.toString() + ")";
+            }
+
             const justificationElement = document.createElement("div");
 
             if (just == null) {
@@ -117,15 +124,19 @@ export class ProverComponent {
                 justificationElement.innerHTML = "input";
                 return justificationElement;
             }
-            else if (just.type == "issue")
+            else if (just.type == "issue") {
                 justificationElement.setAttribute("class", "justification errorJustification");
-            else if (just.type == "success")
+                justificationElement.innerHTML = just.msg;
+                return justificationElement;
+            }
+                
+            else if (just.type == "success") {
                 justificationElement.setAttribute("class", "justification ruleJustification");
+                justificationElement.innerHTML = just.msg + numberArrayToString((<any> just).previous.map((n) => n+1));
+                return justificationElement;
+            }
             else
                 throw "error";
-
-            justificationElement.innerHTML = just.msg;
-            return justificationElement;
         }
 
         /**
@@ -147,6 +158,13 @@ export class ProverComponent {
             });
         }
 
+
+        proverElement.appendChild(proofTreeArea);
+        
+
+
+
+
         function compute() {
             const proof: Proof = stringToProof(getCurrentProofString());
 
@@ -166,6 +184,10 @@ export class ProverComponent {
                 proofTextArea.setAttribute("class", "proof");
                 buttonSolution.setAttribute("class", "solutionButton");
             }
+
+
+            proofTreeArea.innerHTML = "\\(" + proofToProofTreeLaTeX(proof) + "\\)";
+            askForMathJAX();
 
         }
 

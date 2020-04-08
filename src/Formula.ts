@@ -26,38 +26,49 @@ export function stringToFormula(str: string): Formula {
 
 
 
-export function formulaToString(f: Formula): string {
-    if (typeof f == "string")
-        return f;
-
-    function argsToString(array: any[]) {
+export function formulaToLaTeX(f: Formula): string {
+    function arrayToLaTEX(array: any[]) {
         if (array.length == 0) return "";
 
         if (array.length == 1)
-            return formulaToString(array[0]);
+            return formulaToLaTeX(array[0]);
 
-        let s = formulaToString(array[0]);
+        let s = formulaToLaTeX(array[0]);
 
         for (let i = 1; i < array.length; i++) {
-            s += ", " + formulaToString(array[i]);
+            s += ", " + formulaToLaTeX(array[i]);
         }
 
         return s;
     }
 
-    switch ((<any>f).type) {
-        case "false": return "bottom";
-        case "true": return "top";
-        case "atomic": return (<any>f).pred + "(" + argsToString((<any>f).args) + ")";
-        case "term": return (<any>f).func + "(" + argsToString((<any>f).args) + ")";
-        case "and": return `(${formulaToString(f.args[0])}) and (${formulaToString(f.args[1])})`;
-        case "or": return `(${formulaToString(f.args[0])}) or (${formulaToString(f.args[1])})`;
-        case "not": return `not (${formulaToString(f.args[0])})`;
-        case "exists": return `exists  ${f.args[0]} (${formulaToString(f.args[1])})`;
-        case "forall": return `forall  ${f.args[0]} (${formulaToString(f.args[1])})`;
-        default: throw "error in formulaToString";
+
+    function arrayToLaTEXWithParenthesis(array: any[]) {
+        if (array.length == 0) return "";
+        else return "(" + arrayToLaTEX(array) + ")";
     }
 
+    if (typeof f == "string")
+        return f;
+    else if (f instanceof Array) {
+        return arrayToLaTEX(f);
+    }
+    else {
+        switch ((<any>f).type) {
+            case "false": return "\\bot";
+            case "true": return "\\top";
+            case "atomic": return (<any>f).pred + arrayToLaTEXWithParenthesis((<any>f).args);
+            case "term": return (<any>f).func + arrayToLaTEXWithParenthesis((<any>f).args);
+            case "and": return `(${formulaToLaTeX(f.args[0])}) \\wedge (${formulaToLaTeX(f.args[1])})`;
+            case "or": return `(${formulaToLaTeX(f.args[0])}) \\vee (${formulaToLaTeX(f.args[1])})`;
+            case "->": return `(${formulaToLaTeX(f.args[0])}) \\rightarrow (${formulaToLaTeX(f.args[1])})`;
+            case "not": return `\\neg (${formulaToLaTeX(f.args[0])})`;
+            case "exists": return `\\exists  ${f.args[0]} (${formulaToLaTeX(f.args[1])})`;
+            case "forall": return `\\forall  ${f.args[0]} (${formulaToLaTeX(f.args[1])})`;
+            case "sequent": return `${formulaToLaTeX(f.args[0].args)} \\vdash ${formulaToLaTeX(f.args[1])}`;
+            default: throw "error in formulaToString";
+        }
+    }
 }
 
 /*

@@ -7,7 +7,7 @@ export class NaturalDeduction extends ProofSystem {
     constructor() {
         super();
         this.addRule0(
-            axiomPattern("Gamma, phi |- phi", "Gamma |- phi",
+            axiomPattern("axiom", "Gamma |- phi",
                 (sub) => Utils.contains(sub["Gamma"].args, sub["phi"])));
 
         this.addRule1(
@@ -22,9 +22,9 @@ export class NaturalDeduction extends ProofSystem {
                 }));
 
 
-        this.addRule1(rule1Pattern("intro ->", "Gamma+ |- psi", "Gamma |- phi -> psi",
+        this.addRule1(rule1Pattern("intro impl", "Gamma+ |- psi", "Gamma |- phi -> psi",
             (sub) => Utils.isSetPlusElement(sub["Gamma+"].args, sub["Gamma"].args, sub["phi"])));
-        this.addRule2(rule2Pattern("elim ->", "Gamma |- phi -> psi", "Gamma |- phi", "Gamma |- psi"));
+        this.addRule2(rule2Pattern("elim impl", "Gamma |- phi -> psi", "Gamma |- phi", "Gamma |- psi"));
 
         this.addRule2(rule2Pattern("intro and", "Gamma |- phi", "Gamma |- psi", "Gamma |- phi and psi"));
         this.addRule1(rule1Pattern("elim and", "Gamma |- phi and psi", "Gamma |- phi"));

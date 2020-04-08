@@ -5,6 +5,9 @@
   <script src="./src/parser/parser.js"></script>
   <script src="Main.js" type="module"></script>
   <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
 </head>
 
 <body>
@@ -181,25 +184,31 @@ Show that we can prove <code>not (p or q) -> not p and not q</code>.
 </textarea>
 
 
-  <textarea proofSystem="NaturalDeduction">
-  Q(x) |- exists x P(x)    *
-  Q(x), P(x) |- p       *
-  Q(x) |- p
-</textarea>
 
-  <textarea proofSystem="NaturalDeduction">
+
+If you proved <code>exists x P(x)</code> and from <code>P(x)</code> you prove <code>p</code>, you deduce <code>p</code> only from the other hypothesis, as long as they do not depend on <code>x</code>.
+<textarea proofSystem="NaturalDeduction">
   Q(a) |- exists x P(x)    *
   Q(a), P(x) |- p       *
   Q(a) |- p
 </textarea>
 
+Be careful, when the hypothesis depend on the involved variable <code>x</code> you <b>cannot</b> apply the elimination of <code>exists</code> as shown below:
+<textarea proofSystem="NaturalDeduction">
+  Q(x) |- exists x P(x)    *
+  Q(x), P(x) |- p       *
+  Q(x) |- p
+</textarea>
+
+
+If you proved <code>P(x)</code> and the hypothesis do not depend on <code>x</code>, then you deduce <code>forall x P(x)</code>. That rule is called the introduction of <code>forall</code>.
   <textarea proofSystem="NaturalDeduction">
   Q(y) |- P(x)       *
   Q(y) |- forall x P(x)
 </textarea>
 
 
-
+Be careful, when the hypothesis depend on the involved variable <code>x</code> you  <b>cannot</b> apply the introduction of <code>forall</code> as shown below:
   <textarea proofSystem="NaturalDeduction">
   Q(x) |- P(x)          *
   Q(x) |- forall x P(x)

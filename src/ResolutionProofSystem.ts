@@ -1,5 +1,5 @@
 import { ProofSystem, RuleOutput } from "./ProofSystem.js";
-import { Formula, FormulaUtility, getDirectSubFormulas, stringToFormula, formulaToString } from "./Formula.js";
+import { Formula, FormulaUtility, getDirectSubFormulas, stringToFormula, formulaToLaTeX } from "./Formula.js";
 import * as Utils from "./Utils.js";
 import * as UnitTest from "./UnitTest.js";
 
@@ -150,11 +150,11 @@ function substitutionApply(t, sub) {
 UnitTest.run("substituying  [x := a] in P(x)",
     substitutionApply(stringToFormula("P(x)"), { "x": { type: "term", func: "a", args: [] } }));
 UnitTest.run("substituying  [] in P(x)",
-    formulaToString(substitutionApply(stringToFormula("P(x)"), {})));
+    formulaToLaTeX(substitutionApply(stringToFormula("P(x)"), {})));
 UnitTest.run("substituying  [] in Q(x,y)",
-    formulaToString(substitutionApply(stringToFormula("Q(x,y)"), {})));
+    formulaToLaTeX(substitutionApply(stringToFormula("Q(x,y)"), {})));
 UnitTest.run("substituying  [x, y] in Q(x,y)",
-    formulaToString(substitutionApply(stringToFormula("Q(x,y)"), { x: "x", y: "y" })));
+    formulaToLaTeX(substitutionApply(stringToFormula("Q(x,y)"), { x: "x", y: "y" })));
 
 function getResolvant(c0, c1, cl) {
     const l0 = cl.l0;
@@ -196,7 +196,7 @@ UnitTest.run("getResolvant hard resolution 2",
     getResolvant([stringToFormula("not Q(y,x)"), stringToFormula("R(y)")],
         [stringToFormula("not R(y)"), stringToFormula("not Q(y,x)")],
         { l0: stringToFormula("R(y)"), l1: stringToFormula("not R(y)"), mgu: { "y": "y" } }).map((f) =>
-            formulaToString(f)).join(" or "));
+            formulaToLaTeX(f)).join(" or "));
 
 /**
  * 
@@ -288,7 +288,18 @@ UnitTest.run("sameModuloVariableRenaming(not Q(y,x), not Q(y',x'))", sameModuloV
     getFormulaWithNewNames(stringToFormula("not Q(y,x)"))));
 
 
+
+
+
+
+
+    /**********************************RESOLUTION  */                                    
+    
 function resolution(ac0: Formula, ac1: Formula, ares: Formula): RuleOutput {
+    if(ac0 == undefined) return ProofSystem.defaultRuleSuccess();
+    if(ac1 == undefined) return ProofSystem.defaultRuleSuccess();
+    if(ares == undefined) return ProofSystem.defaultRuleSuccess();
+
     ac1 = <any>getFormulaWithNewNames(ac1);
     const c0: Formula[] = getDirectSubFormulas(ac0);
     const c1: Formula[] = getDirectSubFormulas(ac1);
@@ -329,7 +340,7 @@ UnitTest.run("hard resolution 3", resolution(stringToFormula("not P(x) or not Q(
 
 
 
-/*************** CONTRACTION */
+/**************************************** CONTRACTION ************************************/
 
 
 function getContractionPossible(c0) {
@@ -361,6 +372,8 @@ function getContractedClause(c0, mgu) {
 }
 
 function contraction(f: Formula, g: Formula): RuleOutput {
+    if(f == undefined) return ProofSystem.defaultRuleSuccess();
+    if(g == undefined) return ProofSystem.defaultRuleSuccess();
     const c0: Formula[] = getDirectSubFormulas(f);
     const c1: Formula[] = getDirectSubFormulas(g);
 

@@ -1,8 +1,8 @@
 import { Formula } from './Formula';
 import { Proof } from "./Proof.js";
 
-export type RuleOutput = { type: "success", msg: string } | { type: "issue", msg: string } | false;
-export type RuleOutputTmp = { type: "success", msg: string } | { type: "issue", msg: string } | boolean;
+export type RuleOutput = { type: "success", msg: string, previous: number[] } | { type: "issue", msg: string } | false;
+export type RuleOutputTmp = { type: "success", msg: string, previous: number[] } | { type: "issue", msg: string } | boolean;
 
 
 type Rule0 = (Formula) => RuleOutput;
@@ -13,10 +13,14 @@ type Rule3 = (f1: Formula, f2: Formula, f3: Formula, f4: Formula) => RuleOutput;
 
 
 export class ProofSystem {
-    public static ruleSuccess(msg: string): RuleOutput {
-        return { type: "success", msg: msg };
+    public static ruleSuccess(msg: string, previous: number[] = []): RuleOutput {
+        return { type: "success", msg: msg, previous: previous };
     }
 
+
+    public static defaultRuleSuccess(): RuleOutput {
+        return { type: "success", msg: "", previous: [] };
+    }
 
     public static ruleIssue(msg: string): RuleOutput {
         return { type: "issue", msg: msg };
@@ -58,9 +62,12 @@ export class ProofSystem {
             for (let j = 0; j < i; j++) if (proof.formulas[j]) {
                 let output = rule(proof.formulas[j], proof.formulas[i]);
                 if (output) {
-                    output.msg = output.msg + " (" + (j + 1) + ")";
                     proof.justifications[i] = output;
-                    if (output.type == "success") return;
+                    
+                    if (output.type == "success") {
+                        output.previous = [j];
+                        return;
+                    }
                 }
             }
 
@@ -72,9 +79,11 @@ export class ProofSystem {
                         for (let k = 0; k < j; k++) if (proof.formulas[k]) {
                             let output = rule(proof.formulas[k], proof.formulas[j], proof.formulas[i]);
                             if (output) {
-                                output.msg = output.msg + " (" + (k + 1) + " , " + (j + 1) + ")";
                                 proof.justifications[i] = output;
-                                if (output.type == "success") return;
+                                if (output.type == "success") {
+                                    output.previous = [k, j];
+                                    return;
+                                }
                             }
                         }
 
@@ -87,9 +96,11 @@ export class ProofSystem {
                             for (let l = 0; l < k; l++) if (proof.formulas[l]) {
                                 let output = rule(proof.formulas[l], proof.formulas[k], proof.formulas[j], proof.formulas[i]);
                                 if (output) {
-                                    output.msg = output.msg + " (" + (k + 1) + " , " + (j + 1) + ", " + (l + 1) + ")";
                                     proof.justifications[i] = output;
-                                    if (output.type == "success") return;
+                                    if (output.type == "success") {
+                                        output.previous = [k, j, l];
+                                        return;
+                                    }
                                 }
                             }
         if (proof.justifications[i] == null)

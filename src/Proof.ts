@@ -1,16 +1,17 @@
 import { Formula, stringToFormula } from "./Formula.js";
 import {RuleOutput} from "./ProofSystem.js";
 
-export type Justification =  {type: "success" | "issue" | "input", msg: string}
+export type Justification =  {type: "success" | "issue" | "input", msg: string, previous: number[]}
 
 
 
 export class Proof {
     formulas: Formula[] = new Array();
+    lines: string[] = [];
     justifications: Justification[] = [];
 
     public setJustificationInputFor(i) {
-        this.justifications[i] = {type: "input", msg:""};
+        this.justifications[i] = {type: "input", msg:"", previous: []};
     }
 
     public get length() { return this.formulas.length };
@@ -28,7 +29,9 @@ export class Proof {
 
 export function stringToProof(str: string): Proof {
     const proof: Proof = new Proof();
+    
     const lines: string[] = str.split("\n");
+    proof.lines = lines;
     for (const i in lines)
         if (lines[i] != "") {
             const pos = lines[i].indexOf("*");
@@ -42,7 +45,7 @@ export function stringToProof(str: string): Proof {
                     proof.setJustificationInputFor(i);
             }
             catch (e) {
-                proof.justifications[i] = {type: "issue", msg: "parsing error | " + e.message};
+                proof.justifications[i] = {type: "issue", msg: "parsing error | " + e.message, previous: []};
             }
         }
         else
