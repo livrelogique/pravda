@@ -1,9 +1,9 @@
 .prover {
     position: relative;
     white-space: nowrap;
-    padding: 2px;
-    margin: 8px;
-    margin-bottom: 16px;
+    padding: 8px;
+    margin: 16px;
+    margin-bottom: 32px;
 }
 
 
@@ -111,6 +111,11 @@ button {
 }
 
 
+.proofTreeLaTeX {
+    color: rgb(59, 59, 59);
+    margin: 16px;
+    margin-bottom: 32px;
+}
 
 .mission {
     background-color: rgb(245, 245, 245);

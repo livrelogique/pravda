@@ -22,6 +22,7 @@ export class ProverComponent {
 
         const proofTextArea = <HTMLTextAreaElement>document.createElement("textarea");
         const proofTreeArea = <HTMLElement>document.createElement("div");
+        proofTreeArea.setAttribute("class", "proofTreeLaTeX");
         const proofLinesInput = proofStringOriginal.split("\n").map((line) => line.trim());
 
 

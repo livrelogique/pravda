@@ -827,9 +827,6 @@
                   s5 = peg$FAILED;
                   if (peg$silentFails === 0) { peg$fail(peg$c27); }
                 }
-                if (s5 === peg$FAILED) {
-                  s5 = peg$c5;
-                }
                 if (s5 !== peg$FAILED) {
                   s6 = peg$parse_();
                   if (s6 !== peg$FAILED) {
@@ -864,9 +861,6 @@
                   } else {
                     s5 = peg$FAILED;
                     if (peg$silentFails === 0) { peg$fail(peg$c27); }
-                  }
-                  if (s5 === peg$FAILED) {
-                    s5 = peg$c5;
                   }
                   if (s5 !== peg$FAILED) {
                     s6 = peg$parse_();

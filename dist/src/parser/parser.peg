@@ -40,7 +40,7 @@ Formula
     
     /
     
-    phi:Formula2 tail:(_ ("or" / "") _ Formula)* {
+    phi:Formula2 tail:(_ ("or") _ Formula)* {
       let args = [phi];
       tail.forEach(function(element) {args.push(element[3]); });
       if(args.length == 1)

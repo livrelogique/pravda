@@ -31,6 +31,7 @@ export function stringToProof(str: string): Proof {
     const proof: Proof = new Proof();
     
     const lines: string[] = str.split("\n");
+    lines.push("");
     proof.lines = lines;
     for (const i in lines)
         if (lines[i] != "") {
