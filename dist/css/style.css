@@ -6,7 +6,33 @@
     margin-bottom: 32px;
 }
 
+a[href="index.html"] {
+    float: left;
+    padding: 8px;
+    margin:8px;
+    border-style: solid 1px black;
+    border-radius: 16px;
+    background-color: lightgrey;
+    cursor: pointer;
+    color: black;
+    text-decoration: none;
 
+}
+
+a[href="index.html"]::before {
+    content: url("../images/back.png");
+}
+
+
+a[href="index.html"]:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.8);
+}
+
+
+
+a[href="index.html"]::after {
+    content: "Back";
+}
 textarea {
     display: inline-block;
     resize: none;
@@ -14,6 +40,12 @@ textarea {
     background-color: white;
     line-height: 16px;
 }
+
+
+textarea:focus {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.8);
+}
+
 
 .proof {
     display: inline-block;
@@ -101,6 +133,12 @@ button {
     border: 2px brown solid;
 }
 
+.solutionButton:hover {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.8);
+}
+
+
+
 .hidden {
     display: none;
 }
@@ -110,6 +148,9 @@ button {
     border: 2px blue solid;
 }
 
+.resetButton:hover {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.8);
+}
 
 .proofTreeLaTeX {
     color: rgb(59, 59, 59);
@@ -138,11 +179,6 @@ div.gallery {
     display: block;
 }
 
-
-.buttonproofsystem a::before {
-    content: url(../images/fly.png);
-    padding: 0px;
-}
 
 
 .buttonproofsystem {

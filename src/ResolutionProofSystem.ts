@@ -378,7 +378,7 @@ function contraction(f: Formula, g: Formula): RuleOutput {
     const c1: Formula[] = getDirectSubFormulas(g);
 
     for (const contraction of getContractionPossible(c0)) {
-        if (Utils.same(contraction, c1)) return ProofSystem.ruleSuccess("contraction");
+        if (sameModuloVariableRenaming(contraction, c1)) return ProofSystem.ruleSuccess("contraction");
     }
 
     return false;
