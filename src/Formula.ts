@@ -25,7 +25,11 @@ export function stringToFormula(str: string): Formula {
 }
 
 
-
+/**
+ * 
+ * @param f a formula
+ * @returns the LaTEX code corresponding to f
+ */
 export function formulaToLaTeX(f: Formula): string {
     function arrayToLaTEX(array: any[]) {
         if (array.length == 0) return "";
@@ -112,7 +116,9 @@ function isFreeVariable(f, x): boolean {
 }
 
 
-
+/**
+ * This class contains static methods to manipulate formulas.
+ */
 export class FormulaUtility {
     static getNotSub = (f: Formula) => { return f.args[0]; }
     static not = (f: Formula) => { return { type: "not", args: [f] } };

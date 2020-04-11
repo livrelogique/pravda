@@ -371,6 +371,13 @@ function getContractedClause(c0, mgu) {
     return c;
 }
 
+
+/**
+ * 
+ * @param f 
+ * @param g 
+ * tests whether g is obtained from f by the contraction rule
+ */
 function contraction(f: Formula, g: Formula): RuleOutput {
     if(f == undefined) return ProofSystem.defaultRuleSuccess();
     if(g == undefined) return ProofSystem.defaultRuleSuccess();
