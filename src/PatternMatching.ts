@@ -13,22 +13,22 @@ import { Substitution } from "./Substitution.js"
  * @returns a substitution sub such that the formula is obtained from the pattern by applying that substitution. If this is not possible it returns null. If the substitution is null, it returns null. In clear, it does pattern matching.
  */
 export function patternMatchingFormula(formula: Formula, pattern: Formula, initialSubstitution: Substitution = {}): Substitution {
-    function isVariablePattern(s) { return typeof s == "string"; }
-
     function patternMatchingFormula2(formula: Formula, pattern: Formula, sub: Substitution) {
-        if (isVariablePattern(pattern)) {
+        if (typeof pattern == "string") {
             const v = <string>(<any>pattern);
             if (sub[v] == undefined) sub[v] = formula;
             else if (!Utils.same(formula, sub[v]))
                 throw "pattern matching error because not the same formula registered in the substitution";
         }
+        else if (typeof formula == "string")
+            throw "pattern matching error because formula is a string whereas the pattern is complex";
         else {
             if (formula.type != pattern.type)
                 throw "pattern matching error because different type: " + formula.type + " VS " + pattern.type + "(pattern is " + pattern + ")";
 
             if ((<any[]>formula.args).length != (<any[]>pattern.args).length)
                 throw "pattern matching error because not the same number of arguments";
-            for (const i in formula.args)
+            for (const i in <any[]> formula.args)
                 patternMatchingFormula2(formula.args[i], pattern.args[i], sub);
         }
     }
@@ -66,7 +66,7 @@ export function rulePattern(ruleName: string,
 
         const isPartialCheck = (fs.indexOf(undefined) > -1); //not all the formulas are given (partial check)
 
-        for (const i in fs) if(fs[i] != undefined)
+        for (const i in fs) if (fs[i] != undefined)
             sub = patternMatchingFormula(fs[i], premissesPattern[i], sub);
         sub = patternMatchingFormula(f, patternConclusion, sub);
 
@@ -101,7 +101,7 @@ export function rulePattern(ruleName: string,
 
             t = test([fs[0], fs[2], fs[1]], f);
             if (t) return t;
-            
+
             t = test([fs[1], fs[0], fs[2]], f);
             if (t) return t;
 

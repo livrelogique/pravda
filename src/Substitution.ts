@@ -1,4 +1,4 @@
 import { Formula, Term } from "./Formula.js";
 
-export type Substitution = { [v: string]: Formula | Term; };
+export type Substitution = { [v: string]: Formula; };
 

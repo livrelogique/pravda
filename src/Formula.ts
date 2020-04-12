@@ -9,11 +9,13 @@ export type FunctionSymbol = string;
 
 export type Term = { type: "term", func: FunctionSymbol, args: Term[] };
 
-export type Formula = { type: "and" | "or" | "->", args: Formula[] } |
+export type FormulaConstruction = { type: "and" | "or" | "->", args: Formula[] } |
 { type: "not", args: Formula[] } |
 { type: "exists" | "forall", var: VariableSymbol, args: Formula } |
 { type: "atomic", pred: PredicateSymbol, args: Term[] } |
-{ type: "true", args: Formula[] } | { type: "false", args: Formula[] };
+{ type: "true", args: Formula[] } | { type: "false", args: Formula[] }
+
+export type Formula = FormulaConstruction | Term | string;
 
 
 /*
@@ -95,7 +97,7 @@ export function getDirectSubFormulas(f: Formula): Formula[] {
  * 
  * @returns true iff x appears as a free variable in f
  */
-function isFreeVariable(f, x): boolean {
+function isFreeVariable(f: Formula, x: string): boolean {
     if (f instanceof Array) {
         for (const o of f) if (isFreeVariable(o, x))
             return true;
@@ -109,7 +111,7 @@ function isFreeVariable(f, x): boolean {
         return isFreeVariable(f.args[1], x);
     }
     else {
-        for (const o of f.args) if (isFreeVariable(o, x))
+        for (const o of <any> f.args) if (isFreeVariable(o, x))
             return true;
         return false;
     }
@@ -120,7 +122,7 @@ function isFreeVariable(f, x): boolean {
  * This class contains static methods to manipulate formulas.
  */
 export class FormulaUtility {
-    static getNotSub = (f: Formula) => { return f.args[0]; }
+    static getNotSub = (f: FormulaConstruction) => { return f.args[0]; }
     static not = (f: Formula) => { return { type: "not", args: [f] } };
     static isFreeVariable = isFreeVariable;
 }

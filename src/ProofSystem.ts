@@ -46,7 +46,7 @@ export class ProofSystem {
      * @param i, suchthat  proof.justifications[j] are filled for all j < i
      * @effect modifies proof.justifications[i]
      */
-    private checkFormula(proof, i) {
+    private checkFormula(proof, i: number) {
         for (let rule of this.rules0) {
             let output = rule(proof.formulas[i]);
             if (output) {
