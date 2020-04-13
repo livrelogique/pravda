@@ -18,10 +18,7 @@ export function substitutionApply(t, sub: Substitution) {
         n.type = t.type;
         if (t.pred) n.pred = t.pred;
         if (t.func) n.func = t.func;
-        n.args = [];
-        for (const a of t.args)
-            n.args.push(substitutionApply(a, sub));
-
+        n.args = t.args.map((a) => substitutionApply(a, sub));
         return n;
     }
 }

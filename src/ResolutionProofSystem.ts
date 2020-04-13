@@ -222,7 +222,7 @@ function resolution(aClause1: Formula, aClause2: Formula, aResolvant: Formula): 
     aClause2 = <any>getFormulaWithNewNames(aClause2);
     const clause1: FormulaConstruction[] = <FormulaConstruction[]>getDirectSubFormulas(aClause1);
     const clause2: FormulaConstruction[] = <FormulaConstruction[]>getDirectSubFormulas(aClause2);
-    const resolvant: Formula[] = getDirectSubFormulas(aResolvant);
+    const potentialResolvant: Formula[] = getDirectSubFormulas(aResolvant);
 
     const clashingLitterals = getClashingLitterals(clause1, clause2);
 
@@ -232,7 +232,7 @@ function resolution(aClause1: Formula, aClause2: Formula, aResolvant: Formula): 
         /* console.log(JSON.stringify(clashingLiteral));
          console.log(JSON.stringify(res));
          console.log(JSON.stringify(resolvant));*/
-        if (sameModuloVariableRenaming(resolvant, resolvant))
+        if (sameModuloVariableRenaming(resolvant, potentialResolvant))
             return ProofSystem.ruleSuccess("resolution");
     }
     return false;
