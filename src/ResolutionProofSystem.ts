@@ -1,8 +1,15 @@
+import { unification } from './Unification.js';
+import { substitutionApply, Substitution } from './Substitution.js';
 import { ProofSystem, RuleOutput } from "./ProofSystem.js";
-import { Formula, FormulaUtility, getDirectSubFormulas, stringToFormula, formulaToLaTeX } from "./Formula.js";
+import { Formula, FormulaUtility, getDirectSubFormulas, stringToFormula, formulaToLaTeX, FormulaConstruction } from "./Formula.js";
 import * as Utils from "./Utils.js";
 import * as UnitTest from "./UnitTest.js";
 
+
+
+/**
+ * the main class of the proof system that is used by the system
+ */
 export class ResolutionProofSystem extends ProofSystem {
     constructor() {
         super();
@@ -12,98 +19,27 @@ export class ResolutionProofSystem extends ProofSystem {
 }
 
 
-function isVariable(t) { return (typeof t == "string"); }
 
-UnitTest.run("isVariable(x)", isVariable("x"));
-UnitTest.run("isVariable(P(x))", !isVariable(stringToFormula("P(x)")));
+type ClashingLitteralsInfo = { litteral1: FormulaConstruction, litteral2: FormulaConstruction, mgu: Substitution };
 
 
-type UnificationEquation = { term1: any, term2: any };
-
-function unification2(E: UnificationEquation[], sub: {}) {
-  /*  console.log(JSON.stringify(E));
-    console.log(JSON.stringify(sub));*/
-
-    if (E.length == 0) return sub;
-
-    let equation = E.pop();
-
-    let t = equation.term1;
-    let u = equation.term2;
-
-    if (isVariable(t) && t == u) {
-        return unification2(E, sub);
-    }
-    else if(isVariable(t)) {
-        if(FormulaUtility.isFreeVariable(u, t))
-            throw "u contains " + t + " as a variable";
-
-        sub[t] = u;
-        E = E.map((eq) => ({
-            term1: substitutionApply(eq.term1, sub),
-            term2: substitutionApply(eq.term2, sub)
-        }));
-
-        for (let x in sub) {
-            sub[x] = substitutionApply(sub[x], sub);
-        }
-
-        return unification2(E, sub);
-    }
-
-    else if (isVariable(u)) {
-        E.push({ term1: u, term2: t });
-        return unification2(E, sub);
-    }
-    else {
-        if (t.type != u.type) throw "different type";
-        switch (t.type) {
-            case "atomic": if (t.pred != u.pred) throw "different pred";
-            case "term": if (t.func != u.func) throw "different func";
-        }
-
-        if (t.args.length != u.args.length) throw "different number of args";
-
-        for (let i in t.args) {
-            E.push({ term1: t.args[i], term2: u.args[i] });
-        }
-        return unification2(E, sub);
-    }
-
-
-}
-
-
-
-function unification(t, u) {
-    try {
-        return unification2([{ term1: t, term2: u }], {});
-    }
-    catch (e) {
-        return null;
-    }
-}
-
-UnitTest.run("unifying p and p", unification(stringToFormula("p"), stringToFormula("p")) != null);
-UnitTest.run("unifying P(x) and P(x)", unification(stringToFormula("P(x)"), stringToFormula("P(x)")) != null);
-UnitTest.run("unifying P(x) and P(a)", unification(stringToFormula("P(x)"), stringToFormula("P(a)")));
-UnitTest.run("unifyfing R(z, z) and R(u, f(y))",
-    unification(stringToFormula("R(z,z)"), stringToFormula("R(u, f(y))")));
-UnitTest.run("unifyfing R(x, f(x)) and R(f(x), x)",
-    unification(stringToFormula("R(x,f(x))"), stringToFormula("R(f(x), x)")));
-
-
-function getClashingLitterals(c0, c1) {
-    let clashingLitterals = [];
+/**
+ * 
+ * @param c0 a clause as an array of litterals
+ * @param c1 a clause as an array of litterals
+ * @returns an array of "clashing litterals"
+ */
+function getClashingLitterals(c0: FormulaConstruction[], c1: FormulaConstruction[]): ClashingLitteralsInfo[] {
+    let clashingLitterals: ClashingLitteralsInfo[] = [];
     for (let l0 of c0)
         for (let l1 of c1) {
             if (l1.type == "not") {
                 const mgu = unification(l0, FormulaUtility.getNotSub(l1));
-                if (mgu) clashingLitterals.push({ l0: l0, l1: l1, mgu: mgu });
+                if (mgu) clashingLitterals.push({ litteral1: l0, litteral2: l1, mgu: mgu });
             }
             if (l0.type == "not") {
                 const mgu = unification(l1, FormulaUtility.getNotSub(l0));
-                if (mgu) clashingLitterals.push({ l0: l0, l1: l1, mgu: mgu });
+                if (mgu) clashingLitterals.push({ litteral1: l0, litteral2: l1, mgu: mgu });
             }
         }
     return clashingLitterals;
@@ -113,61 +49,38 @@ function getClashingLitterals(c0, c1) {
 
 
 
-UnitTest.run("clashing lit P(x) and not P(x)", getClashingLitterals([stringToFormula("P(x)")], [stringToFormula("not P(x)")]));
-UnitTest.run("clashing lit P(x) and not P(a)", getClashingLitterals([stringToFormula("P(x)")], [stringToFormula("not P(a)")]));
+UnitTest.run("clashing lit P(x) and not P(x)", getClashingLitterals([<FormulaConstruction>stringToFormula("P(x)")], [<FormulaConstruction>stringToFormula("not P(x)")]));
+UnitTest.run("clashing lit P(x) and not P(a)", getClashingLitterals([<FormulaConstruction>stringToFormula("P(x)")], [<FormulaConstruction>stringToFormula("not P(a)")]));
 
 
 UnitTest.run("clashing lit q and not q",
-    getClashingLitterals([stringToFormula("q")],
-        [stringToFormula("not q")]));
+    getClashingLitterals([<FormulaConstruction>stringToFormula("q")],
+        [<FormulaConstruction>stringToFormula("not q")]));
 UnitTest.run("clashing lit not p or q and not p or not q",
-    getClashingLitterals([stringToFormula("not p"), stringToFormula("q")],
-        [stringToFormula("not p"), stringToFormula("not q")]));
+    getClashingLitterals([<FormulaConstruction>stringToFormula("not p"), <FormulaConstruction>stringToFormula("q")],
+        [<FormulaConstruction>stringToFormula("not p"), <FormulaConstruction>stringToFormula("not q")]));
 UnitTest.run("clashing lit resolution 2",
     getClashingLitterals([getFormulaWithNewNames(stringToFormula("not Q(y,x)")), getFormulaWithNewNames(stringToFormula("R(y)"))],
-        [stringToFormula("not R(y)"), stringToFormula("not Q(y,x)")]));
+        [<FormulaConstruction>stringToFormula("not R(y)"), <FormulaConstruction>stringToFormula("not Q(y,x)")]));
 
-function substitutionApply(t, sub) {
-    if (isVariable(t)) {
-        if (sub[t] == undefined)
-            return t;
-        else
-            return sub[t];
-    }
-    else {
-        const n: any = {};
-        n.type = t.type;
-        if (t.pred) n.pred = t.pred;
-        if (t.func) n.func = t.func;
-        n.args = [];
-        for (const a of t.args)
-            n.args.push(substitutionApply(a, sub));
-
-        return n;
-    }
-}
-
-UnitTest.run("substituying  [x := a] in P(x)",
-    substitutionApply(stringToFormula("P(x)"), { "x": { type: "term", func: "a", args: [] } }));
-UnitTest.run("substituying  [] in P(x)",
-    formulaToLaTeX(substitutionApply(stringToFormula("P(x)"), {})));
-UnitTest.run("substituying  [] in Q(x,y)",
-    formulaToLaTeX(substitutionApply(stringToFormula("Q(x,y)"), {})));
-UnitTest.run("substituying  [x, y] in Q(x,y)",
-    formulaToLaTeX(substitutionApply(stringToFormula("Q(x,y)"), { x: "x", y: "y" })));
-
-function getResolvant(c0, c1, cl) {
-    const l0 = cl.l0;
-    const l1 = cl.l1;
-    const mgu = cl.mgu;
+/**
+ * 
+ * @param clause1 
+ * @param clause2 
+ * @param clashingLitterals 
+ */
+function getResolvant(clause1: FormulaConstruction[], clause2: FormulaConstruction[], clashingLitterals: ClashingLitteralsInfo) {
+    const l1 = clashingLitterals.litteral1;
+    const l2 = clashingLitterals.litteral2;
+    const mgu = clashingLitterals.mgu;
 
     const resolvant = [];
 
-    for (const l of c0) if (!Utils.same(l, l0)) {
+    for (const l of clause1) if (!Utils.same(l, l1)) {
         Utils.setAdd(resolvant, substitutionApply(l, mgu));
     }
 
-    for (const l of c1) if (!Utils.same(l, l1)) {
+    for (const l of clause2) if (!Utils.same(l, l2)) {
         Utils.setAdd(resolvant, substitutionApply(l, mgu));
     }
 
@@ -178,33 +91,33 @@ function getResolvant(c0, c1, cl) {
 
 
 UnitTest.run("getResolvant P(x) and not P(x)",
-    getResolvant([stringToFormula("P(x)")], [stringToFormula("not P(x)")],
-        { l0: stringToFormula("P(x)"), l1: stringToFormula("not P(x)"), mgu: { "x": "x" } }));
+    getResolvant([<FormulaConstruction>stringToFormula("P(x)")], [<FormulaConstruction>stringToFormula("not P(x)")],
+        { litteral1: <FormulaConstruction> stringToFormula("P(x)"), litteral2: <FormulaConstruction> stringToFormula("not P(x)"), mgu: { "x": "x" } }));
 
 UnitTest.run("getResolvant lit q and not p or not q",
-    Utils.same(stringToFormula("not p"), getResolvant([stringToFormula("q")],
-        [stringToFormula("not p"), stringToFormula("not q")],
-        { l0: stringToFormula("q"), l1: stringToFormula("not q"), mgu: {} })));
+    Utils.same(stringToFormula("not p"), getResolvant([<FormulaConstruction>stringToFormula("q")],
+        [<FormulaConstruction>stringToFormula("not p"), <FormulaConstruction>stringToFormula("not q")],
+        { litteral1: <FormulaConstruction> stringToFormula("q"), litteral2: <FormulaConstruction> stringToFormula("not q"), mgu: {} })));
 
 
 UnitTest.run("getResolvant lit not p or q and not p or not q",
-    getResolvant([stringToFormula("not p"), stringToFormula("q")],
-        [stringToFormula("not p"), stringToFormula("not q")],
-        { l0: stringToFormula("q"), l1: stringToFormula("not q"), mgu: {} }));
+    getResolvant([<FormulaConstruction>stringToFormula("not p"), <FormulaConstruction>stringToFormula("q")],
+        [<FormulaConstruction>stringToFormula("not p"), <FormulaConstruction>stringToFormula("not q")],
+        { litteral1: <FormulaConstruction>stringToFormula("q"), litteral2: <FormulaConstruction>stringToFormula("not q"), mgu: {} }));
 
 UnitTest.run("getResolvant hard resolution 2",
-    getResolvant([stringToFormula("not Q(y,x)"), stringToFormula("R(y)")],
-        [stringToFormula("not R(y)"), stringToFormula("not Q(y,x)")],
-        { l0: stringToFormula("R(y)"), l1: stringToFormula("not R(y)"), mgu: { "y": "y" } }).map((f) =>
+    getResolvant([<FormulaConstruction>stringToFormula("not Q(y,x)"), <FormulaConstruction>stringToFormula("R(y)")],
+        [<FormulaConstruction>stringToFormula("not R(y)"), <FormulaConstruction>stringToFormula("not Q(y,x)")],
+        { litteral1: <FormulaConstruction>stringToFormula("R(y)"), litteral2: <FormulaConstruction>stringToFormula("not R(y)"), mgu: { "y": "y" } }).map((f) =>
             formulaToLaTeX(f)).join(" or "));
 
 /**
  * 
- * @param f 
+ * @param a formula f 
  * @return a copy of f in which variables (e.g. x, y, etc.) have been renamed (e.g. x', y', etc.)
  */
 function getFormulaWithNewNames(f) {
-    if (isVariable(f))
+    if (FormulaUtility.isVariable(f))
         return f + "'";
     else {
         const n: any = {};
@@ -224,10 +137,16 @@ UnitTest.run("getFormulaWithNewNames(p)", getFormulaWithNewNames(stringToFormula
 UnitTest.run("getFormulaWithNewNames(P(x))", getFormulaWithNewNames(stringToFormula("P(x)")));
 UnitTest.run("getFormulaWithNewNames(not Q(y,x))", getFormulaWithNewNames(stringToFormula("not Q(y,x)")));
 
+/**
+ * 
+ * @param f 
+ * @param g 
+ * @returns true if f and g are the same expressions modulo variable renaming
+ */
 function sameModuloVariableRenaming(f, g) {
     function sameModuloVariableRenaming2(f, g, renaming) {
-        if (isVariable(f)) {
-            if (!isVariable(g)) throw "aïe, not a variable on the other side";
+        if (FormulaUtility.isVariable(f)) {
+            if (!FormulaUtility.isVariable(g)) throw "aïe, not a variable on the other side";
             if (renaming[f] && renaming[f] != g) throw "aïe, not a good correspondence";
             renaming[f] = g;
             return renaming;
@@ -293,27 +212,27 @@ UnitTest.run("sameModuloVariableRenaming(not Q(y,x), not Q(y',x'))", sameModuloV
 
 
 
-    /**********************************RESOLUTION  */                                    
-    
-function resolution(ac0: Formula, ac1: Formula, ares: Formula): RuleOutput {
-    if(ac0 == undefined) return ProofSystem.defaultRuleSuccess();
-    if(ac1 == undefined) return ProofSystem.defaultRuleSuccess();
-    if(ares == undefined) return ProofSystem.defaultRuleSuccess();
+/**********************************RESOLUTION  */
 
-    ac1 = <any>getFormulaWithNewNames(ac1);
-    const c0: Formula[] = getDirectSubFormulas(ac0);
-    const c1: Formula[] = getDirectSubFormulas(ac1);
-    const res: Formula[] = getDirectSubFormulas(ares);
+function resolution(aClause1: Formula, aClause2: Formula, aResolvant: Formula): RuleOutput {
+    if (aClause1 == undefined) return ProofSystem.defaultRuleSuccess();
+    if (aClause2 == undefined) return ProofSystem.defaultRuleSuccess();
+    if (aResolvant == undefined) return ProofSystem.defaultRuleSuccess();
 
-    const clashingLitterals = getClashingLitterals(c0, c1);
+    aClause2 = <any>getFormulaWithNewNames(aClause2);
+    const clause1: FormulaConstruction[] = <FormulaConstruction[]>getDirectSubFormulas(aClause1);
+    const clause2: FormulaConstruction[] = <FormulaConstruction[]>getDirectSubFormulas(aClause2);
+    const resolvant: Formula[] = getDirectSubFormulas(aResolvant);
+
+    const clashingLitterals = getClashingLitterals(clause1, clause2);
 
     for (const clashingLiteral of clashingLitterals) {
 
-        const resolvant = getResolvant(c0, c1, clashingLiteral);
+        const resolvant = getResolvant(clause1, clause2, clashingLiteral);
         /* console.log(JSON.stringify(clashingLiteral));
          console.log(JSON.stringify(res));
          console.log(JSON.stringify(resolvant));*/
-        if (sameModuloVariableRenaming(res, resolvant))
+        if (sameModuloVariableRenaming(resolvant, resolvant))
             return ProofSystem.ruleSuccess("resolution");
     }
     return false;
@@ -342,14 +261,17 @@ UnitTest.run("hard resolution 3", resolution(stringToFormula("not P(x) or not Q(
 
 /**************************************** CONTRACTION ************************************/
 
-
-function getContractionPossible(c0) {
+/**
+ * 
+ * @param clause 
+ * @returns the set of possible contractions
+ */
+function getPossibleContractions(clause: FormulaConstruction[]): FormulaConstruction[][] {
     let contractions = [];
-    for (const i in c0)
-        for (const j in c0) if (i < j) {
-            let mgu = unification(c0[i], c0[j]);
-            if (mgu)
-                contractions.push(getContractedClause(c0, mgu));
+    for (const i in clause)
+        for (const j in clause) if (i < j) {
+            let mgu = unification(clause[i], clause[j]);
+            if (mgu) contractions.push(getContractedClause(clause, mgu));
         }
     return contractions;
 }
@@ -357,34 +279,39 @@ function getContractionPossible(c0) {
 
 
 UnitTest.run("contractionPossible of P(x) P(a)",
-    getContractionPossible([stringToFormula("P(x)"), stringToFormula("P(a)")]));
+    getPossibleContractions([<FormulaConstruction> stringToFormula("P(x)"), <FormulaConstruction> stringToFormula("P(a)")]));
 
 
-
-function getContractedClause(c0, mgu) {
-    const c = [];
-    for (const l of c0) {
+/**
+ * 
+ * @param clause 
+ * @param mgu 
+ * @returns the contracted clause obtained from the clause and the mgu
+ */
+function getContractedClause(clause: FormulaConstruction[], mgu: Substitution): FormulaConstruction[] {
+    const contractedClause = [];
+    for (const l of clause) {
         const nl = substitutionApply(l, mgu);
-        if (!Utils.contains(c, nl)) c.push(nl);
+        if (!Utils.contains(contractedClause, nl)) contractedClause.push(nl);
     }
 
-    return c;
+    return contractedClause;
 }
 
 
 /**
  * 
- * @param f 
- * @param g 
- * tests whether g is obtained from f by the contraction rule
+ * @param clause 
+ * @param potentialContractedClause 
+ * tests whether potentialContractedClause is obtained from clause by the contraction rule
  */
-function contraction(f: Formula, g: Formula): RuleOutput {
-    if(f == undefined) return ProofSystem.defaultRuleSuccess();
-    if(g == undefined) return ProofSystem.defaultRuleSuccess();
-    const c0: Formula[] = getDirectSubFormulas(f);
-    const c1: Formula[] = getDirectSubFormulas(g);
+function contraction(clause: Formula, potentialContractedClause: Formula): RuleOutput {
+    if (clause == undefined) return ProofSystem.defaultRuleSuccess();
+    if (potentialContractedClause == undefined) return ProofSystem.defaultRuleSuccess();
+    const c0: FormulaConstruction[] = <FormulaConstruction[]> getDirectSubFormulas(clause);
+    const c1: FormulaConstruction[] = <FormulaConstruction[]> getDirectSubFormulas(potentialContractedClause);
 
-    for (const contraction of getContractionPossible(c0)) {
+    for (const contraction of getPossibleContractions(c0)) {
         if (sameModuloVariableRenaming(contraction, c1)) return ProofSystem.ruleSuccess("contraction");
     }
 

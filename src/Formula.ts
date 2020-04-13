@@ -90,41 +90,59 @@ export function getDirectSubFormulas(f: Formula): Formula[] {
         return (<any>f).args.map((f) => getDirectSubFormulas(f)).flat();
 }
 
-/**
- * 
- * @param f 
- * @param x 
- * 
- * @returns true iff x appears as a free variable in f
- */
-function isFreeVariable(f: Formula, x: string): boolean {
-    if (f instanceof Array) {
-        for (const o of f) if (isFreeVariable(o, x))
-            return true;
-        return false;
-    }
-    else if (typeof f == "string")
-        return f == x;
 
-    else if (f.type == "forall" || f.type == "exists") {
-        if (f.args[0] == x) return false;
-        return isFreeVariable(f.args[1], x);
-    }
-    else {
-        for (const o of <any> f.args) if (isFreeVariable(o, x))
-            return true;
-        return false;
-    }
-}
 
 
 /**
  * This class contains static methods to manipulate formulas.
  */
 export class FormulaUtility {
+
+    /**
+     * @param a formula of the form "(not phi)"
+     * @returns phi
+     */
     static getNotSub = (f: FormulaConstruction) => { return f.args[0]; }
+
+    /**
+         * @param phi a formula
+         * @returns the formula "(not phi)"
+         */
     static not = (f: Formula) => { return { type: "not", args: [f] } };
-    static isFreeVariable = isFreeVariable;
+
+
+    /**
+         * @param phi an expression
+         * @returns true iff it is a variable
+         */
+    static isVariable = (f: Formula) => (typeof f == "string");
+
+    /**
+ * 
+ * @param f 
+ * @param x 
+ * 
+ * @returns true iff x appears as a free variable in f
+ */
+    static isFreeVariable(f: Formula, x: string): boolean {
+        if (f instanceof Array) {
+            for (const o of f) if (FormulaUtility.isFreeVariable(o, x))
+                return true;
+            return false;
+        }
+        else if (typeof f == "string")
+            return f == x;
+
+        else if (f.type == "forall" || f.type == "exists") {
+            if (f.args[0] == x) return false;
+            return FormulaUtility.isFreeVariable(f.args[1], x);
+        }
+        else {
+            for (const o of <any>f.args) if (FormulaUtility.isFreeVariable(o, x))
+                return true;
+            return false;
+        }
+    }
 }
 
 

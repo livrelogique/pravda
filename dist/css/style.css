@@ -188,6 +188,7 @@ div.gallery {
     margin: 64px;
     padding: 32px;
     width: 350px;
+    height:250px;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.4);
     cursor: pointer;
     color: black;
