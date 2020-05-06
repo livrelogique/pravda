@@ -60,6 +60,9 @@ export function isSetPlusElement(bigArray: any[], array: any[], element: any): b
 
     if (!contains(bigArray, element))
         return false;
+        
+    if (contains(array, element))
+        return false;
 
     return includes(bigArray, array);
 }
@@ -67,6 +70,8 @@ export function isSetPlusElement(bigArray: any[], array: any[], element: any): b
 
 
 UnitTest.run("isSetPlusElement", isSetPlusElement(["p"], [], "p"));
+UnitTest.run("isSetPlusElement", isSetPlusElement(["p", "q"], ["p"], "q"));
+UnitTest.run("isSetPlusElement", !isSetPlusElement(["p", "q"], ["p"], "p"));
 
 
 export function setAdd(array: any[], element: any): void {

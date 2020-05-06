@@ -22,7 +22,6 @@ export class ResolutionProofSystem extends ProofSystem {
 
 type ClashingLitteralsInfo = { litteral1: FormulaConstruction, litteral2: FormulaConstruction, mgu: Substitution };
 
-
 /**
  * 
  * @param c0 a clause as an array of litterals
@@ -47,8 +46,6 @@ function getClashingLitterals(c0: FormulaConstruction[], c1: FormulaConstruction
 
 
 
-
-
 UnitTest.run("clashing lit P(x) and not P(x)", getClashingLitterals([<FormulaConstruction>stringToFormula("P(x)")], [<FormulaConstruction>stringToFormula("not P(x)")]));
 UnitTest.run("clashing lit P(x) and not P(a)", getClashingLitterals([<FormulaConstruction>stringToFormula("P(x)")], [<FormulaConstruction>stringToFormula("not P(a)")]));
 
@@ -60,7 +57,7 @@ UnitTest.run("clashing lit not p or q and not p or not q",
     getClashingLitterals([<FormulaConstruction>stringToFormula("not p"), <FormulaConstruction>stringToFormula("q")],
         [<FormulaConstruction>stringToFormula("not p"), <FormulaConstruction>stringToFormula("not q")]));
 UnitTest.run("clashing lit resolution 2",
-    getClashingLitterals([getFormulaWithNewNames(stringToFormula("not Q(y,x)")), getFormulaWithNewNames(stringToFormula("R(y)"))],
+    getClashingLitterals([<FormulaConstruction> getFormulaWithNewNames(stringToFormula("not Q(y,x)")), <FormulaConstruction> getFormulaWithNewNames(stringToFormula("R(y)"))],
         [<FormulaConstruction>stringToFormula("not R(y)"), <FormulaConstruction>stringToFormula("not Q(y,x)")]));
 
 /**
@@ -70,24 +67,16 @@ UnitTest.run("clashing lit resolution 2",
  * @param clashingLitterals 
  */
 function getResolvant(clause1: FormulaConstruction[], clause2: FormulaConstruction[], clashingLitterals: ClashingLitteralsInfo) {
-    const l1 = clashingLitterals.litteral1;
-    const l2 = clashingLitterals.litteral2;
-    const mgu = clashingLitterals.mgu;
-
     const resolvant = [];
 
-    for (const l of clause1) if (!Utils.same(l, l1)) {
-        Utils.setAdd(resolvant, substitutionApply(l, mgu));
-    }
+    for (const l of clause1) if (!Utils.same(l, clashingLitterals.litteral1)) 
+        Utils.setAdd(resolvant, substitutionApply(l, clashingLitterals.mgu));
 
-    for (const l of clause2) if (!Utils.same(l, l2)) {
-        Utils.setAdd(resolvant, substitutionApply(l, mgu));
-    }
+    for (const l of clause2) if (!Utils.same(l, clashingLitterals.litteral2))
+        Utils.setAdd(resolvant, substitutionApply(l, clashingLitterals.mgu));
 
     return resolvant;
 }
-
-
 
 
 UnitTest.run("getResolvant P(x) and not P(x)",
@@ -120,18 +109,11 @@ function getFormulaWithNewNames(f) {
     if (FormulaUtility.isVariable(f))
         return f + "'";
     else {
-        const n: any = {};
-        n.type = f.type;
-        if (f.pred) n.pred = f.pred;
-        if (f.func) n.func = f.func;
-        n.args = [];
-        for (const a of f.args) {
-            n.args.push(getFormulaWithNewNames(a));
-        }
-        return n;
+        return {type: f.type,
+             pred: f.pred, func: f.func,
+              args: f.args.map((a) => getFormulaWithNewNames(a))};
     }
 }
-
 
 UnitTest.run("getFormulaWithNewNames(p)", getFormulaWithNewNames(stringToFormula("p")));
 UnitTest.run("getFormulaWithNewNames(P(x))", getFormulaWithNewNames(stringToFormula("P(x)")));
@@ -157,9 +139,9 @@ function sameModuloVariableRenaming(f, g) {
             if (f.length != g.length)
                 throw "pattern matching error because not the same number of arguments";
 
-            for (const i in f) {
+            for (const i in f)
                 renaming = sameModuloVariableRenaming2(f[i], g[i], renaming);
-            }
+            
             return renaming;
         }
         else {
@@ -171,9 +153,9 @@ function sameModuloVariableRenaming(f, g) {
                 throw "pattern matching error because different func";
             if ((f.args).length != (g.args).length)
                 throw "pattern matching error because not the same number of arguments";
-            for (let i in f.args) {
+            for (let i in f.args)
                 renaming = sameModuloVariableRenaming2(f.args[i], g.args[i], renaming);
-            }
+            
             return renaming;
         }
 
@@ -214,15 +196,23 @@ UnitTest.run("sameModuloVariableRenaming(not Q(y,x), not Q(y',x'))", sameModuloV
 
 /**********************************RESOLUTION  */
 
-function resolution(aClause1: Formula, aClause2: Formula, aResolvant: Formula): RuleOutput {
+/**
+ * 
+ * @param aClause1 
+ * @param aClause2 
+ * @param aPotentialResolvant 
+ * @returns the output explains that aPotentialResolvant is a resolvant of aClause1 and aClause2, or 
+ * explains that it is not the case
+ */
+function resolution(aClause1: Formula, aClause2: Formula, aPotentialResolvant: Formula): RuleOutput {
     if (aClause1 == undefined) return ProofSystem.defaultRuleSuccess();
     if (aClause2 == undefined) return ProofSystem.defaultRuleSuccess();
-    if (aResolvant == undefined) return ProofSystem.defaultRuleSuccess();
+    if (aPotentialResolvant == undefined) return ProofSystem.defaultRuleSuccess();
 
     aClause2 = <any>getFormulaWithNewNames(aClause2);
     const clause1: FormulaConstruction[] = <FormulaConstruction[]>getDirectSubFormulas(aClause1);
     const clause2: FormulaConstruction[] = <FormulaConstruction[]>getDirectSubFormulas(aClause2);
-    const potentialResolvant: Formula[] = getDirectSubFormulas(aResolvant);
+    const potentialResolvant: Formula[] = getDirectSubFormulas(aPotentialResolvant);
 
     const clashingLitterals = getClashingLitterals(clause1, clause2);
 

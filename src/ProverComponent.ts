@@ -5,14 +5,18 @@ import { HilbertProofSystem } from './HilbertProofSystem.js';
 import { NaturalDeduction } from './NaturalDeduction.js';
 import { stringToFormula, Formula, formulaToLaTeX } from './Formula.js';
 import * as Utils from "./Utils.js";
-import { stringToLaTeX, proofToProofTreeLaTeX, askForMathJAX } from './LaTeX.js';
+import { proofToProofTreeLaTeX, askForMathJAX } from './LaTeX.js';
 
 
 const NB_COLS_MIN = 40;
 
 export class ProverComponent {
 
-
+    /**
+     * 
+     * @param oldDomElement 
+    * transforms the HTML TextArea in a "ProverComponent"
+     */
     constructor(oldDomElement: HTMLTextAreaElement) {
         const proofStringOriginal = oldDomElement.value;
         const proverElement = document.createElement("div");
@@ -83,7 +87,7 @@ export class ProverComponent {
         proofTextArea.value = initialProofString;
         proverElement.appendChild(proofTextArea);
 
-        
+
 
         const justificationsElement = document.createElement("div");
         justificationsElement.setAttribute("class", "justifications");
@@ -130,10 +134,10 @@ export class ProverComponent {
                 justificationElement.innerHTML = just.msg;
                 return justificationElement;
             }
-                
+
             else if (just.type == "success") {
                 justificationElement.setAttribute("class", "justification ruleJustification");
-                justificationElement.innerHTML = just.msg + numberArrayToString((<any> just).previous.map((n) => n+1));
+                justificationElement.innerHTML = just.msg + numberArrayToString((<any>just).previous.map((n) => n + 1));
                 return justificationElement;
             }
             else
@@ -161,7 +165,7 @@ export class ProverComponent {
 
 
         proverElement.appendChild(proofTreeArea);
-        
+
 
 
 
@@ -186,10 +190,12 @@ export class ProverComponent {
                 buttonSolution.setAttribute("class", "solutionButton");
             }
 
-
-            proofTreeArea.innerHTML = "\\(" + proofToProofTreeLaTeX(proof) + "\\)";
-            askForMathJAX();
-
+            if(proof.isCorrect()) {
+                proofTreeArea.innerHTML = "\\(" + proofToProofTreeLaTeX(proof) + "\\)";
+                askForMathJAX();
+            }
+            else
+                proofTreeArea.innerHTML = "";
         }
 
 
