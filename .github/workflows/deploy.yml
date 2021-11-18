@@ -20,9 +20,8 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:          
-      - name: Build
-        run: |
-          tsc
+      - name: tsc
+      uses: icrawl/action-tsc@v1
          
       # Deploy
       - name: Deploy
