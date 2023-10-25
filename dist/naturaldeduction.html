@@ -207,7 +207,7 @@ Show that we can prove <code>not (p or q) -> not p and not q</code>.
 
 <h3>Examples of direct applications of rules</h3>
 
-
+<h4>Existential quantifier</h4>
 
   <textarea proofSystem="NaturalDeduction">
   Q(x) |- P(a)  *
@@ -231,6 +231,7 @@ Be careful, when the hypothesis depend on the involved variable <code>x</code> y
   Q(x) |- p
 </textarea>
 
+<h4>Universal quantifier</h4>
 
 If you proved <code>P(x)</code> and the hypothesis do not depend on <code>x</code>, then you deduce <code>forall x P(x)</code>. That rule is called the introduction of <code>forall</code>.
   <textarea proofSystem="NaturalDeduction">
