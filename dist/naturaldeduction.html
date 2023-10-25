@@ -27,7 +27,12 @@ The left-hand side can be empty, e.g. <code>|- p or not p</code>. In that case, 
 
   <h3>Examples of direct applications of rules</h3>
 
-First, let us explore the rules in propositional logic. First, you can simply conclude an hypothesis:
+First, let us explore the rules in propositional logic. 
+
+<h4>Dealing with hypotheses</h4>
+
+
+First, you can simply conclude an hypothesis:
   <textarea proofSystem="NaturalDeduction">
     q |- q
   </textarea>
@@ -36,6 +41,16 @@ First, let us explore the rules in propositional logic. First, you can simply co
     p, q |- q
   </textarea>
 
+
+
+Of course, you can add hypothesis without destroying what you already proved:
+
+  <textarea proofSystem="NaturalDeduction">
+p |- q  *
+p, r |- q
+</textarea>
+
+<h4>Absurd</h4>
 
 If an hypothesis of the form <code>not phi</code> leads to a contradiction, you can derive <code>phi</code> and remove that hypothesis.
   <textarea proofSystem="NaturalDeduction">
@@ -49,14 +64,8 @@ If an hypothesis of the form <code>not phi</code> leads to a contradiction, you 
     </textarea>
 
 
-Of course, you can add hypothesis without destroying what you already proved:
 
-  <textarea proofSystem="NaturalDeduction">
-p |- q  *
-p, r |- q
-</textarea>
-
-
+<h4>Implication</h4>
 
 Now, if you suppose <code>p</code> and derive <code>q</code>, you can irrevocably prove <code>p -> q</code>.
 
@@ -70,6 +79,24 @@ Now, if you suppose <code>p</code> and derive <code>q</code>, you can irrevocabl
     p, r  |-  q   *
     r |- p -> q
     </textarea>
+
+
+    If you have already proven <code>p</code> and you have <code>p -> q</code>, you have a proof for <code>q</code>:
+
+    <textarea proofSystem="NaturalDeduction">
+      |-  p             *
+      |-  p -> q        *
+      |- q
+      </textarea>
+  
+  <textarea proofSystem="NaturalDeduction">
+    r |-  p             *
+    r |-  p -> q        *
+    r |- q
+    </textarea>
+
+
+<h4>Or</h4>
 
 
   <textarea proofSystem="NaturalDeduction">
@@ -89,6 +116,11 @@ Now, if you suppose <code>p</code> and derive <code>q</code>, you can irrevocabl
   p |- s
 </textarea>
 
+
+
+
+<h4>And</h4>
+
   <textarea proofSystem="NaturalDeduction">
 p |- q *
 p |- r *
@@ -106,6 +138,10 @@ p |- q and r
   p |- r
 </textarea>
 
+
+<h4>Not</h4>
+
+
   <textarea proofSystem="NaturalDeduction">
   p, q |- bottom *
   q |- not p
@@ -116,11 +152,6 @@ p |- q and r
   p |- not q   *
   p |- bottom
 </textarea>
-
-
-
-
-
 
 
 
