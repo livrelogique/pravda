@@ -1,0 +1,133 @@
+Sequent =  args1: (FormulaListVariable / FormulaList) _ "|-" _ args2: (FormulaListVariable / FormulaList) {
+          return {type: "sequent", args: [args1, args2]};} / Formula
+         
+         
+ 
+FormulaList = phi: Formula tail:(_ ("," / "") _ Formula)* {
+      let args = [phi];
+      tail.forEach(function(element) {args.push(element[3]); });
+      return {type: "list", args: args};}
+       /   EmptyList
+
+
+FormulaListVariable = "Gamma+" / "Gamma" / "Sigma" / "Delta" {
+return text()}
+
+
+
+EmptyList = _ {return {type: "list", args: []}; }
+
+
+
+Formula
+  = 
+    "exists" _ x:VariableSymbol _ phi: Formula {
+    	return {type: "exists", args: [x, phi]};
+    }
+
+    /
+    
+    "forall" _ x:VariableSymbol _ phi: Formula {
+    	return {type: "forall", args: [x, phi]};
+    }
+ 
+    /
+ 
+  
+    phi: Formula2 _ ("->") _ psi: Formula {
+    	return {type: "->", args: [phi, psi]};
+    }
+    
+    /
+    
+    phi:Formula2 tail:(_ ("or") _ Formula)* {
+      let args = [phi];
+      tail.forEach(function(element) {args.push(element[3]); });
+      if(args.length == 1)
+          return args[0]
+      else
+          return {type: "or", args: args};
+    }
+    
+    
+    
+Formula2
+   =
+   phi:Factor tail:(_ ("and") _ Formula)* {
+      let args = [phi];
+      tail.forEach(function(element) {args.push(element[3]); });
+      if(args.length == 1)
+          return args[0]
+      else
+          return {type: "and", args: args};
+    }
+    
+
+Factor
+  = "(" _ phi:Formula _ ")" { return phi; }
+     
+     /
+     
+    ("not") _ phi:Factor {
+    	return  {type: "not", args: [phi]};
+    } 
+    /
+    AtomicFormula
+
+
+
+AtomicFormula = ("bottom" / "false") {return {type: "false", args: []};}
+    /
+    ("top" / "true") {return {type: "true", args: []};}
+    /
+    ("phi" / "psi" / "chi" / "eta") {return text();}
+    /
+    p:PropositionSymbol {
+     return {type: "atomic", pred:p, args: []};
+} /
+	p:PredicateSymbol "("  args: TermList ")" {
+	return {type: "atomic", pred:p, args: args};
+}
+
+
+
+TermList
+ = term:Term tail:( _ (",") _ Term)* {
+      let args = [term];
+      tail.forEach(function(element) {args.push(element[3]); });
+      return args;
+    }
+    
+    
+
+
+
+Term 
+ = VariableSymbol / c: ConstantSymbol
+  	{return {type: "term", func:c, args: []};} 
+    /
+   f:FunctionSymbol "(" args: TermList ")" {
+   	return {type: "term", func:f, args: args};
+   }
+ 
+ 
+VariableSymbol
+ = "x" / "y" / "z" / "u" / "v" /
+   "x'" / "y'" / "z'" /  "u'" / "v'" { return text();}
+ 
+ConstantSymbol
+ = "0" / "1" / "a" / "b" / "c" / "d" / "e" / "a'" / "b'" / "c'" / "d'" / "e'" { return text();}
+
+FunctionSymbol
+ = "f" / "g" / "h" / "f'" / "g'" / "h'" { return text();}
+ 
+
+PropositionSymbol
+  = ("p" / "q" / "r" / "s" / "t" / "u" / "v") {return text(); }
+
+PredicateSymbol
+  = ("P" / "Q" / "R" / "S" / "T" / "U" / "V") {return text(); }
+
+ 
+_ "whitespace"
+  = [ \t\n\r]*
