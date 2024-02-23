@@ -74,9 +74,7 @@ export function isSetPlusElement(bigArray: any[], array: any[], element: any): b
  * @param array2
  * @return true iff array1 interesected with array2 is not empty
  */
-
 export function isNotEmptyIntersection(array1: any[], array2: any[]): boolean {
-    console.log(array2);
     for (let e of array1) {
         if (contains(array2, e)) {
             return true;
@@ -99,3 +97,23 @@ export function setAdd(array: any[], element: any): void {
     if (!contains(array, element))
         array.push(element);
 }
+
+
+/**
+ *
+ * @param bigArray
+ * @param array
+ * @return An array containing all elements in [bigArray] that are not in [array]
+ */
+export function setDifference(bigArray: any[], array: any[]): any[] {
+    let newArray = [];
+    for (let e of bigArray) {
+        if (!contains(array, e)) {
+            newArray.push(e)
+        }
+    }
+
+    return newArray
+}
+
+UnitTest.run("setMinus", setDifference(["p", "q"], ["q"])[0] == "p");
