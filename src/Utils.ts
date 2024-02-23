@@ -68,6 +68,27 @@ export function isSetPlusElement(bigArray: any[], array: any[], element: any): b
 }
 
 
+/**
+ *
+ * @param array1
+ * @param array2
+ * @return true iff array1 interesected with array2 is not empty
+ */
+
+export function isNotEmptyIntersection(array1: any[], array2: any[]): boolean {
+    console.log(array2);
+    for (let e of array1) {
+        if (contains(array2, e)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+UnitTest.run("isNotEmptyIntersection", isNotEmptyIntersection(["p", "q"], ["p"]));
+UnitTest.run("isNotEmptyIntersection", isNotEmptyIntersection(["p"], ["p"]));
+UnitTest.run("isNotEmptyIntersection", !isNotEmptyIntersection(["q"], ["p"]));
 
 UnitTest.run("isSetPlusElement", isSetPlusElement(["p"], [], "p"));
 UnitTest.run("isSetPlusElement", isSetPlusElement(["p", "q"], ["p"], "q"));
