@@ -3,6 +3,7 @@ import { Proof, stringToProof, Justification } from "./Proof.js";
 import { ResolutionProofSystem } from "./ResolutionProofSystem.js";
 import { HilbertProofSystem } from './HilbertProofSystem.js';
 import { NaturalDeduction } from './NaturalDeduction.js';
+import { SequentCalculus } from './SequentCalculus.js';
 import { stringToFormula, Formula, formulaToLaTeX } from './Formula.js';
 import * as Utils from "./Utils.js";
 import { proofToProofTreeLaTeX, askForMathJAX } from './LaTeX.js';
@@ -77,6 +78,7 @@ export class ProverComponent {
             case "ResolutionProofSystem": proofSystem = new ResolutionProofSystem(); break;
             case "HilbertProofSystem": proofSystem = new HilbertProofSystem(); break;
             case "NaturalDeduction": proofSystem = new NaturalDeduction(); break;
+            case "SequentCalculus": proofSystem = new SequentCalculus(); break;
             default: proofSystem = new HilbertProofSystem();
         }
 
