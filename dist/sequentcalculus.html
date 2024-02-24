@@ -12,10 +12,28 @@
 
 <body>
   <a href="index.html"></a>
-  <h1>Pravda - natural deduction</h1>
+  <h1>Pravda - sequent calculus</h1>
+
+  On this page, you will learn about sequent calculus. Just like in natural deduction, you manipulate sequents, but now there can be more than one formula on the right-hand side. For instance <code>
+    p, q |- q, r
+  </code> is a sequent, composed of:
+  <ul>
+    <li>On the left-hand side, a list of hypotheses (here <code>p, q</code>) </li>
+    <li>On the right-hand side, a list of possible conclusions (here <code>q, r</code>) </li>
+    <li>The symbol <code>|-</code> in the middle separates the hypotheses from the possible conclusions.
+  </ul>
+
+  Intuitively, <code>Gamma |- Delta</code> means that you can prove one of the formulas in <code>Delta</code>, based on the hypotheses in <code>Gamma</code>. The set <code>Gamma</code> can be empty, meaning you can prove one of the formulas in <code>Delta</code> without any hypotheses, as well as <code>Delta</code> which would mean the hypotheses in <code>Gamma</code> can prove false.
+
+
+  <h2>In propositional logic</h2>
+
+
 
   <textarea proofSystem="SequentCalculus">
-    p, q |- q
+    p |- p
+    |- not p, p
+    |- (not p) or p
   </textarea>
 
 </body>
