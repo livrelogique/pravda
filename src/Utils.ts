@@ -101,19 +101,33 @@ export function setAdd(array: any[], element: any): void {
 
 /**
  *
+ * @param array
+ * @param element
+ * @return Nothing, but removes element from array if it existed
+ */
+function remove(array: any[], element: any) {
+    for (let i = 0 ; i < array.length; i++) {
+        if (same(element, array[i])) {
+            array.splice(i, 1);
+        }
+    }
+}
+
+
+/**
+ *
  * @param bigArray
  * @param array
  * @return An array containing all elements in [bigArray] that are not in [array]
  */
 export function setDifference(bigArray: any[], array: any[]): any[] {
-    let newArray = [];
-    for (let e of bigArray) {
-        if (!contains(array, e)) {
-            newArray.push(e)
-        }
+    let newArray = bigArray.slice(); // Copy of bigArray
+    for (let e of array) {
+        remove(newArray, e);
     }
 
     return newArray
 }
 
-UnitTest.run("setMinus", setDifference(["p", "q"], ["q"])[0] == "p");
+UnitTest.run("setMinus1", setDifference(["p", "q"], ["q"])[0] == "p");
+UnitTest.run("setMinus2", setDifference(["p", "p"], ["p"])[0] == "p");
