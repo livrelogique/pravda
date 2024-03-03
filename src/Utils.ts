@@ -103,7 +103,7 @@ export function setAdd(array: any[], element: any): void {
  *
  * @param array
  * @param element
- * @return Nothing, but removes element from array if it existed
+ * @returns Nothing, but removes element from array if it existed
  */
 function remove(array: any[], element: any) {
     for (let i = 0 ; i < array.length; i++) {
@@ -113,14 +113,13 @@ function remove(array: any[], element: any) {
     }
 }
 
-
 /**
  *
  * @param bigArray
  * @param array
- * @return An array containing all elements in [bigArray] that are not in [array]
+ * @returns An array containing all elements in [bigArray] that are not in [array]
  */
-export function setDifference(bigArray: any[], array: any[]): any[] {
+export function multisetDifference(bigArray: any[], array: any[]): any[] {
     let newArray = bigArray.slice(); // Copy of bigArray
     for (let e of array) {
         remove(newArray, e);
@@ -129,5 +128,22 @@ export function setDifference(bigArray: any[], array: any[]): any[] {
     return newArray
 }
 
-UnitTest.run("setMinus1", setDifference(["p", "q"], ["q"])[0] == "p");
-UnitTest.run("setMinus2", setDifference(["p", "p"], ["p"])[0] == "p");
+/**
+ *
+ * @param bigArray
+ * @param array
+ * @param element
+ * @return true iff bigArray = array U {element}
+ */
+export function isMultisetPlusElement(bigArray: any[], array: any[], element: any): boolean {
+    if (bigArray.length != array.length + 1)
+        return false;
+
+    if (!contains(bigArray, element))
+        return false;
+
+    return includes(bigArray, array);
+}
+
+UnitTest.run("setMinus1", multisetDifference(["p", "q"], ["q"])[0] == "p");
+UnitTest.run("setMinus2", multisetDifference(["p", "p"], ["p"])[0] == "p");
