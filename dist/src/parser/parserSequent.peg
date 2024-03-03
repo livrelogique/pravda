@@ -10,7 +10,7 @@ FormulaList = phi: Formula tail:(_ ("," / "") _ Formula)* {
        /   EmptyList
 
 
-FormulaListVariable = "Gamma+" / "Gamma" / "Sigma" / "Delta" {
+FormulaListVariable = "Theta" / "Gamma+" / "Gamma" / "Sigma" / "Delta+" / "Delta" {
 return text()}
 
 
