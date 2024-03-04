@@ -1,66 +1,68 @@
 <html>
 
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <script src="./src/parser/parserSequent.js"></script>
-  <script src="Main.js" type="module"></script>
-  <link rel="stylesheet" type="text/css" href="css/style.css" />
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="./src/parser/parserSequent.js"></script>
+    <script src="Main.js" type="module"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-</head>
+  </head>
 
-<body>
-  <a href="index.html"></a>
-  <h1>Pravda - sequent calculus</h1>
+  <body>
+    <a href="index.html"></a>
+    <h1>Pravda - sequent calculus</h1>
 
-  On this page, you will learn about sequent calculus. Just like in natural deduction, sequent calculus is about manipulating sequents, but now there can be more than one formula on the right-hand side. For instance <code>
-    p, q |- q, r
-  </code> is a sequent, composed of:
-  <ul>
-    <li>On the left-hand side, a list of hypotheses (here <code>p, q</code>) </li>
-    <li>On the right-hand side, a list of possible conclusions (here <code>q, r</code>) </li>
-    <li>The symbol <code>|-</code> in the middle separates the hypotheses from the possible conclusions.
-  </ul>
+    On this page, you will learn about sequent calculus. Just like in natural deduction, sequent calculus is about manipulating sequents, but now there can be more than one formula on the right-hand side. For instance <code>
+      p, q |- q, r
+    </code> is a sequent, composed of:
+    <ul>
+      <li>On the left-hand side, a list of hypotheses (here <code>p, q</code>) </li>
+      <li>On the right-hand side, a list of possible conclusions (here <code>q, r</code>) </li>
+      <li>The symbol <code>|-</code> in the middle separates the hypotheses from the possible conclusions.
+    </ul>
 
-  Intuitively, <code>Gamma |- Delta</code> means that you can prove one of the formulas in <code>Delta</code>, based on the hypotheses in <code>Gamma</code>. The set <code>Gamma</code> can be empty, meaning you can prove one of the formulas in <code>Delta</code> without any hypotheses, as well as <code>Delta</code> which would mean the hypotheses in <code>Gamma</code> can prove false.
+    Intuitively, <code>Gamma |- Delta</code> means that you can prove one of the formulas in <code>Delta</code>, based on the hypotheses in <code>Gamma</code>. The set <code>Gamma</code> can be empty, meaning you can prove one of the formulas in <code>Delta</code> without any hypotheses, as well as <code>Delta</code> which would mean the hypotheses in <code>Gamma</code> can prove false.
+
+    This is only an introduction though, and sequent calculus is much richer than what we will see here! If you are interested, don't hesitate to take a look at the <a href="https://en.wikipedia.org/wiki/Sequent_calculus" target="_blank">wikipedia page</a>, as well as this <a href="http://www.lsv.fr/~baelde/1819/logique/lk1.pdf" target="_blank">wholesome document</a> by David Baelde about more theoretical aspects of this proof system.
 
 
-  <h2>In propositional logic</h2>
+    <h2>In propositional logic</h2>
 
-  <h3>Axioms</h3>
-  There are three ways you can start a proof. First, and most intuitively, any sequent having the same proposition on the right and the left can be proved.
+    <h3>Axioms</h3>
+    There are three ways you can start a proof. First, and most intuitively, any sequent having the same proposition on the right and the left can be proved.
 
-  <textarea proofSystem="SequentCalculus">
-    p |- p
-  </textarea>
+    <textarea proofSystem="SequentCalculus">
+      p |- p
+    </textarea>
 
-  <textarea proofSystem="SequentCalculus">
-    p, q |- q, r
-  </textarea>
+    <textarea proofSystem="SequentCalculus">
+      p, q |- q, r
+    </textarea>
 
-  Second, any sequent having false as an hypothesis can be proved:
-  <textarea proofSystem="SequentCalculus">
-    bottom |-
-  </textarea>
+    Second, any sequent having false as an hypothesis can be proved:
+    <textarea proofSystem="SequentCalculus">
+      bottom |-
+    </textarea>
 
-  <textarea proofSystem="SequentCalculus">
-    p, bottom |- p -> q, r
-  </textarea>
+    <textarea proofSystem="SequentCalculus">
+      p, bottom |- p -> q, r
+    </textarea>
 
-  Third, and symmetrically, having true as one of the conclusions is sufficient to be proved:
-  <textarea proofSystem="SequentCalculus">
-     |- top
-  </textarea>
+    Third, and symmetrically, having true as one of the conclusions is sufficient to be proved:
+    <textarea proofSystem="SequentCalculus">
+      |- top
+    </textarea>
 
-  <textarea proofSystem="SequentCalculus">
-    p, p and q |- r -> q, top
-  </textarea>
+    <textarea proofSystem="SequentCalculus">
+      p, p and q |- r -> q, top
+    </textarea>
 
-  <h3>Other rules</h3>
-  There are two rules for each connective of the propositional logic: a "left" one and and a "right" one, i.e. one if a formula having this connective as a root is an hypothesis or a conclusion.
+    <h3>Other rules</h3>
+    There are two rules for each connective of the propositional logic: a "left" one and and a "right" one, i.e. one if a formula having this connective as a root is an hypothesis or a conclusion.
 
-  <h4>Not</h4>
+    <h4>Not</h4>
 
     <textarea proofSystem="SequentCalculus">
       p |-  *
@@ -337,7 +339,9 @@
 
     In the following box, you can write any proof you want:
 
-  <textarea proofSystem="SequentCalculus">
-  </textarea>
+    <textarea proofSystem="SequentCalculus">
+    </textarea>
 
-</body>
+  </body>
+
+</html>
