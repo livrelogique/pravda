@@ -122,7 +122,7 @@
       //|- p or not p
     </textarea>
 
-    Try to prove the following De Morgan law in sequent calculus: <code>not (p or q) -> (not p) and (not q)</code>
+    Try to prove the following De Morgan's law in sequent calculus: <code>not (p or q) -> (not p) and (not q)</code>
     <textarea proofSystem="SequentCalculus">
       //p |- p, q
       //|- p, q, not p
@@ -334,8 +334,8 @@
 
     Try to prove the drinking person's paradox: in a bar, there is always a person such that if this person drinks, everyone drinks.
     <textarea proofSystem="SequentCalculus">
-      //P(x), P(y) |- P(y), forall y P(y)
-      //P(x) |- P(y), (P(y) -> forall y P(y))
+      //P(x), P(y) |- P(y), forall z P(z)
+      //P(x) |- P(y), (P(y) -> forall z P(z))
       //P(x) |- P(y), exists x (P(x) -> forall y P(y))
       //P(x) |- forall y P(y), exists x (P(x) -> forall y P(y))
       //|- P(x) -> forall y P(y), exists x (P(x) -> forall y P(y))
