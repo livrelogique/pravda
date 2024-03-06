@@ -41,8 +41,15 @@ export function orRightRulePattern(deltaHyp: any[],  deltaConcl: any[], formulaT
         args: formulas
     };
 
+    let pFormula2 = {
+        type: formulaType,
+        args: [formulas[1], formulas[0]]
+    };
+
     return Utils.isMultisetPlusElement(deltaConcl,
-                                       Utils.multisetDifference(deltaHyp, formulas), pFormula);
+                                       Utils.multisetDifference(deltaHyp, formulas), pFormula)
+        || Utils.isMultisetPlusElement(deltaConcl,
+                                       Utils.multisetDifference(deltaHyp, formulas), pFormula2);
 }
 
 
