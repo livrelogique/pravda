@@ -103,13 +103,17 @@ export function setAdd(array: any[], element: any): void {
  *
  * @param array
  * @param element
- * @returns Nothing, but removes element from array if it existed
+ * @returns Nothing, but removes one occurrence of element from array if it existed
  */
 function remove(array: any[], element: any) {
-    for (let i = 0 ; i < array.length; i++) {
+    let found = false;
+    let i = 0;
+    while (i < array.length && !found) {
         if (same(element, array[i])) {
             array.splice(i, 1);
+            found = true;
         }
+        i++;
     }
 }
 
@@ -139,8 +143,10 @@ export function isMultisetPlusElement(bigArray: any[], array: any[], element: an
     if (bigArray.length != array.length + 1)
         return false;
 
-    if (!contains(bigArray, element))
-        return false;
+    let bigCount = bigArray.filter(x => same(x, element)).length;
+    let count = array.filter(x => same(x, element)).length;
+
+    if (bigCount != count + 1) { return false; }
 
     return includes(bigArray, array);
 }
