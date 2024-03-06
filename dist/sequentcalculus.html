@@ -173,26 +173,34 @@
 
     <p> While the proofs are not that shorter compared to natural deduction, you can see that they are way more guided by the shape of the formulas. This is in part due to the <em>subformula property</em> of the sequent calculus: each formula appearing in the premisses is a subformula of another formula appearing in the conclusion of a rule. </p>
     <p> This observation almost directly gives a proof search algorithm. Maybe this could tickle something in your brain if you are aware of some notions about complexity: we know for sure that the validity problem for propositional logic is coNP-complete, thus it would be an enormous breakthrough to show that it is in P, thanks to an hypothetical polynomial-time proof search algorithm. </p>
-    However be reassured, this will not happen with sequent calculus, because the proof search algorithm we just found happens to have an exponential complexity, in the worst case. For example, try to prove the following (and quite boring) formula: <code>(p or p) or p -> (p and p) and p</code>
+    However be reassured, this will not happen with sequent calculus, because the proof search algorithm we just found happens to have an exponential complexity, in the worst case. For example, try to prove the following (and quite boring) sequent: <code>|- p and q, p and not q, not p and q, not p and not q</code>
     <textarea proofSystem="SequentCalculus">
-      //p |- p
-      //p |- p
-      //p |- (p and p)
-      //p |- p
-      //p |- (p and p) and p
-      //p |- p
-      //p |- p
-      //p |- (p and p)
-      //p |- p
-      //p |- (p and p) and p
-      //(p or p) |- (p and p) and p
-      //p |- p
-      //p |- p
-      //p |- (p and p)
-      //p |- p
-      //p |- (p and p) and p
-      //(p or p) or p |- (p and p) and p
-      //|- ((p or p) or p) -> ((p and p) and p)
+      //q |- q, not p and q, not p and not q
+      //|- q, not q, not p and q, not p and not q
+      //q |- q, p, q
+      //|- q, p, q, not q
+      //p |- q, p, q
+      //|- q, p, q, not p
+      //|- q, p, q, not p and not q
+      //p |- q, p, not p and not q
+      //|- q, p, not p, not p and not q
+      //|- q, p, not p and q, not p and not q
+      //|- q, p and not q, not p and q, not p and not q
+      //q |- p, q, not p and not q
+      //|- p, not q, q, not p and not q
+      //p |- p, not q, not p and not q
+      //|- p, not q, not p, not p and not q
+      //|- p, not q, not p and q, not p and not q
+      //q |- p, p, q
+      //|- p, p, q, not q
+      //p |- p, p, q
+      //|- p, p, q, not p
+      //|- p, p, q, not p and not q
+      //p |- p, p, not p and not q
+      //|- p, p, not p, not p and not q
+      //|- p, p, not p and q, not p and not q
+      //|- p, p and not q, not p and q, not p and not q
+      //|- p and q, p and not q, not p and q, not p and not q
     </textarea>
 
     <h2>First-order logic</h2>
