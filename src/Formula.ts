@@ -110,6 +110,21 @@ export class FormulaUtility {
          */
     static not = (f: Formula) => { return { type: "not", args: [f] } };
 
+    /**
+     * @param a formula of the form Q x. phi(x)
+     * @returns phi(x)
+     * */
+
+    static getQuantifierSub = (f: FormulaConstruction) => { return f.args[1]; }
+
+    /**
+     * @param a formula of the form Q x. phi(x)
+     * @returns x
+     * */
+
+    static getQuantifierVar = (f: FormulaConstruction) => { return f.args[0]; }
+
+
 
     /**
          * @param phi an expression

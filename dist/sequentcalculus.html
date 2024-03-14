@@ -1,0 +1,355 @@
+<html>
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="./src/parser/parserSequent.js"></script>
+    <script src="Main.js" type="module"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  </head>
+
+  <body>
+    <a href="index.html"></a>
+    <h1>Pravda - sequent calculus</h1>
+
+    On this page, you will learn about sequent calculus. Just like in natural deduction, sequent calculus is about manipulating sequents, but now there can be more than one formula on the right-hand side. For instance <code>
+      p, q |- q, r
+    </code> is a sequent, composed of:
+    <ul>
+      <li>On the left-hand side, a list of hypotheses (here <code>p, q</code>) </li>
+      <li>On the right-hand side, a list of possible conclusions (here <code>q, r</code>) </li>
+      <li>The symbol <code>|-</code> in the middle separates the hypotheses from the possible conclusions.
+    </ul>
+
+    Intuitively, <code>Gamma |- Delta</code> means that you can prove one of the formulas in <code>Delta</code>, based on the hypotheses in <code>Gamma</code>. The set <code>Gamma</code> can be empty, meaning you can prove one of the formulas in <code>Delta</code> without any hypotheses, as well as <code>Delta</code> which would mean the hypotheses in <code>Gamma</code> can prove false.
+
+    This is only an introduction though, and sequent calculus is much richer than what we will see here! If you are interested, don't hesitate to take a look at the <a href="https://en.wikipedia.org/wiki/Sequent_calculus" target="_blank">wikipedia page</a>, as well as this <a href="http://www.lsv.fr/~baelde/1819/logique/lk1.pdf" target="_blank">wholesome document</a> by David Baelde about more theoretical aspects of this proof system.
+
+
+    <h2>In propositional logic</h2>
+
+    <h3>Axioms</h3>
+    There are three ways you can start a proof. First, and most intuitively, any sequent having the same proposition on the right and the left can be proved.
+
+    <textarea proofSystem="SequentCalculus">
+      p |- p
+    </textarea>
+
+    <textarea proofSystem="SequentCalculus">
+      p, q |- q, r
+    </textarea>
+
+    Second, any sequent having false as an hypothesis can be proved:
+    <textarea proofSystem="SequentCalculus">
+      bottom |-
+    </textarea>
+
+    <textarea proofSystem="SequentCalculus">
+      p, bottom |- p -> q, r
+    </textarea>
+
+    Third, and symmetrically, having true as one of the conclusions is sufficient to be proved:
+    <textarea proofSystem="SequentCalculus">
+      |- top
+    </textarea>
+
+    <textarea proofSystem="SequentCalculus">
+      p, p and q |- r -> q, top
+    </textarea>
+
+    <h3>Other rules</h3>
+    There are two rules for each connective of the propositional logic: a "left" one and and a "right" one, i.e. one if a formula having this connective as a root is an hypothesis or a conclusion.
+
+    <h4>Not</h4>
+
+    <textarea proofSystem="SequentCalculus">
+      p |-  *
+      |- not p
+    </textarea>
+
+    <textarea proofSystem="SequentCalculus">
+      |- p *
+      not p |-
+    </textarea>
+
+    <h4>Or</h4>
+
+    <textarea proofSystem="SequentCalculus">
+      |- p, q *
+      |- p or q
+    </textarea>
+
+    <textarea proofSystem="SequentCalculus">
+      p |- *
+      q |- *
+      p or q |-
+    </textarea>
+
+    <h4>And</h4>
+
+    <textarea proofSystem="SequentCalculus">
+      |- p *
+      |- q *
+      |- p and q
+    </textarea>
+
+    <textarea proofSystem="SequentCalculus">
+      p, q |- *
+      p and q |-
+    </textarea>
+
+    <h4>Implication</h4>
+
+    <textarea proofSystem="SequentCalculus">
+      p |- q *
+      |- p -> q
+    </textarea>
+
+    <textarea proofSystem="SequentCalculus">
+      q |- *
+      |- p *
+      p -> q |-
+    </textarea>
+
+    <h3>Examples of proofs</h3>
+
+    Proofs in sequent calculus are generally way simpler and more straightforward than in natural deduction. For instance, try to show <code>p or (not p)</code> (the law of excluded middle) in sequent calculus:
+    <textarea proofSystem="SequentCalculus">
+      //p |- p
+      //|- not p, p
+      //|- p or not p
+    </textarea>
+
+    Try to prove the following De Morgan's law in sequent calculus: <code>not (p or q) -> (not p) and (not q)</code>
+    <textarea proofSystem="SequentCalculus">
+      //p |- p, q
+      //|- p, q, not p
+      //|- p or q, not p
+      //not (p or q) |- not p
+      //q |- p, q
+      //|- p, q, not q
+      //|- p or q, not q
+      //not (p or q) |- not q
+      //not (p or q) |- not p and not q
+      //|- not (p or q) -> not p and not q
+    </textarea>
+
+    Try to prove the contraposition law in sqeuent calculus: <code>(p -> q) -> (not q -> not p)</code>
+    <textarea proofSystem="SequentCalculus">
+      //q, p |- q
+      //p |- p, q
+      //p -> q, p |- q
+      //p -> q |- not p, q
+      //p -> q, not q |- not p
+      //p -> q |- not q -> not p
+      //|- (p -> q) -> (not q -> not p)
+    </textarea>
+
+    Try to prove Peirce's law: <code>((p -> q) -> p) -> p</code>
+    <textarea proofSystem="SequentCalculus">
+      //p |- p, q
+      //|- p, p -> q
+      //p |- p
+      //(p -> q) -> p |- p
+      //|- ((p -> q) -> p) -> p
+    </textarea>
+
+    Try to prove the definition of negation using implication: <code>(not p -> (p -> bottom)) and ((p -> bottom) -> (not p))</code>
+    <textarea proofSystem="SequentCalculus">
+      //p |- p
+      //|- not p, p
+      //bottom |- not p
+      //p -> bottom |- not p
+      //|- (p -> bottom) -> (not p)
+      //p |- p, bottom
+      //not p, p |- bottom
+      //not p |- p -> bottom
+      //|- not p -> (p -> bottom)
+      //|- (not p -> (p -> bottom)) and ((p -> bottom) -> (not p))
+    </textarea>
+
+
+    <p> While the proofs are not that shorter compared to natural deduction, you can see that they are way more guided by the shape of the formulas. This is in part due to the <em>subformula property</em> of the sequent calculus: each formula appearing in the premisses is a subformula of another formula appearing in the conclusion of a rule. </p>
+    <p> This observation almost directly gives a proof search algorithm. Maybe this could tickle something in your brain if you are aware of some notions about complexity: we know for sure that the validity problem for propositional logic is coNP-complete, thus it would be an enormous breakthrough to show that it is in P, thanks to an hypothetical polynomial-time proof search algorithm. </p>
+    However be reassured, this will not happen with sequent calculus, because the proof search algorithm we just found happens to have an exponential complexity, in the worst case. For example, try to prove the following (and quite boring) sequent: <code>|- p and q, p and not q, not p and q, not p and not q</code>
+    <textarea proofSystem="SequentCalculus">
+      //q |- q, not p and q, not p and not q
+      //|- q, not q, not p and q, not p and not q
+      //q |- q, p, q
+      //|- q, p, q, not q
+      //p |- q, p, q
+      //|- q, p, q, not p
+      //|- q, p, q, not p and not q
+      //p |- q, p, not p and not q
+      //|- q, p, not p, not p and not q
+      //|- q, p, not p and q, not p and not q
+      //|- q, p and not q, not p and q, not p and not q
+      //q |- p, q, not p and not q
+      //|- p, not q, q, not p and not q
+      //p |- p, not q, not p and not q
+      //|- p, not q, not p, not p and not q
+      //|- p, not q, not p and q, not p and not q
+      //q |- p, p, q
+      //|- p, p, q, not q
+      //p |- p, p, q
+      //|- p, p, q, not p
+      //|- p, p, q, not p and not q
+      //p |- p, p, not p and not q
+      //|- p, p, not p, not p and not q
+      //|- p, p, not p and q, not p and not q
+      //|- p, p and not q, not p and q, not p and not q
+      //|- p and q, p and not q, not p and q, not p and not q
+    </textarea>
+
+    <h2>First-order logic</h2>
+
+    <h3>First order rules</h3>
+
+    Just like for propositional rules, we have a right and left rule for the existential and universal quantifier. This gives four rules in total.
+
+    <h4>Existential quantifier</h4>
+    When the formula is on the right, you can instantiate the variable with anything.
+    <textarea proofSystem="SequentCalculus">
+      Q(u) |- P(u) *
+      Q(u) |- exists x P(x)
+    </textarea>
+
+    Note that the substitution of the variable <code>x</code> must not be ill-formed. For instance, the following is not a valid application of the rule:
+    <textarea proofSystem="SequentCalculus">
+      |- forall y P(y, y) *
+      |- exists x (forall y P(x, y))
+    </textarea>
+
+    However, you can always get around this issue by renaming linked variables:
+    <textarea proofSystem="SequentCalculus">
+      |- forall z P(y, z) *
+      |- exists x (forall y P(x, y))
+    </textarea>
+
+
+
+    However, on the left you must keep the variable as it is.
+    <textarea proofSystem="SequentCalculus">
+      P(x) |- *
+      exists x P(x) |-
+    </textarea>
+
+    Be careful, though! You cannot apply this rule with a variable appearing free anywhere in the premisse sequent:
+    <textarea proofSystem="SequentCalculus">
+      P(x) |- P(x)
+      exists x P(x) |- P(x)
+    </textarea>
+
+    <h4>Universal quantifier</h4>
+    The rules and restrictions are symmetric here:
+    <textarea proofSystem="SequentCalculus">
+      |- P(x) *
+      |- forall x P(x)
+    </textarea>
+
+    <textarea proofSystem="SequentCalculus">
+      P(x) |- P(x)
+      P(x) |- forall x P(x)
+    </textarea>
+
+    <textarea proofSystem="SequentCalculus">
+      P(u) |- Q(u) *
+      forall x P(x) |- Q(u)
+    </textarea>
+
+    <h3>First examples of first-order proofs</h3>
+
+    Try to prove the following formula: <code>(forall x P(x)) -> (exists x P(x))</code>
+    <textarea proofSystem="SequentCalculus">
+      //P(x) |- P(x)
+      //forall x P(x) |- P(x)
+      //forall x P(x) |- exists x P(x)
+      //|- (forall x P(x)) -> (exists x P(x))
+    </textarea>
+
+    Try to prove the distributy of the universal quantifier on conjunctions: <code>forall x (P(x) and Q(x)) -> (forall x P(x)) and (forall x Q(x))</code>
+    <textarea proofSystem="SequentCalculus">
+      //P(x), Q(x) |- P(x)
+      //P(x) and Q(x) |- P(x)
+      //forall x (P(x) and Q(x)) |- P(x)
+      //forall x (P(x) and Q(x)) |- forall x P(x)
+      //P(x), Q(x) |- Q(x)
+      //P(x) and Q(x) |- Q(x)
+      //forall x (P(x) and Q(x)) |- Q(x)
+      //forall x (P(x) and Q(x)) |- forall x Q(x)
+      //forall x (P(x) and Q(x)) |- (forall x P(x)) and (forall x Q(x))
+      //|- (forall x (P(x) and Q(x))) -> ((forall x P(x)) and (forall x Q(x)))
+    </textarea>
+
+    Try to prove the duality of the existential and universal quantifiers: <code>not (forall x P(x)) -> exists x (not P(x))</code>
+    <textarea proofSystem="SequentCalculus">
+      //P(x) |- P(x)
+      //|- P(x), not P(x)
+      //|- P(x), exists x (not P(x))
+      //|- forall x P(x), exists x (not P(x))
+      //not (forall x P(x)) |- exists x (not P(x))
+      //|- not (forall x P(x)) -> exists x (not P(x))
+    </textarea>
+
+    Though those rules can seem satisfying, they are not sufficient to prove everything. Take a look at the following formula: <code>exists x (forall y (P(y) -> P(x)))</code>. When we try to prove it using only the previous rules, we fail quite quickly:
+    <textarea proofSystem="SequentCalculus">
+      P(y) |- P(x)
+      |- P(y) -> P(x)
+      |- forall y (P(y) -> P(x))
+      |- exists x (forall y (P(y) -> P(x)))
+    </textarea>
+
+    But this formula is indeed valid (try to convince yourself of this!). A way to solve this problem is to add new structural rules, named <em>contraction rules</em>.
+
+    <h3>Contraction rules</h3>
+    As before, there is a left contraction rule as well as a right one. They are pretty straightforward:
+    <textarea proofSystem="SequentCalculus">
+      |- P(x), P(x) *
+      |- P(x)
+    </textarea>
+
+    <textarea proofSystem="SequentCalculus">
+      P(x), P(x) |- *
+      P(x) |-
+    </textarea>
+
+    Note that their introduction completely shatters any hope to get a proof search algorithm for first-order sequents, since it's a priori very hard to know when to apply them, and how many times. This was to be expected though, since first-order logic is not decidable.
+
+    <h3>First-order proofs using contraction rules</h3>
+
+    Now equipped with those new rules, try to prove the previous formula: <code>exists x (forall y (P(y) -> P(x)))</code> (tip: you only have to apply contraction once!)
+
+    <textarea proofSystem="SequentCalculus">
+      //P(y), P(z) |- P(x), P(y)
+      //P(y) |- P(x), P(z) -> P(y)
+      //P(y) |- P(x), forall z (P(z) -> P(y))
+      //P(y) |- P(x), exists x (forall y (P(y) -> P(x)))
+      //|- P(y) -> P(x), exists x (forall y (P(y) -> P(x)))
+      //|- forall y (P(y) -> P(x)), exists x (forall y (P(y) -> P(x)))
+      //|- exists x (forall y (P(y) -> P(x))), exists x (forall y (P(y) -> P(x)))
+      //|- exists x (forall y (P(y) -> P(x)))
+    </textarea>
+
+    Try to prove the drinking person's paradox: in a bar, there is always a person such that if this person drinks, everyone drinks.
+    <textarea proofSystem="SequentCalculus">
+      //P(x), P(y) |- P(y), forall z P(z)
+      //P(x) |- P(y), (P(y) -> forall z P(z))
+      //P(x) |- P(y), exists x (P(x) -> forall y P(y))
+      //P(x) |- forall y P(y), exists x (P(x) -> forall y P(y))
+      //|- P(x) -> forall y P(y), exists x (P(x) -> forall y P(y))
+      //|- exists x (P(x) -> forall y P(y)), exists x (P(x) -> forall y P(y))
+      //|- exists x (P(x) -> forall y P(y))
+    </textarea>
+
+    <h2>Sandbox</h2>
+
+    In the following box, you can write any proof you want:
+
+    <textarea proofSystem="SequentCalculus">
+    </textarea>
+
+  </body>
+
+</html>
