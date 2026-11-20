@@ -1,6 +1,6 @@
 # Pravda
 
-This tool provides exercices in formal logic, more precisely for proof systems.  You can have a look at the following address: http://pravda.irisa.fr/
+This tool provides exercices in formal logic, more precisely for proof systems.  You can have a look at the following address: https://livrelogique.github.io/pravda/dist/
 
 <img width="1142" height="387" alt="pravda" src="https://github.com/user-attachments/assets/abe170db-d591-446c-a170-4db32feb4c65" />
 
